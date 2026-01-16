@@ -1,0 +1,212 @@
+*{
+    margin:0%;
+    padding:0%;
+    box-sizing:border-box;
+}
+html,body{
+    height: 10%;
+    width: 100%;
+  background-repeat: no-repeat; 
+    background: linear-gradient(45deg, #00C9FF, #92FE9D);
+}
+.card1{
+    display: flex;
+    gap: 6cap;
+    margin-left: 20rcap;
+    margin-top: 5rcap;
+    margin-bottom: 2rcap;
+    
+}
+
+.card2{
+    display: flex;
+    gap: 6cap;
+    margin-left: 20rcap;
+    margin-top: 5rcap;
+    margin-bottom: 2rcap;
+}
+#one{
+    background-color:  #e9edf6;
+    border-radius: 1rem;
+    height: 50vh;
+    width: 20vw;
+    text-align: center;
+    align-content:end;
+    display:grid;
+    
+}
+
+#one:hover{
+    cursor: pointer; 
+    background:#D4F6FF;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+}
+
+#two{
+    background-color:  #e9edf6;
+    border-radius: 1rem;
+    height: 50vh;
+    width: 20vw;
+    text-align: center;
+    align-content: end;
+    display:grid;
+    overflow: hidden;
+    object-fit:cover;
+}
+#two:hover{
+    cursor: pointer; 
+    background:#D4F6FF;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+}
+#three{
+    background-color:  #e9edf6;
+    border-radius: 1rem;
+    height: 50vh;
+    width: 20vw;
+    text-align: center;
+    align-content: end;
+    display:grid;
+    overflow: hidden;
+    object-fit:cover;
+}
+#three:hover{
+    cursor: pointer; 
+    background:#D4F6FF;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+}
+#four{
+    background-color:  #e9edf6;
+    border-radius: 1rem;
+    height: 50vh;
+    width: 20vw;
+    text-align: center;
+    align-content: end; 
+    display:grid;
+    overflow: hidden;
+    object-fit:cover;
+}
+#four:hover{
+    cursor: pointer; 
+    background:#D4F6FF;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+}
+#five{
+    background-color:  #e9edf6;
+    border-radius: 1rem;
+    height: 50vh;
+    width: 20vw;
+    text-align: center;
+    align-content: end;
+    display:grid;
+    overflow: hidden;
+    object-fit:cover;
+}
+#five:hover{
+    cursor: pointer; 
+    background:#D4F6FF;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+}
+#six{
+    background-color: #e9edf6;
+    border-radius: 1rem;
+    height: 50vh;
+    width: 20vw;
+    text-align: center;
+    align-content: end;
+    display:grid;
+    overflow: hidden;
+    object-fit:cover; 
+}
+#six:hover{
+    cursor: pointer; 
+    background:#D4F6FF;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.6);
+}
+
+a{
+    text-decoration: none;
+    font-size: 2rem;
+    padding: 1rem;
+    color: black;
+    }
+    img{
+        height: 15dvh;
+        width: 10dvw;
+        margin: 5% 5%;
+        position: absolute;
+        align-self:center;
+        border-radius: 10%;
+     
+    }
+    @media (max-width:700px) {
+        .card1{
+            flex-direction: column;
+            margin-left: 30%;
+        } 
+        .card1 #one{
+            width: 50vw;
+            height: 30vh;
+            padding: 5%;
+            justify-items: center;
+        }
+        .card1 #two{
+            width: 50vw;
+            height: 30vh;
+            padding: 5%;
+            justify-items: center;
+        }
+        .card1 #three{
+            width: 50vw;
+            height: 30vh;
+            padding: 5%;
+            justify-items: center;
+        }
+        .card2{
+            flex-direction: column;
+            margin-left: 30%;
+        }
+        .card2 #four{
+            width: 50vw;
+            height: 30vh;
+            padding: 5%;
+            justify-items: center;
+        }
+        .card2 #five{
+            width: 50vw;
+            height: 30vh;
+            padding: 5%;
+            justify-items: center;
+         
+        }
+        .card2 #six{
+            width: 50vw;
+            height: 30vh;
+            padding: 5%;
+            justify-items: center;
+        }
+        img{
+            height: auto;
+            width: 20vw;
+            margin: 5% 5% 5% 5%;
+            position: relative;
+            align-self:center;
+            border-radius: 10%;
+           
+        }
+       a{
+        font-size: 1.2rem;
+        padding: 0.5rem;
+            }
+    }

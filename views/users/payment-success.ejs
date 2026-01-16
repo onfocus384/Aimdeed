@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .success-container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 480px;
+      border-radius: 18px;
+      padding: 40px 30px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .success-icon {
+      font-size: 80px;
+      color: #4CAF50;
+      margin-bottom: 20px;
+    }
+
+    .success-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .amount-display {
+      background: linear-gradient(135deg, #f093fb, #f5576c);
+      color: #fff;
+      padding: 20px;
+      border-radius: 14px;
+      margin: 25px 0;
+    }
+
+    .amount-display span {
+      font-size: 36px;
+      font-weight: 700;
+    }
+
+    .transaction-info {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 25px 0;
+      text-align: left;
+    }
+
+    .info-item {
+      margin-bottom: 10px;
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #555;
+    }
+
+    .info-value {
+      color: #333;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 30px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+      border: none;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .dashboard-btn {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+    }
+
+    .dashboard-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(102,126,234,0.35);
+    }
+
+    .home-btn {
+      background: #6c757d;
+      color: #fff;
+    }
+
+    .home-btn:hover {
+      background: #5a6268;
+      transform: translateY(-2px);
+    }
+
+    .note {
+      margin-top: 25px;
+      font-size: 13px;
+      color: #777;
+      background: #f8f9fa;
+      padding: 14px;
+      border-radius: 10px;
+      border-left: 4px solid #4CAF50;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    /* ================= MOBILE RESPONSIVE ================= */
+    @media (max-width: 480px) {
+
+      body {
+        padding: 12px;
+      }
+
+      .success-container {
+        padding: 30px 20px;
+        border-radius: 14px;
+      }
+
+      .success-icon {
+        font-size: 60px;
+      }
+
+      .success-title {
+        font-size: 22px;
+      }
+
+      .amount-display span {
+        font-size: 28px;
+      }
+
+      .transaction-info {
+        padding: 16px;
+      }
+
+      .info-item {
+        font-size: 13px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .action-btn {
+        width: 100%;
+        font-size: 15px;
+        padding: 14px;
+      }
+
+      .note {
+        font-size: 12px;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="success-container">
+    <div class="success-icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+
+    <h1 class="success-title">Payment Successful!</h1>
+
+    <p style="color: #666; margin-bottom: 20px;">
+      Thank you for your payment. Your subscription has been activated.
+    </p>
+
+    <div class="amount-display">
+      Amount Paid<br />
+      <span>₹<%= amount %></span>
+    </div>
+
+    <div class="transaction-info">
+      <div class="info-item">
+        <span class="info-label">Transaction ID:</span>
+        <span class="info-value"> <%= transactionId %></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Date & Time:</span>
+        <span class="info-value"> <%= new Date().toLocaleString() %></span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Status:</span>
+        <span class="info-value" style="color: #4CAF50; font-weight: 600;">Completed</span>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <a href="/dashboard" class="action-btn dashboard-btn">
+        <i class="fas fa-tachometer-alt"></i> Dashboard
+      </a>
+      <a href="/" class="action-btn home-btn">
+        <i class="fas fa-home"></i> Home
+      </a>
+    </div>
+
+    <div class="note">
+      <i class="fas fa-envelope"></i>
+      <strong>Confirmation email sent.</strong>
+      Please check your email for payment receipt and subscription details.
+      <br><br>
+      For any questions, contact: support@aimdeed.com
+    </div>
+  </div>
+</body>
+</html>

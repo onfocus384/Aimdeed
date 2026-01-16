@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AimDeed Payments</title>
+
+ <!-- Primary favicon (MOST IMPORTANT) -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+<!-- PNG favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .payment-container {
+      background: rgb(192, 191, 191);
+      width: 100%;
+      max-width: 480px;
+      border-radius: 18px;
+      padding: 35px 30px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .instruction {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .amount-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .amount-option {
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 15px;
+      padding: 20px 10px;
+      cursor: pointer;
+    }
+
+    .amount-option.selected {
+      background: #0d6efd;
+      color: #fff;
+      border-color: #ffffff;
+    }
+
+    .amount-number {
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .action-btn {
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      margin-top: 10px;
+    }
+
+    .pay-btn {
+      background: #0d6efd;
+      color: #fff;
+    }
+
+    .qr-section {
+      display: none;
+      margin-top: 25px;
+    }
+
+    .amount-display {
+      background: #0d6efd;
+      color: #fff;
+      padding: 18px;
+      border-radius: 14px;
+      margin-bottom: 20px;
+    }
+
+    .amount-display span {
+      font-size: 34px;
+      font-weight: 700;
+    }
+
+    .qr-box {
+      background: #f8f9fa;
+      border: 2px dashed #dee2e6;
+      border-radius: 14px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .qr-image {
+      width: 220px;
+      height: 220px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-top: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    .note {
+      margin-top: 20px;
+      font-size: 13px;
+      background: #f8f9fa;
+      padding: 14px;
+      border-radius: 10px;
+      border-left: 4px solid #0d6efd;
+      text-align: left;
+    }
+  </style>
+</head>
+
+<body>
+<div class="payment-container">
+
+  <div class="logo">Aimdeed Payments</div>
+
+  <!-- STEP 1 -->
+  <div id="amountSection">
+    <h2 class="section-title">Select Payment Amount</h2>
+
+    <div class="amount-options">
+      <% allowedAmounts.forEach(amt => { %>
+        <div class="amount-option" data-amount="<%= amt %>">
+          <div class="amount-number">₹<%= amt %></div>
+        </div>
+      <% }) %>
+    </div>
+
+    <button id="proceedBtn" class="action-btn pay-btn" disabled>
+      Proceed to Pay ₹<span id="selectedAmount">0</span>
+    </button>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="qrSection" class="qr-section">
+
+    <div class="amount-display">
+      Payable Amount<br />
+      <span id="qrAmount">₹0</span>
+    </div>
+
+    <div class="qr-box">
+      <img id="qrImage" class="qr-image" />
+    </div>
+
+    <form action="/payment/confirm" method="POST">
+      <input type="hidden" name="amount" id="finalAmount">
+
+      <!-- ✅ NAME FIELD -->
+      <input
+        type="text"
+        name="payerName"
+        placeholder="Enter your full name"
+        required
+      />
+
+      <!-- ✅ TRANSACTION ID -->
+      <input
+        type="text"
+        name="utr"
+        placeholder="Enter Transaction ID "
+        required
+      />
+
+      <button type="submit" class="action-btn pay-btn">
+        Submit Payment
+      </button>
+    </form>
+
+    <div class="note">
+      After verification, we will inform you shortly
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const options = document.querySelectorAll(".amount-option");
+  const proceedBtn = document.getElementById("proceedBtn");
+  const selectedAmountSpan = document.getElementById("selectedAmount");
+
+  const amountSection = document.getElementById("amountSection");
+  const qrSection = document.getElementById("qrSection");
+
+  const qrAmount = document.getElementById("qrAmount");
+  const qrImage = document.getElementById("qrImage");
+  const finalAmount = document.getElementById("finalAmount");
+
+  let selectedAmount = null;
+
+  options.forEach(option => {
+    option.onclick = () => {
+      options.forEach(o => o.classList.remove("selected"));
+      option.classList.add("selected");
+      selectedAmount = option.dataset.amount;
+      selectedAmountSpan.textContent = selectedAmount;
+      proceedBtn.disabled = false;
+    };
+  });
+
+  proceedBtn.onclick = async () => {
+    qrAmount.textContent = "₹" + selectedAmount;
+    finalAmount.value = selectedAmount;
+
+    const res = await fetch("/payment/generate-qr", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: selectedAmount })
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      qrImage.src = data.qrImage;
+      amountSection.style.display = "none";
+      qrSection.style.display = "block";
+    }
+  };
+
+  options[0].click();
+</script>
+</body>
+</html>

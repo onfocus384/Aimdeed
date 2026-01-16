@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+ <meta name="description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and tips for IIT and medical entrance exams.">
+    <meta name="keywords" content="NEET preparation, JEE preparation, IIT, medical entrance exams, Aimdeed, online coaching, study materials, NEET coaching, JEE coaching">
+    <meta name="author" content="Aimdeed">
+    <meta name="robots" content="index, follow">
+
+    
+    <meta property="og:title" content="Aimdeed - Your NEET & JEE Preparation Guider">
+    <meta property="og:description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and tips for IIT and medical entrance exams.">
+    <meta property="og:image" content="https://www.aimdeed.in/logo_circular.png">
+    <meta property="og:url" content="https://www.aimdeed.in">
+    <meta property="og:type" content="website">
+
+   
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Aimdeed - Your NEET & JEE Preparation Hub">
+    <meta name="twitter:description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and coaching tips tailored for IIT and medical entrance exams.">
+    <meta name="twitter:image" content="https://www.aimdeed.in/logo_circular.png">
+
+   
+    <link rel="canonical" href="https://www.aimdeed.in">
+
+   
+    <!-- Primary favicon (MOST IMPORTANT) -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+<!-- PNG favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
+
+
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+  <!-- Marked.js for Markdown → HTML -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI", sans-serif; }
+    body { background:#16213e; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:10px; }
+    .chat-container { width:100%; max-width:800px; height:100vh; background:white; border-radius:20px; display:flex; flex-direction:column; overflow:hidden; }
+    .chat-header { padding:1rem; background:#007fff; color:white; display:flex; align-items:center; gap:12px; }
+    .chat-header i { font-size:1.5rem; animation: float 3s ease-in-out infinite; }
+    .chat-header h2 { font-size:1.2rem; }
+    .chat-body { flex:1; padding:1rem; overflow-y:auto; display:flex; flex-direction:column; gap:1rem; }
+    .message { max-width:85%; padding:0.8rem 1rem; border-radius:15px; font-size:0.9rem; }
+    .user-message { background: rgba(34, 38, 233, 0.1); border:1px solid rgba(47,23,231,0.15); align-self:flex-end; }
+    .bot-message { background: rgba(75, 73, 238, 0.15); border:1px solid rgba(22,25,227,0.2); align-self:flex-start; }
+    .input-container { padding:1rem; display:flex; gap:0.5rem; border-top:1px solid #eee; }
+    input { flex:1; padding:0.8rem; border:1px solid rgb(62,155,237); border-radius:12px; font-size:0.9rem; }
+    button { padding:0.8rem 1rem; border:none; border-radius:12px; background:#3457d5; color:white; cursor:pointer; }
+    @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header"><i class="fas fa-robot"></i><h2>Ask me your Questions</h2></div>
+
+    <div class="chat-body" id="chat-body">
+      <div class="message bot-message"><b>Aimdeed:</b> How can I help you today?</div>
+    </div>
+
+    <div class="input-container">
+      <input type="text" id="user-input" placeholder="Type your doubts..." />
+      <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <script>
+    const chatBody = document.getElementById("chat-body");
+    const backendUrl = "/chat"; // same origin
+
+    document.getElementById("send-button").addEventListener("click", sendMessage);
+    document.getElementById("user-input").addEventListener("keypress", e => {
+      if(e.key==="Enter"){ e.preventDefault(); sendMessage(); }
+    });
+
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const message = input.value.trim();
+      if(!message) return;
+
+      addMessage("You", message, true);
+      input.value = "";
+
+      const thinking = addMessage("Aimdeed", "Thinking...", false);
+
+      try {
+        const res = await fetch(backendUrl, {
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({ message })
+        });
+        const data = await res.json();
+        thinking.remove();
+
+        const formattedReply = marked.parse(data.reply || "");
+        addMessage("Aimdeed", formattedReply, false, true);
+      } catch(err){
+        thinking.remove();
+        addMessage("Aimdeed", "Something went wrong. Try again.", false);
+        console.error(err);
+      }
+    }
+
+    function addMessage(sender, text, isUser, isHTML=false){
+      const div = document.createElement("div");
+      div.className = `message ${isUser?"user-message":"bot-message"}`;
+      div.innerHTML = isHTML ? `<b>${sender}:</b><div class="chatbot-response">${text}</div>` : `<b>${sender}:</b> ${text.replace(/\n/g,"<br>")}`;
+      chatBody.appendChild(div);
+      div.scrollIntoView({ behavior: "smooth" });
+      return div;
+    }
+  </script>
+</body>
+</html>

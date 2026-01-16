@@ -1,0 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Victor+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+*{
+    margin:0%;
+    padding:0%;
+    box-sizing:border-box;
+    font-family: 'Poppins';
+}
+
+html,body{
+    height: 100%;
+    width: 100%;
+    background-color: #E0FFFF;
+    
+}
+.main{
+    width: 100%;
+    display: flex;
+    background-color: #F0F8FF;
+    gap: 8%;
+    margin: 2%;
+    padding: 3%;
+
+}
+body h1{
+    font-size: 4rem;
+    margin-left: 40%;
+   
+}
+body h2{
+    font-size: 2rem;
+    margin-left: 5%;
+   
+}
+.main ul{
+list-style: none;
+margin-top: 1%;
+}
+.main a{
+    text-decoration: none;
+    color: rgb(8, 8, 8);
+    transition: 0.3s;
+}
+.menu{
+   height: 10vh;
+   width: 20vw;
+   margin: 4%;
+   padding: 4%;
+   background-color: #00FFFF;
+   border-radius: 1rem;
+   text-align: center;
+   justify-content: center;
+    align-items: center; 
+    display: grid;
+    place-items: center;
+     overflow: hidden;
+     font-size: 0.85rem;
+     
+     
+}
+.menu:hover{
+    cursor: pointer;
+    background-color: #73C2FB;
+    font-size:0.90rem;
+    font-weight: bold;
+}
+@media screen and (max-width: 500px) { 
+      .main{
+        flex-direction: column;
+      }
+      body h1{
+        font-size: 3rem;
+        margin-left: 30%;
+       
+    }
+    body h2{
+        font-size: 1.5rem;
+        margin-left: 5%;
+       
+    }
+    .menu{
+        height: 10vh;
+        width: 80vw;
+        margin: 4%;
+        padding: 4%;
+    }
+    @keyframes appear{
+        from{
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+        to{
+            opacity: 1;
+            clip-path: inset(0 0 0 0);
+        }
+    }
+    .cbse{
+        animation: appear linear;
+        animation-timeline: view();
+        animation-range: entry 0% cover 40%; 
+    }
+    .wbchse{
+        animation: appear linear;
+        animation-timeline: view();
+        animation-range: entry 0% cover 40%; 
+    }
+    }
+   

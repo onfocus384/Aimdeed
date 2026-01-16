@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mentor form</title>
+  <!-- Primary favicon (MOST IMPORTANT) -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+<!-- PNG favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
+
+
+    <link rel="stylesheet" href="/css/mentor.css">
+
+</head>
+<body>
+    <div class="main">
+       
+        <form id="form" method="post">
+            <h1>Get Mentor</h1>
+            <div class="form-outer">
+                <label for="name">Name :</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-outer">
+                <label for="gender">Gender :</label>
+                <select id="gender" name="gender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-outer">
+                <label for="email">Email id :</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-outer">
+                <label for="phone">Contact Number :</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            <div class="form-outer">
+                <label for="school">School Name :</label>
+                <input type="text" id="school" name="school" required>
+            </div>
+            <div class="form-outer">
+                <label for="class">Class :</label>
+                <input type="number" id="class" name="class" min="1" max="12" required>
+            </div>
+            <div class="form-outer">
+                <label for="city">Vill/City :</label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div class="form-outer">
+                <label for="district">District :</label>
+                <input type="text" id="district" name="district" required>
+            </div>
+            <div class="form-outer">
+                <label for="state">State :</label>
+                <input type="text" id="state" name="state" required>
+            </div>
+            <div class="form-outer">
+                <label for="career-goal">What is your future career goal ?</label>
+                <input type="text" id="career-goal" name="career_goal" required>
+            </div>
+            <div class="form-outer">
+                <label for="study-time">How many hours do you study daily ?</label>
+                <select id="study-time" name="study_time">
+                    <option value="Less than 1 hour">less than 2 hour</option>
+                    <option value="1-2 hours">2-4 hours</option>
+                    <option value="3-4 hours">4-8 hours</option>
+                    <option value="More than 4 hours">More than 8 hours</option>
+                </select>
+                <div class="form-outer">
+                    <label for="career-goal">Why did you choose us ?</label>
+                    <input type="text" id="career-goal" name="career_goal" required>
+                </div>
+            </div>
+            <div id="res" style="color: rgb(128, 239, 128);font-size: 15px; font-weight: bold;"></div>
+            <button name="btn" type="submit">Submit</button>
+        </form>
+    </div>
+    <script src="/js/mentor.js"></script>
+</body>
+</html>

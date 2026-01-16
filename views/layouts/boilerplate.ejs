@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>
+    <%= typeof title !== "undefined"
+        ? title
+        : "Aimdeed - Your NEET & JEE Preparation Guider" %>
+  </title>
+
+  <meta 
+    name="description"
+    content="<%= typeof description !== 'undefined'
+      ? description
+      : 'Boost your NEET & JEE exam success with Aimdeed.' %>"
+  >
+
+  <!-- Bootstrap -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+  
+</head>
+
+
+<body>
+
+  <%- body %>
+
+  <!-- JS -->
+  <script src="/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE College Predictor</title>
+ <!-- Primary favicon (MOST IMPORTANT) -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+<!-- PNG favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+
+<!-- Apple Touch Icon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
+
+
+
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --light: #ecf0f1;
+            --danger: #e74c3c;
+        }
+
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0;
+            padding: 20px;
+            background-color: var(--light);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+
+        button {
+            background-color: var(--secondary);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .result-section {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .college-category {
+            margin: 25px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .college-item {
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-left: 4px solid var(--secondary);
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+            text-align: center;
+            color: var(--secondary);
+        }
+
+        .error {
+            color: var(--danger);
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8d7da;
+            border-radius: 5px;
+        }
+
+        .disclaimer {
+            margin-top: 30px;
+            padding: 15px;
+            background: #fff3cd;
+            border-radius: 8px;
+            color: #856404;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🎓 JEE College Predictor</h2>
+        
+        <div class="input-group">
+            <label for="rank">Enter Your JEE Rank:</label>
+            <input type="number" id="rank" placeholder="Enter your All India Rank" min="1">
+        </div>
+
+        <button onclick="predictCollege()">Predict My Colleges</button>
+        <div class="loading" id="loading">⏳ Analyzing rank data...</div>
+
+        <div class="result-section" id="result"></div>
+        <div class="disclaimer">
+            Note: Predictions are based on previous year's cutoff data. Actual results may vary. 
+            Always consult official sources for admission decisions.
+        </div>
+    </div>
+
+    <script>
+        async function predictCollege() {
+            const rank = parseInt(document.getElementById("rank").value);
+            const resultDiv = document.getElementById("result");
+            const loading = document.getElementById("loading");
+            
+            resultDiv.innerHTML = '';
+            loading.style.display = 'block';
+
+            if (!rank || rank <= 0) {
+                showError("Please enter a valid positive rank");
+                loading.style.display = 'none';
+                return;
+            }
+
+            try {
+               const response = await fetch("/api/josaa", {
+  credentials: "same-origin"
+});
+
+if (!response.ok) {
+  throw new Error("Failed to fetch JOSAA data");
+}
+
+const colleges = await response.json();
+
+
+                let eligibleColleges = colleges.filter(college => {
+                    return rank >= college["Opening Rank"] && 
+                           rank <= college["Closing Rank"];
+                });
+                
+                eligibleColleges = eligibleColleges.sort((a, b) => {
+                    const typeOrder = { "IIT": 1, "NIT": 2, "IIIT": 3, "IIEST": 4, "GFTI": 5, "Other": 6 };
+                    const aType = getInstituteType(a);
+                    const bType = getInstituteType(b);
+                    return typeOrder[aType] - typeOrder[bType] || a["Closing Rank"] - b["Closing Rank"];
+                });
+
+                displayResults(eligibleColleges, rank);
+            } catch (error) {
+                showError("Failed to load college data. Please try again later.");
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function getInstituteType(college) {
+            if (college["Institute"].includes("IIT")) return "IIT";
+            if (college["Institute"].includes("NIT")) return "NIT";
+            if (college["Institute"].includes("IIIT")) return "IIIT";
+            if (college["Institute"].includes("IIEST")) return "IIEST";
+            if (college["Institute"].includes("GFTI")) return "GFTI";
+            return "Other";
+        }
+
+        function displayResults(colleges, userRank) {
+            const resultDiv = document.getElementById("result");
+            
+            if (colleges.length === 0) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        No colleges found for your rank. Consider these options:
+                        <ul>
+                            <li>Check lower-tier colleges</li>
+                            <li>Explore state-level counseling</li>
+                            <li>Consider spot admission rounds</li>
+                        </ul>
+                    </div>`;
+                return;
+            }
+
+            let html = '<h3>📚 Predicted College List</h3>';
+            colleges.forEach(college => {
+                html += `
+                    <div class="college-item">
+                        <strong>${college["Institute"]}</strong><br>
+                        <span>Program: ${college["Academic Program Name"]}</span><br>
+                        <span>Category: ${college["Seat Type"]} (${college["Quota"]})</span><br>
+                        <em>Rank Range: ${college["Opening Rank"]} - ${college["Closing Rank"]}</em>
+                        ${getAdmissionChance(userRank, college["Opening Rank"], college["Closing Rank"])}
+                    </div>`;
+            });
+
+            resultDiv.innerHTML = html;
+        }
+
+        function getAdmissionChance(userRank, open, close) {
+            const range = close - open;
+            const position = userRank - open;
+            const percentage = ((position / range) * 100).toFixed(1);
+
+            if (position < range * 0.25) return '<div style="color: #27ae60;">High Admission Chance (Top 25%)</div>';
+            if (position < range * 0.75) return '<div style="color: #f1c40f;">Moderate Chance</div>';
+            return '<div style="color: #e74c3c;">Possible in Later Rounds</div>';
+        }
+
+        function showError(message) {
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        document.getElementById('rank').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') predictCollege();
+        });
+    </script>
+</body>
+
+</html>
