@@ -1,0 +1,12 @@
+# Every change must be reviewed by the owner
+*       @onfocus384
+
+# Critical Backend Protection
+app.js @onfocus384
+package.json @onfocus384
+
+# CI/CD & Docker Security
+.github/workflows/ @onfocus384
+Dockerfile @onfocus384
+docker-compose.yml @onfocus384
+.deepsource.toml @onfocus384
