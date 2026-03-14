@@ -7,24 +7,38 @@ const statusEl = document.getElementById("res");
  * Modern non-blocking status messages
  */
 function showStatus(message, isError = true) {
-    const bg = isError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)';
-    const border = isError ? 'rgba(239, 68, 68, 0.3)' : 'rgba(16, 185, 129, 0.3)';
-    const color = isError ? '#fca5a5' : '#4ade80';
-    const icon = isError ? '⚠️' : '✅';
+    const config = {
+        error: {
+            bg: 'rgba(239, 68, 68, 0.1)',
+            border: 'rgba(239, 68, 68, 0.3)',
+            color: '#fca5a5',
+            icon: '⚠️',
+            time: 5000
+        },
+        success: {
+            bg: 'rgba(16, 185, 129, 0.1)',
+            border: 'rgba(16, 185, 129, 0.3)',
+            color: '#4ade80',
+            icon: '✅',
+            time: 8000
+        }
+    };
+
+    const s = isError ? config.error : config.success;
     
     statusEl.innerHTML = `<div class="alert mt-3 animate__animated animate__fadeIn" style="
-        background: ${bg}; 
-        border: 1px solid ${border}; 
-        color: ${color};
+        background: ${s.bg}; 
+        border: 1px solid ${s.border}; 
+        color: ${s.color};
         border-radius: 12px;
         padding: 1rem;
     ">
-        ${icon} ${message}
+        ${s.icon} ${message}
     </div>`;
     
     setTimeout(() => {
         statusEl.innerHTML = "";
-    }, isError ? 5000 : 8000);
+    }, s.time);
 }
 
 /**
