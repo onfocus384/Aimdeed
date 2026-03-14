@@ -995,13 +995,10 @@ EMAIL_PASSWORD=your-app-password
       text: "This is a test email. If you receive this, email is working!",
     });
     
-    console.log(" Test email sent!");
-    
-    res.send(`
-      <h2>Email Test Successful!</h2>
-      <p>Check your email: <strong>${process.env.EMAIL_USERNAME}</strong></p>
-      <p>Check spam folder if you don't see it.</p>
-      <a href="/forgot-password">Test Forgot Password</a>
+    return res.send(`
+      <h2> Email Test Successful!</h2>
+      <p>A test email has been sent to <strong>${process.env.EMAIL_USERNAME}</strong>.</p>
+      <a href="/">Back to Home</a>
     `);
     
   } catch (error) {
