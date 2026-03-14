@@ -168,6 +168,12 @@ select.form-control-glass {
   padding-right: 2.5rem !important;
 }
 
+/* Select dropdown options visibility */
+select.form-control-glass option {
+  background-color: white;
+  color: black;
+}
+
 /* Fix for Hero Content separation */
 .hero-content {
   display: flex;
