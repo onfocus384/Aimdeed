@@ -244,6 +244,11 @@ app.get("/mentor", (req, res) => {
   res.redirect("/listings/mentor");
 });
 
+// Health Check
+app.get("/healthz", (req, res) => {
+  res.status(200).send("OK");
+});
+
 // Privacy Policy
 app.get("/privacy", (req, res) => {
   res.render("privacy", { title: "Privacy Policy | Aimdeed" });
