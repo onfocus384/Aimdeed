@@ -876,7 +876,7 @@ app.post("/chat", isLoggedIn, async (req, res) => {
     const userMessage = req.body.message;
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // OR mistralai, llama, etc
+      model: process.env.MODEL || "gpt-4o-mini", // Use env var or dynamic fallback
       messages: [{ role: "user", content: userMessage }],
     });
 
