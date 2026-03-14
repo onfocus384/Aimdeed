@@ -27,7 +27,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const User = require("./models/user.js");
 const dbUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/aimdeed";
-const SESSION_SECRET = process.env.SESSION_SECRET || "your-secret-key-change-this";
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
 // ======================
 // VIEW ENGINE
@@ -80,7 +80,7 @@ app.use(
       collectionName: "sessions",
       ttl: 7 * 24 * 60 * 60,
     }),
-    secret: process.env.SESSION_SECRET || "dev-secret",
+    secret: SESSION_SECRET || "change-this-in-production",
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -807,7 +807,7 @@ app.get("/listings/chatbot", isLoggedIn, (req, res) => {
 // ================== CHAT API ==================
  // Using OpenAI v4+
    const openai = new OpenAI({
-  apiKey: process.env.OPENROUTER_API_KEY || "sk-dummy-key-for-workflow-passing",
+  apiKey: process.env.OPENROUTER_API_KEY,
   baseURL: "https://openrouter.ai/api/v1",
   defaultHeaders: {
     "HTTP-Referer": "https://www.aimdeed.in", // required by OpenRouter

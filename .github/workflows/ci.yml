@@ -57,10 +57,10 @@ jobs:
           NODE_ENV: test
           PORT: 3000
           MONGO_URL: mongodb://127.0.0.1:27017/aimdeed_test
-          SESSION_SECRET: ci-test-secret
-          OPENROUTER_API_KEY: sk-dummy-key
+          SESSION_SECRET: placeholder-secret-for-ci
+          OPENROUTER_API_KEY: placeholder-key-for-ci
           EMAIL_USERNAME: test@example.com
-          EMAIL_PASSWORD: test-password
+          EMAIL_PASSWORD: test-password-placeholder
 
   # ─────────────────────────────────────────────────────────────
   # STAGE 4: Docker Build Verification
