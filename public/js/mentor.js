@@ -90,31 +90,52 @@ form.addEventListener("submit", (e) => {
         return;
     }
 
-    // If all validations pass, submit the form data
-    const formData = new FormData(form);
+    // If all validations pass, trigger the submitting state
+    submitButton.innerHTML = '<i class="ri-loader-4-line ri-spin me-2"></i> Submitting...';
+    submitButton.disabled = true;
+
+    const data = new URLSearchParams();
+    data.append("name", name);
+    data.append("gender", gender);
+    data.append("email", email);
+    data.append("phone", phone);
+    data.append("school", school);
+    data.append("class", classLevel);
+    data.append("city", city);
+    data.append("district", district);
+    data.append("state", state);
+    data.append("career_goal", careerGoal);
+    data.append("study_time", studyTime);
+    data.append("reason", document.getElementById("reason").value.trim());
+
     fetch(url, {
         method: "POST",
-        body: formData
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: data.toString()
     })
-    .then((res) => res.text())
-    .then((finalRes) => {
-        // Reset button text
-        submitButton.innerHTML = "Submit";
+    .then(() => {
+        // Restore button state
+        submitButton.innerHTML = 'Submit My Application <i class="ri-send-plane-fill ms-2"></i>';
+        submitButton.disabled = false;
 
-        // Display the response message
-        document.getElementById("res").innerHTML = finalRes;
-
-        // Reset the form
+        // Show prominent success message
+        const responseEl = document.getElementById("res");
+        responseEl.innerHTML = '<div class="alert alert-success mt-3" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #4ade80;">✅ Your mentor application was submitted successfully! We will contact you soon.</div>';
+        
         form.reset();
-
-        // Clear the response message after 6 seconds
+        
+        // Clear message after 6 seconds
         setTimeout(() => {
-            document.getElementById("res").innerHTML = "";
-        }, 5000);
+            responseEl.innerHTML = "";
+        }, 6000);
     })
     .catch((error) => {
-        console.error("Error:", error);
-        alert("An error occurred while submitting the form. Please try again.");
-        submitButton.innerHTML = "Submit";
+        console.error("Submission Error:", error);
+        submitButton.innerHTML = 'Submit My Application <i class="ri-send-plane-fill ms-2"></i>';
+        submitButton.disabled = false;
+        alert("An error occurred. Please check your internet connection and try again.");
     });
 });
