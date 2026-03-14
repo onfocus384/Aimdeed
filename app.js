@@ -119,19 +119,24 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
+        console.log("📨 Google Auth Callback received for:", profile.emails[0].value);
+        
         // Find user by googleId
         let user = await User.findOne({ googleId: profile.id });
         
         if (!user) {
+          console.log("ℹ️ No user found with googleId, checking email...");
           // Check if user already exists with this email
           user = await User.findOne({ email: profile.emails[0].value });
           
           if (user) {
+            console.log("🔗 Linking existing email account to Google ID");
             // Update existing user with googleId
             user.googleId = profile.id;
             user.displayName = profile.displayName;
             await user.save();
           } else {
+            console.log("✨ Creating new user from Google profile");
             // Create a new user
             user = new User({
               googleId: profile.id,
@@ -142,16 +147,29 @@ passport.use(
             await user.save();
           }
         }
+        console.log("✅ Google Auth Successful for:", user.email);
         return done(null, user);
       } catch (err) {
+        console.error("❌ Google Strategy Error:", err);
         return done(err, null);
       }
     }
   )
 );
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// Switch to ID-based serialization to support both social and local users
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
+});
 
 
 // ======================
@@ -224,6 +242,11 @@ app.get("/", (req, res) => {
 // Mentor (Public)
 app.get("/mentor", (req, res) => {
   res.redirect("/listings/mentor");
+});
+
+// Privacy Policy
+app.get("/privacy", (req, res) => {
+  res.render("privacy", { title: "Privacy Policy | Aimdeed" });
 });
 
 
