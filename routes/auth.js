@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-const crypto = require('crypto');
+const nodeCrypto = require('crypto');
 const { sendPasswordResetEmail } = require('../utils/emailService');
 
 // 1. Forgot Password - Request reset

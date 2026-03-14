@@ -12,7 +12,6 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo"); // Missing import
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const crypto = require('crypto');
 const methodOverride = require("method-override");
 const flash = require("connect-flash");
 const ExpressError = require("./utils/expresserror.js"); // Make sure this exists
@@ -22,7 +21,6 @@ const path=require("path")
 const fileURLToPath=require("url")
 const Together=require("together-ai")
 const OpenAI=require("openai")
-const fetch = require("node-fetch");
 const QRCode=require("qrcode")
 const Payment = require("./models/Payment.js");
 const compression = require("compression");
@@ -46,8 +44,6 @@ app.set("views", path.join(__dirname, "views"));
 // ======================
 // Compress all HTTP responses for faster page load
 app.use(compression());
-
-// Cache static files (CSS, JS, images) aggressively for 1 year in production
 const staticOptions = {
   maxAge: process.env.NODE_ENV === "production" ? "1y" : "0"
 };
