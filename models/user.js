@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
-const crypto = require('crypto');
+const cryptoLib = require('crypto');
 
 const userSchema = new mongoose.Schema({
   username: { 
