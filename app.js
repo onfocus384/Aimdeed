@@ -40,6 +40,19 @@ app.set("views", path.join(__dirname, "views"));
 // ======================
 // MIDDLEWARE
 // ======================
+
+// Redirect everything to primary domain (aimdeed.in)
+app.use((req, res, next) => {
+  const host = req.headers.host;
+  
+  if (host === "www.aimdeed.in" || host === "aimdeed.com" || host === "www.aimdeed.com") {
+    console.log(`📡 Redirecting from ${host} to aimdeed.in`);
+    return res.redirect(301, "https://aimdeed.in" + req.url);
+  }
+  
+  next();
+});
+
 // Compress all HTTP responses for faster page load
 app.use(compression());
 
