@@ -9,20 +9,15 @@ const fs =require("fs")
 const ejsMate = require("ejs-mate");
 const nodemailer = require("nodemailer");
 const session = require("express-session");
-const MongoStore = require("connect-mongo"); // Missing import
+const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const crypto = require('crypto');
 const methodOverride = require("method-override");
 const flash = require("connect-flash");
-const ExpressError = require("./utils/expresserror.js"); // Make sure this exists
 const cors=require("cors")
-const bodyParser=require("body-parser")
 const path=require("path")
-const fileURLToPath=require("url")
-const Together=require("together-ai")
 const OpenAI=require("openai")
-const fetch = require("node-fetch");
 const QRCode=require("qrcode")
 const Payment = require("./models/Payment.js");
 const compression = require("compression");
@@ -32,7 +27,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const User = require("./models/user.js");
 const dbUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/aimdeed";
-const SESSION_SECRET = process.env.SESSION_SECRET || "your-secret-key-change-this"; // Missing variable
+const SESSION_SECRET = process.env.SESSION_SECRET || "your-secret-key-change-this";
 
 // ======================
 // VIEW ENGINE
@@ -568,7 +563,6 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
     console.log(" Password validation passed");
     
     // 2. Hash the token to compare with database
-    const crypto = require('crypto');
     const hashedToken = crypto
       .createHash('sha256')
       .update(token)
@@ -796,12 +790,6 @@ app.use(
     credentials: true,
   })
 );
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// serve ONLY public assets (safe)
-app.use(express.static(path.join(__dirname, "public")));
 
 // ================= AUTH ROUTES =================
 app.get("/chatbot", isLoggedIn, (req, res) => {
