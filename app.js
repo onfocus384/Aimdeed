@@ -254,6 +254,11 @@ app.get("/terms", (req, res) => {
   res.render("terms", { title: "Terms of Service | Aimdeed" });
 });
 
+// Cookies Policy
+app.get("/cookies", (req, res) => {
+  res.render("cookies", { title: "Cookies Policy | Aimdeed" });
+});
+
 
 // payments page
 // Payment page – show plans
