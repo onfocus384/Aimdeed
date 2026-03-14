@@ -159,43 +159,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// ======================
-// HELPER FUNCTIONS
-// ======================
-const sendResetEmail = async (email, resetToken, req) => {
-  const resetURL = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
-  
-  const mailOptions = {
-    from: `"Aimdeed Support" <${process.env.EMAIL_USERNAME}>`,
-    to: email,
-    subject: "Password Reset Request - Aimdeed",
-    html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #2c3e50;">Password Reset Request</h2>
-        <p>Hello,</p>
-        <p>You requested to reset your password for your Aimdeed account.</p>
-        <p>Click the button below to set a new password:</p>
-        <div style="text-align: center; margin: 30px 0;">
-          <a href="${resetURL}" style="background-color: #0d6efd; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-            Reset Password
-          </a>
-        </div>
-        <p>Or copy and paste this link in your browser:</p>
-        <p style="word-break: break-all; background-color: #f8f9fa; padding: 10px; border-radius: 5px;">
-          ${resetURL}
-        </p>
-        <p>This link will expire in <strong>10 minutes</strong>.</p>
-        <p>If you didn't request this, please ignore this email.</p>
-        <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-        <p style="color: #6c757d; font-size: 12px;">
-          This is an automated message from Aimdeed - NEET & JEE Preparation Platform
-        </p>
-      </div>
-    `
-  };
-  
-  return transporter.sendMail(mailOptions);
-};
+const fromAddress = process.env.EMAIL_FROM
+  ? `"Aimdeed Support" <${process.env.EMAIL_FROM}>`
+  : `"Aimdeed Support" <${process.env.EMAIL_USERNAME}>`;
 
 // ======================
 // ROUTES
@@ -467,29 +433,54 @@ app.post("/forgot-password", isLoggedOut, async (req, res) => {
     await user.save({ validateBeforeSave: false });
     
     // Create reset URL
-    const resetURL = `http://localhost:3000/reset-password/${resetToken}`;
+    const resetURL = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
     console.log("Reset URL:", resetURL);
     
-    // Send email
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-    });
-    
     const mailOptions = {
-      from: `"Aimdeed Support" <${process.env.EMAIL_USERNAME}>`,
+      from: fromAddress,
       to: user.email,
-      subject: "Password Reset Link - Aimdeed",
-      text: `Click this link to reset your password: ${resetURL}`,
+      subject: "🔒 Password Reset Request — Aimdeed",
       html: `
-        <h3>Password Reset Request</h3>
-        <p>Click the link below to reset your password:</p>
-        <p><a href="${resetURL}">${resetURL}</a></p>
-        <p>This link expires in 10 minutes.</p>
-        <p>If you didn't request this, please ignore this email.</p>
+        <!DOCTYPE html>
+        <html lang="en">
+        <body style="margin:0;padding:0;background:#0f172a;font-family:'Segoe UI',Arial,sans-serif;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#0f172a;padding:40px 0;">
+            <tr>
+              <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#1e2a4a,#0f172a);border-radius:16px;border:1px solid rgba(99,102,241,0.3);overflow:hidden;max-width:600px;">
+                  <tr>
+                    <td style="background:linear-gradient(135deg,#4f46e5,#0ea5e9);padding:32px 40px;text-align:center;">
+                      <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:800;">Aimdeed</h1>
+                      <p style="margin:4px 0 0;color:rgba(255,255,255,0.8);font-size:14px;">Security Center</p>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding:40px;">
+                      <p style="color:#94a3b8;font-size:15px;">Hello <strong style="color:#e2e8f0;">${user.username}</strong>,</p>
+                      <p style="color:#cbd5e1;font-size:15px;line-height:1.7;">
+                        We received a request to reset the password for your account. Click the button below to choose a new password.
+                      </p>
+                      <div style="text-align:center;margin:32px 0;">
+                        <a href="${resetURL}" style="background:#4f46e5;color:#ffffff;padding:14px 32px;text-decoration:none;border-radius:12px;font-weight:bold;display:inline-block;box-shadow:0 10px 15px -3px rgba(79,70,229,0.3);">
+                          Reset My Password
+                        </a>
+                      </div>
+                      <p style="color:#94a3b8;font-size:13px;line-height:1.6;margin-bottom:32px;">
+                        This link will expire in <strong style="color:#cbd5e1;">10 minutes</strong>. If you did not request this, you can safely ignore this email.
+                      </p>
+                      <hr style="border:none;border-top:1px solid rgba(99,102,241,0.25);margin:0 0 24px;">
+                      <p style="color:#64748b;font-size:12px;word-break:break-all;">
+                        Trouble clicking the button? Paste this into your browser:<br>
+                        <a href="${resetURL}" style="color:#38bdf8;">${resetURL}</a>
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
       `
     };
     
@@ -986,10 +977,6 @@ app.post("/contact", async (req, res) => {
       message: "All fields are required."
     });
   }
-
-  const fromAddress = process.env.EMAIL_FROM
-    ? `"Aimdeed Support" <${process.env.EMAIL_FROM}>`
-    : `"Aimdeed Support" <${process.env.EMAIL_USERNAME}>`;
 
   try {
     // 1. INTERNAL NOTIFICATION — sent to Aimdeed team
