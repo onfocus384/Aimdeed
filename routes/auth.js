@@ -29,7 +29,7 @@ router.post('/forgot-password', async (req, res) => {
         status: 'success',
         message: 'Password reset link sent to email'
       });
-    } catch (err) {
+    } catch (_err) {
       // Clear token if email fails
       user.resetPasswordToken = undefined;
       user.resetPasswordExpires = undefined;
@@ -42,6 +42,7 @@ router.post('/forgot-password', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+  return null;
 });
 
 // 2. Reset Password - Verify token and update password
@@ -81,8 +82,10 @@ router.post('/reset-password/:token', async (req, res) => {
       status: 'success',
       message: 'Password updated successfully'
     });
+    return null;
   } catch (error) {
     res.status(500).json({ message: error.message });
+    return null;
   }
 });
 
