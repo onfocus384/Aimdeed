@@ -12,6 +12,7 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const crypto = require('crypto');
 const methodOverride = require("method-override");
 const flash = require("connect-flash");
@@ -104,6 +105,51 @@ app.use(passport.session());
 
 // Configure passport
 passport.use(new LocalStrategy(User.authenticate()));
+
+// Google Strategy Configuration
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.NODE_ENV === "production" 
+        ? "https://www.aimdeed.in/auth/google/callback" 
+        : "http://localhost:3000/auth/google/callback",
+      proxy: true
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        // Find user by googleId
+        let user = await User.findOne({ googleId: profile.id });
+        
+        if (!user) {
+          // Check if user already exists with this email
+          user = await User.findOne({ email: profile.emails[0].value });
+          
+          if (user) {
+            // Update existing user with googleId
+            user.googleId = profile.id;
+            user.displayName = profile.displayName;
+            await user.save();
+          } else {
+            // Create a new user
+            user = new User({
+              googleId: profile.id,
+              username: profile.emails[0].value.split("@")[0] + "_" + Math.floor(Math.random() * 1000),
+              email: profile.emails[0].value,
+              displayName: profile.displayName
+            });
+            await user.save();
+          }
+        }
+        return done(null, user);
+      } catch (err) {
+        return done(err, null);
+      }
+    }
+  )
+);
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -396,6 +442,26 @@ app.post(
 
 
 
+
+
+// ======================
+// GOOGLE AUTH ROUTES
+// ======================
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login", failureFlash: true }),
+  (req, res) => {
+    req.flash("success", `Welcome, ${req.user.displayName || req.user.username}!`);
+    const redirectUrl = req.session.returnTo || "/";
+    delete req.session.returnTo;
+    res.redirect(redirectUrl);
+  }
+);
 
 
 // Forgot Password - GET

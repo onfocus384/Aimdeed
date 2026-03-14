@@ -5,7 +5,6 @@ const crypto = require('crypto');
 const userSchema = new mongoose.Schema({
   username: { 
     type: String, 
-    required: true, 
     unique: true,
     trim: true
   },
@@ -16,6 +15,8 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     trim: true
   },
+  googleId: String,
+  displayName: String,
   resetPasswordToken: String,
   resetPasswordExpires: Date,
   createdAt: { 
