@@ -1,31 +1,23 @@
-# STAGE 1: Build & Dependencies
-FROM node:20.19-alpine AS builder
-
-WORKDIR /app
-
-# Install build dependencies if needed (e.g., for native npm modules)
-RUN apk add --no-cache python3 make g++
-
-# Layer caching: Copy package files first
-COPY package*.json ./
-RUN npm install --omit=dev
-
-# STAGE 2: Production Runtime
 FROM node:20.19-alpine
 
 WORKDIR /app
 
-# Set production environment
-ENV NODE_ENV=production
+# Install build dependencies for native modules
+RUN apk add --no-cache python3 make g++
 
-# Copy only the necessary files from builder and project
-COPY --from=builder /app/node_modules ./node_modules
+# Copy package files
+COPY package*.json ./
+
+# Install production dependencies
+RUN npm install --omit=dev
+
+# Copy the rest of the code
 COPY . .
 
 # Security: Run as a non-root user
 USER node
 
-# Render dynamically assigns a PORT, but 10000 is their default
+# Expose port
 EXPOSE 10000
 
 # Start command
