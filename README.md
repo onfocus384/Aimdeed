@@ -112,7 +112,7 @@ graph TD;
   E --> F["👥 Code review by team"];
   F --> G["✅ Merge PR to main"];
   G --> H["🚀 Render → Automatic deployment"];
-  H --> I["🌐 AIMDEED updated live"];
+  H --> I["🌐 Aimdeed updated live"];
 ```
 
 ### Pipeline Tools

@@ -25,8 +25,8 @@ const compression = require("compression");
 
 
 const app = express();
-// Default to 10000 to match Dockerfile EXPOSE and Render's typical Docker default
-const PORT = process.env.PORT || 10000;
+// Reverting to 3000 as it appears to be the expected port in your Render environment
+const PORT = process.env.PORT || 3000;
 const User = require("./models/user.js");
 const dbUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/aimdeed";
 const SESSION_SECRET = process.env.SESSION_SECRET || "default_session_secret_change_me";
@@ -47,8 +47,12 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // ======================
-// MIDDLEWARE
+// DIAGNOSTIC LOGGER (Temporary)
 // ======================
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - Host: ${req.headers.host}`);
+  return next();
+});
 
 // Compress all HTTP responses for faster page load
 app.use(compression());
@@ -195,13 +199,18 @@ app.use((req, res, next) => {
 // ======================
 // MONGODB CONNECTION
 // ======================
+console.log("⏳ Connecting to MongoDB...");
 mongoose
-  .connect(dbUrl)
+  .connect(dbUrl, {
+    serverSelectionTimeoutMS: 5000, // Fail fast if connection times out
+    socketTimeoutMS: 45000,
+  })
   .then(() => {
-    // MongoDB is Connected
+    console.log("✅ MongoDB Connection Established");
   })
   .catch((err) => {
-    console.error("MongoDB Connection Error:", err.message);
+    console.error("❌ MongoDB Connection Error:", err.message);
+    console.error("Tip: Check if your Render IP addresses are whitelisted in MongoDB Atlas.");
   });
 
 // ======================
@@ -1234,6 +1243,7 @@ app.use((err, req, res, next) => {
 // SERVER START
 // ======================
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Aimdeed Server started on port ${PORT}`);
-  console.log(`📡 Binding to 0.0.0.0`);
+  console.log(`🚀 Aimdeed Server started`);
+  console.log(`📡 Port: ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });

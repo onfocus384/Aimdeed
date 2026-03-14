@@ -18,7 +18,7 @@ COPY . .
 USER node
 
 # Expose port
-EXPOSE 10000
+EXPOSE 3000
 
 # Start command
 CMD ["node", "app.js"]
