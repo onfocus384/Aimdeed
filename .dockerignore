@@ -8,4 +8,4 @@ package-lock.json
 README.md
 docker-compose.yml
 .deepsource.toml
-josaa_data.json
+# Remove josaa_data.json from here because it is needed for the Rank Predictor
