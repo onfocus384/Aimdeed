@@ -450,36 +450,36 @@ app.post("/forgot-password", isLoggedOut, async (req, res) => {
       req.flash("error", "Please enter your email address.");
       return res.redirect("/forgot-password");
     }
-    
+
     // Find user by email
     const user = await User.findOne({ email: email.toLowerCase().trim() });
-    
+
     // Show same message whether user exists or not (for security)
     if (!user) {
       console.log("No user found with email:", email);
       req.flash("success", "If an account exists with this email, a reset link will be sent.");
       return res.redirect("/login");
     }
-    
+
     console.log("User found:", user.username);
-    
+
     // Generate reset token
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
-    
+
     // Create reset URL
     const resetURL = `http://localhost:3000/reset-password/${resetToken}`;
     console.log("Reset URL:", resetURL);
-    
+
     // Send email
-    const transporter = nodemailer.createTransport({
+    const mailTransporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
       },
     });
-    
+
     const mailOptions = {
       from: `"Aimdeed Support" <${process.env.EMAIL_USERNAME}>`,
       to: user.email,
@@ -493,10 +493,10 @@ app.post("/forgot-password", isLoggedOut, async (req, res) => {
         <p>If you didn't request this, please ignore this email.</p>
       `
     };
-    
-    await transporter.sendMail(mailOptions);
+
+    await mailTransporter.sendMail(mailOptions);
     console.log("✅ Reset email sent to:", user.email);
-    
+
     req.flash("success", "Password reset link sent to your email!");
     res.redirect("/login");
     
@@ -855,7 +855,6 @@ app.get("/listings/student", isLoggedIn, (req, res) => {
 
 
 
-
 // Test email configuration
 app.get("/test-email", async (req, res) => {
   console.log("Testing email configuration...");
@@ -872,7 +871,7 @@ EMAIL_PASSWORD=your-app-password
       `);
     }
     
-    const transporter = nodemailer.createTransport({
+    const emailTransporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: process.env.EMAIL_USERNAME,
@@ -880,10 +879,10 @@ EMAIL_PASSWORD=your-app-password
       },
     });
     
-    await transporter.verify();
+    await emailTransporter.verify();
     console.log("Email server connected!");
     
-    const info = await transporter.sendMail({
+    const info = await emailTransporter.sendMail({
       from: `"Aimdeed Test" <${process.env.EMAIL_USERNAME}>`,
       to: process.env.EMAIL_USERNAME,
       subject: "Test Email from Aimdeed",
