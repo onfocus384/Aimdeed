@@ -249,6 +249,11 @@ app.get("/privacy", (req, res) => {
   res.render("privacy", { title: "Privacy Policy | Aimdeed" });
 });
 
+// Terms of Service
+app.get("/terms", (req, res) => {
+  res.render("terms", { title: "Terms of Service | Aimdeed" });
+});
+
 
 // payments page
 // Payment page – show plans
