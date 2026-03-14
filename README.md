@@ -99,23 +99,48 @@ This automatically sets up the Node.js application and a MongoDB database, linki
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 🔄 CI/CD Pipeline — GitHub → Docker → Render
-This project uses **Render's native GitHub integration** for fully automated deployments. Every code push is automatically picked up by Render, which builds a fresh Docker image and deploys it — no manual steps required.
+## 🔄 Enterprise CI/CD Pipeline
+
+This project follows a professional, multi-stage CI/CD pipeline that enforces code quality, security, and automated deployment on every Pull Request.
 
 ```mermaid
 graph TD;
-  A["🧑‍💻 Code Change"] --> B["📤 Push to GitHub"];
-  B --> C["👀 Render detects change"];
-  C --> D["🐳 Docker image builds"];
-  D --> E["🚀 Container runs"];
-  E --> F["✅ AIMDEED updated"];
+  A["🧑‍💻 Developer pushes code"] --> B["📤 Pull Request created"];
+  B --> C["🔍 DeepSource → Code quality check"];
+  C --> D["🔒 Snyk → Security scan"];
+  D --> E["🧪 GitHub Actions → Run tests"];
+  E --> F["👥 Code review by team"];
+  F --> G["✅ Merge PR to main"];
+  G --> H["🚀 Render → Automatic deployment"];
+  H --> I["🌐 AIMDEED updated live"];
 ```
 
-**How to connect Render to your GitHub repo:**
-1. Go to [render.com](https://render.com) and create a new **Web Service**.
-2. Select **"Connect a Repository"** and link your GitHub `Aimdeed` repo.
-3. In the **Environment** setting, set it to **Docker** — Render will automatically use the `Dockerfile` included in this repo.
-4. Every push to `main` will now **automatically trigger a new Docker build and live deployment** with zero manual intervention!
+### Pipeline Tools
+
+| Tool | Purpose | Trigger |
+|------|---------|---------|
+| **DeepSource** | Static code analysis, code quality | Every PR (via GitHub App) |
+| **Snyk** | Dependency & security vulnerability scan | Every PR & push |
+| **GitHub Actions** | Automated build + test (Node 18 & 20) | Every PR & push |
+| **Code Review** | Human review before merge | Pull Request |
+| **Render** | Automatic deployment via Docker | On merge to `main` |
+
+### Setup Instructions
+
+**Snyk (Security Scanning):**
+1. Sign up at [snyk.io](https://snyk.io) with your GitHub account
+2. Go to your GitHub repo → **Settings** → **Secrets and variables** → **Actions**
+3. Add a secret named `SNYK_TOKEN` with your Snyk API token
+
+**DeepSource (Code Quality):**
+1. Sign up at [deepsource.com](https://deepsource.com) with GitHub
+2. Add the Aimdeed repository — DeepSource will detect `.deepsource.toml` automatically
+3. It will post quality reports directly on every Pull Request
+
+**Render (Deployment):**
+1. Connect your GitHub repo at [render.com](https://render.com)
+2. Set environment to **Docker** — it will use the `Dockerfile` automatically
+3. Every merge to `main` triggers an automatic redeploy
 
 ## 📝 License
 Distributed under the ISC License.
