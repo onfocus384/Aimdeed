@@ -4,7 +4,6 @@ node_modules
 .env
 Dockerfile
 .dockerignore
-package-lock.json
 README.md
 docker-compose.yml
 .deepsource.toml

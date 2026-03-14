@@ -8,7 +8,7 @@ RUN apk add --no-cache python3 make g++
 
 # Layer caching: Copy package files first
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev
 
 # STAGE 2: Production Runtime
 FROM node:20.19-alpine
