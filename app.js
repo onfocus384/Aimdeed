@@ -108,12 +108,15 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 
 // Google Strategy Configuration
-if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+const googleClientID = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+if (googleClientID && googleClientSecret) {
   passport.use(
     new GoogleStrategy(
       {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        clientID: googleClientID,
+        clientSecret: googleClientSecret,
         callbackURL: process.env.NODE_ENV === "production" 
           ? "https://www.aimdeed.in/auth/google/callback" 
           : "http://localhost:3000/auth/google/callback",
@@ -121,24 +124,19 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
-          console.log("📨 Google Auth Callback received for:", profile.emails[0].value);
-          
           // Find user by googleId
           let user = await User.findOne({ googleId: profile.id });
           
           if (!user) {
-            console.log("ℹ️ No user found with googleId, checking email...");
             // Check if user already exists with this email
             user = await User.findOne({ email: profile.emails[0].value });
             
             if (user) {
-              console.log("🔗 Linking existing email account to Google ID");
               // Update existing user with googleId
               user.googleId = profile.id;
               user.displayName = profile.displayName;
               await user.save();
             } else {
-              console.log("✨ Creating new user from Google profile");
               // Create a new user
               user = new User({
                 googleId: profile.id,
@@ -149,17 +147,16 @@ if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
               await user.save();
             }
           }
-          console.log("✅ Google Auth Successful for:", user.email);
           return done(null, user);
         } catch (err) {
-          console.error("❌ Google Strategy Error:", err);
+          console.error("❌ Google Strategy Callback Error:", err);
           return done(err, null);
         }
       }
     )
   );
 } else {
-  console.log("⚠️ Google OAuth credentials missing. Google Login will be disabled.");
+  console.warn("⚠️ Google OAuth credentials missing. Google Login is disabled.");
 }
 
 // Switch to ID-based serialization to support both social and local users
@@ -921,16 +918,28 @@ app.post("/chat", isLoggedIn, async (req, res) => {
   try {
     const userMessage = req.body.message;
 
+    if (!process.env.OPENROUTER_API_KEY) {
+      console.error("❌ Chat Error: OPENROUTER_API_KEY is missing");
+      return res.status(500).json({ reply: "Chatbot configuration error. API key missing." });
+    }
+
     const completion = await openai.chat.completions.create({
-      model: process.env.MODEL || "gpt-4o-mini", // Use env var or dynamic fallback
+      model: process.env.MODEL || "meta-llama/llama-3.1-8b-instruct:free",
       messages: [{ role: "user", content: userMessage }],
     });
 
+    if (!completion.choices || completion.choices.length === 0) {
+      throw new Error("No response from AI model");
+    }
+
     const reply = completion.choices[0].message.content;
-    res.json({ reply });
+    return res.json({ reply });
   } catch (err) {
-    console.error("Chat Error:", err.message);
-    res.status(500).json({ reply: "AI error. Try again." });
+    console.error("❌ Chat Error:", err.message);
+    if (err.response && err.response.data) {
+      console.error("API Details:", JSON.stringify(err.response.data));
+    }
+    return res.status(500).json({ reply: "I'm having trouble connecting to my brain. Please try again in a moment." });
   }
 });
 
