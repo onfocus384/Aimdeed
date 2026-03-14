@@ -46,7 +46,7 @@ app.use((req, res, next) => {
   const host = req.headers.host;
   
   if (host === "www.aimdeed.in" || host === "aimdeed.com" || host === "www.aimdeed.com") {
-    console.log(`📡 Redirecting from ${host} to aimdeed.in`);
+    console.log(` Redirecting from ${host} to aimdeed.in`);
     return res.redirect(301, "https://aimdeed.in" + req.url);
   }
   
@@ -193,7 +193,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   res.locals.currentUser = req.user || null;
   res.locals.currentHost = req.get('host') || 'www.aimdeed.in';
-  next();
+  return next();
 });
 
 
@@ -202,27 +202,30 @@ app.use((req, res, next) => {
 // ======================
 mongoose
   .connect(dbUrl)
-  .then(() => console.log(" MongoDB is Connected"))
-  .catch((err) => console.log(" MongoDB Error:", err));
+  .then(() => {
+    // MongoDB is Connected
+  })
+  .catch((err) => {
+    console.error("MongoDB Connection Error:", err.message);
+  });
 
 // ======================
 // AUTH MIDDLEWARE
 // ======================
 function isLoggedIn(req, res, next) {
-  console.log("🔍 Checking isLoggedIn. Authenticated:", req.isAuthenticated());
   if (!req.isAuthenticated()) {
     req.flash("error", "Please login first!");
     req.session.returnTo = req.originalUrl;
     return res.redirect("/login");
   }
-  next();
+  return next();
 }
 
 function isLoggedOut(req, res, next) {
   if (req.isAuthenticated()) {
     return res.redirect("/");
   }
-  next();
+  return next();
 }
 
 // ======================
@@ -246,7 +249,7 @@ const fromAddress = process.env.EMAIL_FROM
 
 // Home
 app.get("/", (req, res) => {
-  res.render("index", {
+  return res.render("index", {
     title: "Aimdeed | Best NEET & JEE Preparation Platform",
     description: "Aimdeed provides premium NEET & JEE preparation with expert mentorship, comprehensive study materials, and a proven success roadmap.",
   });
@@ -254,27 +257,27 @@ app.get("/", (req, res) => {
 
 // Mentor (Public)
 app.get("/mentor", (req, res) => {
-  res.redirect("/listings/mentor");
+  return res.redirect("/listings/mentor");
 });
 
 // Health Check
 app.get("/healthz", (req, res) => {
-  res.status(200).send("OK");
+  return res.status(200).send("OK");
 });
 
 // Privacy Policy
 app.get("/privacy", (req, res) => {
-  res.render("privacy", { title: "Privacy Policy | Aimdeed" });
+  return res.render("privacy", { title: "Privacy Policy | Aimdeed" });
 });
 
 // Terms of Service
 app.get("/terms", (req, res) => {
-  res.render("terms", { title: "Terms of Service | Aimdeed" });
+  return res.render("terms", { title: "Terms of Service | Aimdeed" });
 });
 
 // Cookies Policy
 app.get("/cookies", (req, res) => {
-  res.render("cookies", { title: "Cookies Policy | Aimdeed" });
+  return res.render("cookies", { title: "Cookies Policy | Aimdeed" });
 });
 
 
@@ -284,12 +287,12 @@ app.get("/payment", isLoggedIn, (req, res) => {
   try {
     const allowedAmounts = [499, 799, 999];
 
-    res.render("users/payment", {
+    return res.render("users/payment", {
       allowedAmounts
     });
   } catch (error) {
     console.error("Payment page error:", error);
-    res.status(500).send("Server error");
+    return res.status(500).send("Server error");
   }
 });
 
@@ -313,14 +316,14 @@ app.post("/payment/generate-qr", isLoggedIn, async (req, res) => {
 
     const qrImage = await QRCode.toDataURL(upiLink);
 
-    res.json({
+    return res.json({
       success: true,
       qrImage
     });
 
   } catch (error) {
     console.error("QR generation error:", error);
-    res.status(500).json({ error: "Server error" });
+    return res.status(500).json({ error: "Server error" });
   }
 });
 
@@ -340,7 +343,7 @@ app.post("/payment/confirm", isLoggedIn, async (req, res) => {
 
     await payment.save();
 
-    res.render("users/payment-success", {
+    return res.render("users/payment-success", {
       title: "Payment Submitted",
       amount,
       transactionId: utr
@@ -355,7 +358,7 @@ app.post("/payment/confirm", isLoggedIn, async (req, res) => {
     }
 
     console.error("Payment confirm error:", error);
-    res.status(500).send("Payment failed");
+    return res.status(500).send("Payment failed");
   }
 });
 
@@ -369,7 +372,7 @@ app.post("/payment/confirm", isLoggedIn, async (req, res) => {
 
 // Signup - GET
 app.get("/signup", isLoggedOut, (req, res) => {
-  res.render("users/signup", { title: "Sign Up" });
+  return res.render("users/signup", { title: "Sign Up" });
 });
 
 // Signup - POST (Redirects to login page after successful signup)
@@ -449,7 +452,7 @@ app.post("/signup", isLoggedOut, async (req, res) => {
     console.error(" Unexpected signup error:", err);
     console.error("Error stack:", err.stack);
     req.flash("error", "An unexpected error occurred. Please try again.");
-    res.redirect("/signup");
+    return res.redirect("/signup");
   }
 });
 
@@ -459,7 +462,7 @@ app.post("/signup", isLoggedOut, async (req, res) => {
 
 // Login - GET
 app.get("/login", isLoggedOut, (req, res) => {
-  res.render("users/login", { title: "Login" });
+  return res.render("users/login", { title: "Login" });
 });
 
 // Login - POST
@@ -486,7 +489,7 @@ app.post(
     // Redirect to homepage or returnTo URL
     const redirectUrl = req.session.returnTo || "/";
     delete req.session.returnTo;
-    res.redirect(redirectUrl);
+    return res.redirect(redirectUrl);
   }
 );
 
@@ -510,14 +513,14 @@ app.get(
     req.flash("success", `Welcome, ${req.user.displayName || req.user.username}!`);
     const redirectUrl = req.session.returnTo || "/";
     delete req.session.returnTo;
-    res.redirect(redirectUrl);
+    return res.redirect(redirectUrl);
   }
 );
 
 
 // Forgot Password - GET
 app.get("/forgot-password", isLoggedOut, (req, res) => {
-  res.render("users/forgot", { title: "Forgot Password" });
+  return res.render("users/forgot", { title: "Forgot Password" });
 });
 
 // Forgot Password - POST (Add this right after the GET route)
@@ -605,12 +608,12 @@ app.post("/forgot-password", isLoggedOut, async (req, res) => {
     console.log("✅ Reset email sent to:", user.email);
     
     req.flash("success", "Password reset link sent to your email!");
-    res.redirect("/login");
+    return res.redirect("/login");
     
   } catch (error) {
     console.error("❌ Error sending reset email:", error);
     req.flash("error", "Could not send reset email. Please try again.");
-    res.redirect("/forgot-password");
+    return res.redirect("/forgot-password");
   }
 });
 
@@ -1030,24 +1033,15 @@ EMAIL_PASSWORD=your-app-password
 
 
 // Logout
-// Logout - Correct version
+// Logout - Corrected version to satisfy DeepSource return value rules
 app.get("/logout", (req, res, next) => {
-  console.log("=== LOGOUT PROCESS ===");
-  
-  // Store flash message BEFORE destroying session
   const flashMessage = "Logged out successfully!";
-  
-  // Store username for logging
   const username = req.user ? req.user.username : "User";
   
-  // Logout from passport
   req.logout((err) => {
     if (err) {
-      console.error("Passport logout error:", err);
       return next(err);
     }
-    
-    console.log(`User "${username}" logged out from passport`);
     
     // Set the flash message in session before destroying it
     req.session.flash = {
@@ -1055,26 +1049,18 @@ app.get("/logout", (req, res, next) => {
     };
     
     // Save the session with flash message
-    req.session.save((saveErr) => {
+    return req.session.save((saveErr) => {
       if (saveErr) {
-        console.error("Session save error:", saveErr);
         return next(saveErr);
       }
       
       // Now destroy the session
-      req.session.destroy((destroyErr) => {
-        if (destroyErr) {
-          console.error("Session destroy error:", destroyErr);
-          // Continue anyway
-        }
-        
+      return req.session.destroy(() => {
         // Clear the cookie
         res.clearCookie("aimdeed.sid", { path: '/' });
         
-        console.log(" Session destroyed and cookie cleared");
-        
         // Redirect to home
-        res.redirect("/");
+        return res.redirect("/");
       });
     });
   });
@@ -1177,14 +1163,14 @@ app.post("/contact", async (req, res) => {
       `,
     });
 
-    res.json({
+    return res.json({
       success: true,
       message: "Thank you! We have received your message. A confirmation email has been sent to you.",
     });
 
   } catch (error) {
     console.error("Email Error:", error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Message received, but email failed to send.",
     });
@@ -1208,13 +1194,13 @@ app.use((err, req, res, next) => {
   
   // If error view doesn't exist, use simple HTML
   try {
-    res.status(statusCode).render("error", { 
+    return res.status(statusCode).render("error", { 
       title: `${statusCode} - Error`,
       message 
     });
-  } catch (renderErr) {
+  } catch (_renderErr) {
     // Fallback to simple HTML response
-    res.status(statusCode).send(`
+    return res.status(statusCode).send(`
       <!DOCTYPE html>
       <html lang="en">
       <head>
