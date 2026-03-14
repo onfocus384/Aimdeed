@@ -1,0 +1,263 @@
+<style>
+/* Modern Glassmorphic Navbar */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1030;
+  transition: all 0.3s ease-in-out;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.site-header:hover {
+  background: rgba(15, 23, 42, 0.85);
+}
+
+.navbar-brand-custom {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+}
+
+.brand-logo-wrap {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(135deg, #4F46E5, #0ea5e9);
+}
+
+.brand-logo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: contain;
+  background-color: #0f172a; /* Inner circle bg */
+}
+
+.brand-text {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.brand-a {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(to right, #818cf8, #38bdf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #F8FAFC;
+}
+
+.nav-link-custom {
+  color: #cbd5e1 !important;
+  font-weight: 500;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.05rem;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link-custom:hover, .nav-link-custom.active {
+  color: #fff !important;
+  cursor: pointer;
+}
+
+.nav-link-custom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(to right, #4F46E5, #0ea5e9);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.nav-link-custom:hover::after, .nav-link-custom.active::after {
+  width: 80%;
+}
+
+.dropdown-menu-glass {
+  background: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  padding: 0.5rem;
+  min-width: 200px;
+}
+
+.dropdown-menu-glass .dropdown-item {
+  color: #cbd5e1;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.dropdown-menu-glass .dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: translateX(4px);
+}
+
+.dropdown-menu-glass .dropdown-header {
+  color: #fff;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.dropdown-menu-glass .dropdown-divider {
+  border-color: rgba(255, 255, 255, 0.1);
+  margin: 0.5rem 0;
+}
+
+.navbar-toggler {
+  border: none;
+  background: rgba(255,255,255,0.05);
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5);
+}
+</style>
+
+<header class="site-header">
+  <nav class="navbar navbar-expand-lg navbar-dark py-2">
+    <div class="container">
+      <!-- BRAND -->
+      <a href="/" class="navbar-brand-custom" title="Aimdeed - NEET & JEE Preparation">
+        <div class="brand-logo-wrap">
+          <img src="/images/logo_circular.png" alt="Aimdeed - Your NEET & JEE Preparation Partner" class="brand-logo" />
+        </div>
+        <span class="brand-text">
+          <span class="brand-a">A</span><span class="brand-name">imdeed</span>
+        </span>
+      </a>
+
+      <!-- TOGGLER -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#mainNavbar"
+        aria-controls="mainNavbar"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- NAV LINKS -->
+      <div class="collapse navbar-collapse" id="mainNavbar">
+       <ul class="navbar-nav ms-auto align-items-lg-center gap-1 gap-lg-2">
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="/#home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="/#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="/listings/index2">Studies</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="/mentor">Mentor</a>
+          </li>
+          <!-- TOOLS DROPDOWN -->
+          <li class="nav-item dropdown">
+            <a class="nav-link nav-link-custom dropdown-toggle" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Tools
+            </a>
+            <ul class="dropdown-menu dropdown-menu-glass mt-2" aria-labelledby="toolsDropdown">
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2" href="/chatbot">
+                  <i class="ri-robot-2-line" style="color: #818cf8;"></i> AI Chatbot
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2" href="/predictor">
+                  <i class="ri-ruler-2-line" style="color: #38bdf8;"></i> JEE Rank Predictor
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2" href="/student">
+                  <i class="ri-book-open-line" style="color: #60a5fa;"></i> Student Resources
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link nav-link-custom" href="/payment">Premium</a>
+          </li>
+          <li class="nav-item me-lg-2">
+            <a class="nav-link nav-link-custom" href="/#contact">Contact</a>
+          </li>
+
+          <!-- ACCOUNT DROPDOWN -->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link nav-link-custom dropdown-toggle d-flex align-items-center gap-2"
+              href="#"
+              id="accountDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="ri-user-smile-line fs-5"></i>
+              <span>Account</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-glass mt-2">
+              <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+                <li class="dropdown-header d-flex align-items-center gap-2">
+                  <div style="width: 30px; height: 30px; background: linear-gradient(135deg, #4F46E5, #0ea5e9); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="ri-user-fill text-white"></i>
+                  </div>
+                  <strong><%= currentUser.username %></strong>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item text-danger d-flex align-items-center gap-2" href="/logout">
+                    <i class="ri-logout-circle-r-line"></i>
+                    Logout
+                  </a>
+                </li>
+              <% } else { %>
+                <li>
+                  <a class="dropdown-item d-flex align-items-center gap-2" href="/login">
+                    <i class="ri-login-circle-line" style="color: #60a5fa;"></i>
+                    Login
+                  </a>
+                </li>
+                <li>
+                  <a class="dropdown-item d-flex align-items-center gap-2" href="/signup">
+                    <i class="ri-user-add-line" style="color: #38bdf8;"></i>
+                    Signup
+                  </a>
+                </li>
+              <% } %>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -1,89 +1,97 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mentor form</title>
-  <!-- Primary favicon (MOST IMPORTANT) -->
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<% layout("layouts/boilerplate") %>
 
-<!-- PNG favicons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+<div class="page-hero">
+  <div class="container">
+    <div class="badge-premium mb-3">Expert Guidance</div>
+    <h1 class="page-title">Get a Personal Mentor</h1>
+    <p class="page-subtitle">Ready to excel? Fill out the form below and we'll match you with the perfect mentor for your journey.</p>
+  </div>
+</div>
 
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
+<div class="container mb-5 pb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="glass-card p-5">
+        <form id="form" method="post" class="row g-4">
+          <div class="col-md-6">
+            <label class="form-label-premium">Full Name</label>
+            <input type="text" class="form-control form-control-glass" id="name" name="name" placeholder="Enter your name" required>
+          </div>
+          
+          <div class="col-md-6">
+            <label class="form-label-premium">Gender</label>
+            <select class="form-select form-control-glass" id="gender" name="gender">
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          
+          <div class="col-md-6">
+            <label class="form-label-premium">Email Address</label>
+            <input type="email" class="form-control form-control-glass" id="email" name="email" placeholder="example@email.com" required>
+          </div>
+          
+          <div class="col-md-6">
+            <label class="form-label-premium">Contact Number</label>
+            <input type="tel" class="form-control form-control-glass" id="phone" name="phone" placeholder="+91 00000 00000" required>
+          </div>
+          
+          <div class="col-md-8">
+            <label class="form-label-premium">School Name</label>
+            <input type="text" class="form-control form-control-glass" id="school" name="school" placeholder="Enter your school name" required>
+          </div>
+          
+          <div class="col-md-4">
+            <label class="form-label-premium">Class</label>
+            <input type="number" class="form-control form-control-glass" id="class" name="class" min="1" max="12" placeholder="e.g. 11" required>
+          </div>
+          
+          <div class="col-md-4">
+            <label class="form-label-premium">Village / City</label>
+            <input type="text" class="form-control form-control-glass" id="city" name="city" placeholder="e.g. Kharagpur" required>
+          </div>
+          
+          <div class="col-md-4">
+            <label class="form-label-premium">District</label>
+            <input type="text" class="form-control form-control-glass" id="district" name="district" placeholder="District name" required>
+          </div>
+          
+          <div class="col-md-4">
+            <label class="form-label-premium">State</label>
+            <input type="text" class="form-control form-control-glass" id="state" name="state" placeholder="State" required>
+          </div>
+          
+          <div class="col-12">
+            <label class="form-label-premium">What is your future career goal?</label>
+            <textarea class="form-control form-control-glass" id="career-goal" name="career_goal" rows="2" placeholder="Tell us about your dreams..." required></textarea>
+          </div>
+          
+          <div class="col-md-6">
+            <label class="form-label-premium">Study Hours Daily</label>
+            <select class="form-select form-control-glass" id="study-time" name="study_time">
+              <option value="Less than 2 hours">Less than 2 hours</option>
+              <option value="2-4 hours">2-4 hours</option>
+              <option value="4-8 hours">4-8 hours</option>
+              <option value="More than 8 hours">More than 8 hours</option>
+            </select>
+          </div>
+          
+          <div class="col-md-6">
+            <label class="form-label-premium">Why did you choose us?</label>
+            <input type="text" class="form-control form-control-glass" id="reason" name="reason" placeholder="e.g. Referral, Social Media..." required>
+          </div>
 
-
-    <link rel="stylesheet" href="/css/mentor.css">
-
-</head>
-<body>
-    <div class="main">
-       
-        <form id="form" method="post">
-            <h1>Get Mentor</h1>
-            <div class="form-outer">
-                <label for="name">Name :</label>
-                <input type="text" id="name" name="name" required>
-            </div>
-            <div class="form-outer">
-                <label for="gender">Gender :</label>
-                <select id="gender" name="gender">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div class="form-outer">
-                <label for="email">Email id :</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-outer">
-                <label for="phone">Contact Number :</label>
-                <input type="tel" id="phone" name="phone" required>
-            </div>
-            <div class="form-outer">
-                <label for="school">School Name :</label>
-                <input type="text" id="school" name="school" required>
-            </div>
-            <div class="form-outer">
-                <label for="class">Class :</label>
-                <input type="number" id="class" name="class" min="1" max="12" required>
-            </div>
-            <div class="form-outer">
-                <label for="city">Vill/City :</label>
-                <input type="text" id="city" name="city" required>
-            </div>
-            <div class="form-outer">
-                <label for="district">District :</label>
-                <input type="text" id="district" name="district" required>
-            </div>
-            <div class="form-outer">
-                <label for="state">State :</label>
-                <input type="text" id="state" name="state" required>
-            </div>
-            <div class="form-outer">
-                <label for="career-goal">What is your future career goal ?</label>
-                <input type="text" id="career-goal" name="career_goal" required>
-            </div>
-            <div class="form-outer">
-                <label for="study-time">How many hours do you study daily ?</label>
-                <select id="study-time" name="study_time">
-                    <option value="Less than 1 hour">less than 2 hour</option>
-                    <option value="1-2 hours">2-4 hours</option>
-                    <option value="3-4 hours">4-8 hours</option>
-                    <option value="More than 4 hours">More than 8 hours</option>
-                </select>
-                <div class="form-outer">
-                    <label for="career-goal">Why did you choose us ?</label>
-                    <input type="text" id="career-goal" name="career_goal" required>
-                </div>
-            </div>
-            <div id="res" style="color: rgb(128, 239, 128);font-size: 15px; font-weight: bold;"></div>
-            <button name="btn" type="submit">Submit</button>
+          <div class="col-12 text-center mt-5">
+            <div id="res" style="color: #4ade80; font-size: 1rem; font-weight: 600; margin-bottom: 1rem;"></div>
+            <button class="btn-premium px-5 py-3" name="btn" type="submit">
+              Submit My Application <i class="ri-send-plane-fill ms-2"></i>
+            </button>
+          </div>
         </form>
+      </div>
     </div>
-    <script src="/js/mentor.js"></script>
-</body>
-</html>
+  </div>
+</div>
+
+<script src="/js/mentor.js"></script>

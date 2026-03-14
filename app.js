@@ -27,6 +27,7 @@ const { Configuration, OpenAIApi } = require("openai");
 const marked = require("marked");
 const QRCode=require("qrcode")
 const Payment = require("./models/Payment.js");
+const compression = require("compression");
 
 
 const app = express();
@@ -45,7 +46,14 @@ app.set("views", path.join(__dirname, "views"));
 // ======================
 // MIDDLEWARE
 // ======================
-app.use(express.static(path.join(__dirname, "public")));
+// Compress all HTTP responses for faster page load
+app.use(compression());
+
+// Cache static files (CSS, JS, images) aggressively for 1 year in production
+const staticOptions = {
+  maxAge: process.env.NODE_ENV === "production" ? "1y" : "0"
+};
+app.use(express.static(path.join(__dirname, "public"), staticOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method")); // Add method override
@@ -114,6 +122,7 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.currentUser = req.user || null;
+  res.locals.currentHost = req.get('host') || 'www.aimdeed.in';
   next();
 });
 
@@ -130,6 +139,7 @@ mongoose
 // AUTH MIDDLEWARE
 // ======================
 function isLoggedIn(req, res, next) {
+  console.log("🔍 Checking isLoggedIn. Authenticated:", req.isAuthenticated());
   if (!req.isAuthenticated()) {
     req.flash("error", "Please login first!");
     req.session.returnTo = req.originalUrl;
@@ -201,20 +211,20 @@ const sendResetEmail = async (email, resetToken, req) => {
 // Home
 app.get("/", (req, res) => {
   res.render("index", {
-    title: "Aimdeed | Home",
-    description: "NEET & JEE preparation platform by Aimdeed",
+    title: "Aimdeed | Best NEET & JEE Preparation Platform",
+    description: "Aimdeed provides premium NEET & JEE preparation with expert mentorship, comprehensive study materials, and a proven success roadmap.",
   });
 });
 
-// Mentor (Protected)
+// Mentor (Public)
 app.get("/mentor", (req, res) => {
-  res.render("listings/mentor", { title: "Mentor Form" });
+  res.redirect("/listings/mentor");
 });
 
 
 // payments page
 // Payment page – show plans
-app.get("/payment",(req, res) => {
+app.get("/payment", isLoggedIn, (req, res) => {
   try {
     const allowedAmounts = [499, 799, 999];
 
@@ -229,7 +239,7 @@ app.get("/payment",(req, res) => {
 
 
 // Generate QR for selected amount
-app.post("/payment/generate-qr", async (req, res) => {
+app.post("/payment/generate-qr", isLoggedIn, async (req, res) => {
   try {
     const { amount } = req.body;
     const allowedAmounts = [499, 799, 999];
@@ -259,16 +269,12 @@ app.post("/payment/generate-qr", async (req, res) => {
 });
 
 // Confirm payment after user submits UTR
-app.post("/payment/confirm", async (req, res) => {
+app.post("/payment/confirm", isLoggedIn, async (req, res) => {
   try {
     const { amount, utr, payerName } = req.body;
 
-    if (!req.session.user) {
-      return res.redirect("/login");
-    }
-
     const payment = new Payment({
-      userId: req.session.user._id,
+      userId: req.user._id,
       payerName,
       amount,
       utrId: utr,
@@ -421,8 +427,10 @@ app.post(
     // Set success message
     req.flash("success", `Welcome back, ${req.user.username}!`);
     
-    // Redirect to homepage
-    res.redirect("/");
+    // Redirect to homepage or returnTo URL
+    const redirectUrl = req.session.returnTo || "/";
+    delete req.session.returnTo;
+    res.redirect(redirectUrl);
   }
 );
 
@@ -665,13 +673,13 @@ app.get("/debug-user/:email", async (req, res) => {
 });
 
 // In your app.js or routes file
-app.get("/studies", (req, res) => {
+app.get("/studies", isLoggedIn, (req, res) => {
     // This redirects to /listings/index2
     return res.redirect("/listings/index2");
 });
 
 // Make sure you have this route too
-app.get("/listings/index2", (req, res) => {
+app.get("/listings/index2", isLoggedIn, (req, res) => {
     // Render the actual EJS file
     res.render("listings/index2", { 
         currentUser: req.user,
@@ -689,12 +697,12 @@ app.use(express.urlencoded({ extended: true }));
 
 
 // Redirect predictor route
-app.get("/predictor", (req, res) => {
+app.get("/predictor", isLoggedIn, (req, res) => {
   res.redirect("/listings/college");
 });
 
 // Render college predictor page
-app.get("/listings/college", (req, res) => {
+app.get("/listings/college", isLoggedIn, (req, res) => {
   res.render("listings/college", {
     currentUser: req.user,
     pageTitle: "Predict your rank",
@@ -759,9 +767,10 @@ app.put("/api/josaa", async (req, res) => {
 
 // for mentor form 
 // Redirect /mentor → mentor form page
-app.get("/mentor", (req, res) => {
-  return res.redirect("/listings/mentor");
-});
+// (Simplified duplicate)
+// app.get("/mentor", isLoggedIn, (req, res) => {
+//   return res.redirect("/listings/mentor");
+// });
 
 // Render mentor form page
 app.get("/listings/mentor", (req, res) => {
@@ -797,11 +806,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // ================= AUTH ROUTES =================
-app.get("/chatbot", (req, res) => {
+app.get("/chatbot", isLoggedIn, (req, res) => {
   res.redirect("/listings/chatbot");
 });
 
-app.get("/listings/chatbot", (req, res) => {
+app.get("/listings/chatbot", isLoggedIn, (req, res) => {
   res.render("listings/chatbot", {
     currentUser: req.user,
     pageTitle: "Chatbot",
@@ -819,7 +828,7 @@ app.get("/listings/chatbot", (req, res) => {
     "X-Title": "Aimdeed Chatbot",             // any name
   },
 });
-app.post("/chat", async (req, res) => {
+app.post("/chat", isLoggedIn, async (req, res) => {
   try {
     const userMessage = req.body.message;
 
@@ -839,11 +848,11 @@ app.post("/chat", async (req, res) => {
 
 
 // class notes 
-app.get("/student", (req, res) => {
+app.get("/student", isLoggedIn, (req, res) => {
   res.redirect("/listings/student");
 });
 
-app.get("/listings/student",(req, res) => {
+app.get("/listings/student", isLoggedIn, (req, res) => {
   res.render("listings/student", {
     currentUser: req.user,
     pageTitle: "student notes",
@@ -966,7 +975,7 @@ app.get("/logout", (req, res, next) => {
         }
         
         // Clear the cookie
-        res.clearCookie("connect.sid", { path: '/' });
+        res.clearCookie("aimdeed.sid", { path: '/' });
         
         console.log(" Session destroyed and cookie cleared");
         
@@ -981,7 +990,7 @@ app.get("/logout", (req, res, next) => {
 // ======================
 // CONTACT FORM
 // ======================
-app.post("/contact", isLoggedIn, async (req, res) => {
+app.post("/contact", async (req, res) => {
   const { name, email, message } = req.body;
 
   // Basic validation
@@ -992,23 +1001,97 @@ app.post("/contact", isLoggedIn, async (req, res) => {
     });
   }
 
+  const fromAddress = process.env.EMAIL_FROM
+    ? `"Aimdeed Support" <${process.env.EMAIL_FROM}>`
+    : `"Aimdeed Support" <${process.env.EMAIL_USERNAME}>`;
+
   try {
+    // 1. INTERNAL NOTIFICATION — sent to Aimdeed team
     await transporter.sendMail({
-      from: `"Aimdeed Contact" <${process.env.EMAIL_USERNAME}>`,
+      from: fromAddress,
       to: "onfocus384@gmail.com",
-      subject: "Contact Form Submission",
+      subject: `📩 New Contact: ${name}`,
       html: `
-        <h3>New Message from Aimdeed</h3>
+        <h3>New Contact Form Submission — Aimdeed</h3>
         <p><b>Name:</b> ${name}</p>
         <p><b>Email:</b> ${email}</p>
-        <p><b>Message:</b> ${message}</p>
+        <p><b>Message:</b><br>${message}</p>
+      `,
+    });
+
+    // 2. CONFIRMATION EMAIL — sent back to the user
+    await transporter.sendMail({
+      from: fromAddress,
+      to: email,
+      subject: "We've Received Your Message — Aimdeed Support",
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <body style="margin:0;padding:0;background:#0f172a;font-family:'Segoe UI',Arial,sans-serif;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background:#0f172a;padding:40px 0;">
+            <tr>
+              <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="background:linear-gradient(135deg,#1e2a4a,#0f172a);border-radius:16px;border:1px solid rgba(99,102,241,0.3);overflow:hidden;max-width:600px;">
+
+                  <!-- HEADER -->
+                  <tr>
+                    <td style="background:linear-gradient(135deg,#4f46e5,#0ea5e9);padding:32px 40px;text-align:center;">
+                      <h1 style="margin:0;color:#ffffff;font-size:28px;font-weight:800;letter-spacing:-0.5px;">Aimdeed</h1>
+                      <p style="margin:4px 0 0;color:rgba(255,255,255,0.8);font-size:14px;">NEET &amp; JEE Preparation Platform</p>
+                    </td>
+                  </tr>
+
+                  <!-- BODY -->
+                  <tr>
+                    <td style="padding:40px;">
+                      <p style="color:#94a3b8;font-size:15px;margin:0 0 8px;">Hello <strong style="color:#e2e8f0;">${name}</strong>,</p>
+                      <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 20px;">
+                        Thank you for contacting <strong style="color:#818cf8;">Aimdeed</strong>.
+                      </p>
+                      <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 20px;">
+                        We have successfully received your message and our team will review it shortly. Whether you reached out to report a problem, ask a question, or share feedback, we appreciate you taking the time to contact us.
+                      </p>
+                      <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 20px;">
+                        Our support team will get back to you as soon as possible. Most queries are usually responded to within <strong style="color:#38bdf8;">24–48 hours</strong>.
+                      </p>
+                      <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 32px;">
+                        If your issue is urgent or you need to provide additional details, you can reply directly to this email.
+                      </p>
+
+                      <!-- DIVIDER -->
+                      <hr style="border:none;border-top:1px solid rgba(99,102,241,0.25);margin:0 0 32px;">
+
+                      <p style="color:#cbd5e1;font-size:15px;line-height:1.7;margin:0 0 4px;">
+                        Thank you for being part of the <strong style="color:#818cf8;">AIMDEED</strong> community.
+                      </p>
+                    </td>
+                  </tr>
+
+                  <!-- FOOTER -->
+                  <tr>
+                    <td style="background:rgba(0,0,0,0.3);padding:24px 40px;text-align:center;border-top:1px solid rgba(99,102,241,0.2);">
+                      <p style="margin:0;color:#64748b;font-size:14px;line-height:1.6;">
+                        Best regards,<br>
+                        <strong style="color:#94a3b8;">Aimdeed Support Team</strong><br>
+                        🌐 <a href="https://aimdeed.in" style="color:#38bdf8;text-decoration:none;">aimdeed.in</a>
+                      </p>
+                    </td>
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
       `,
     });
 
     res.json({
       success: true,
-      message: "Thank you! We have received your message.",
+      message: "Thank you! We have received your message. A confirmation email has been sent to you.",
     });
+
   } catch (error) {
     console.error("Email Error:", error);
     res.status(500).json({

@@ -1,65 +1,30 @@
-<!-- views/error.ejs -->
 <% layout("layouts/boilerplate") %>
 
-<style>
-  .error-container {
-    min-height: 70vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 2rem;
-  }
-  
-  .error-content {
-    max-width: 600px;
-  }
-  
-  .error-icon {
-    font-size: 4rem;
-    color: #dc3545;
-    margin-bottom: 1rem;
-  }
-  
-  .error-title {
-    color: #2c3e50;
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .error-message {
-    color: #6c757d;
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    line-height: 1.6;
-  }
-  
-  .btn-home {
-    background: #0d6efd;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: 600;
-    display: inline-block;
-  }
-  
-  .btn-home:hover {
-    background: #0b5ed7;
-  }
-</style>
-
-<div class="error-container">
-  <div class="error-content">
-    <div class="error-icon">
-      <i class="bi bi-exclamation-triangle-fill"></i>
+<div class="page-hero" style="min-height: 80vh; display: flex; align-items: center; justify-content: center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="glass-card text-center p-5">
+          <div class="rounded-circle mb-4 mx-auto d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; background: rgba(239, 68, 68, 0.1); border: 2px solid rgba(239, 68, 68, 0.3);">
+            <i class="ri-error-warning-fill text-danger fs-1"></i>
+          </div>
+          
+          <div class="badge-premium mb-3 border-danger text-danger">Wait, Something Went Wrong</div>
+          <h1 class="page-title mb-3"><%= title || 'Error' %></h1>
+          <p class="page-subtitle text-muted mb-5 mx-auto" style="max-width: 500px;">
+            <%= message || "We couldn't find the page you were looking for. It might have been moved or doesn't exist anymore." %>
+          </p>
+          
+          <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="/" class="btn-premium px-4 py-3">
+              <i class="ri-home-4-line me-2"></i> Return to Homepage
+            </a>
+            <a href="javascript:history.back()" class="btn-premium btn-outline-premium px-4 py-3">
+              <i class="ri-arrow-left-line me-2"></i> Go Back
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
-    <h1 class="error-title"><%= title || 'Error' %></h1>
-    <p class="error-message">
-      <%= message || 'Something went wrong. Please try again later.' %>
-    </p>
-    <a href="/" class="btn-home">
-      <i class="bi bi-house-door"></i> Go Back Home
-    </a>
   </div>
 </div>

@@ -1,0 +1,266 @@
+<style>
+/* Modern Glassmorphic Footer */
+.site-footer {
+  background: #0f172a; /* Slate 900 */
+  padding: 5rem 0 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: -150px;
+  right: -150px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.1) 0%, transparent 70%);
+  z-index: 0;
+}
+
+.footer-container {
+  position: relative;
+  z-index: 1;
+}
+
+
+
+.footer-description {
+  color: #CBD5E1; /* Increased contrast from #94A3B8 */
+  line-height: 1.7;
+  font-size: 1rem;
+  max-width: 320px;
+  margin-bottom: 2rem;
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #CBD5E1;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  text-decoration: none !important;
+}
+
+.social-btn:hover {
+  background: linear-gradient(135deg, #4F46E5, #0ea5e9);
+  color: #fff;
+  transform: translateY(-5px);
+  border-color: transparent;
+  box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.5);
+}
+
+.footer-heading {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  font-family: 'Outfit', sans-serif;
+  position: relative;
+}
+
+.footer-heading::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(to right, #4F46E5, #0ea5e9);
+  border-radius: 2px;
+}
+
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links-list li {
+  margin-bottom: 1rem;
+}
+
+.footer-link-item {
+  color: #CBD5E1;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.footer-link-item:hover {
+  color: #fff;
+  transform: translateX(5px);
+}
+
+.contact-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.contact-info-item {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  color: #CBD5E1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.contact-icon-wrap {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  background: rgba(79, 70, 229, 0.1);
+  color: #818cf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.footer-bottom {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.copyright-text {
+  color: #94A3B8;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+.footer-legal-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.legal-link {
+  color: #94A3B8;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.legal-link:hover {
+  color: #fff;
+}
+</style>
+
+<footer class="site-footer">
+  <div class="container footer-container">
+    <div class="row g-5">
+      <!-- BRAND COLUMN -->
+      <div class="col-lg-4 col-md-6">
+        <div class="brand-block">
+          <a href="/" class="navbar-brand-custom mb-4" title="Aimdeed - NEET & JEE Preparation" style="display: inline-flex;">
+            <div class="brand-logo-wrap" style="width: 55px; height: 55px;">
+              <img src="/images/logo_circular.png" alt="Aimdeed logo" class="brand-logo" />
+            </div>
+            <span class="brand-text">
+              <span class="brand-a" style="font-size: 2.2rem;">A</span><span class="brand-name" style="font-size: 1.8rem;">imdeed</span>
+            </span>
+          </a>
+          <p class="footer-description">
+            Empowering students for a brighter future through mentorship, premium study resources, and career guidance. Let's aim high together.
+          </p>
+          <div class="social-links">
+            <a href="https://www.facebook.com/people/Aim-Deed/pfbid027eQwMFMRqbEDE8ptHYTcEKRJdNAZ1aXywE2dZrncJgXam36mmLXoXvDG39yfwQ6xl/?rdid=jTY2q1fs1oqYSXYu&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F16uunc7X9x%2F" class="social-btn" target="_blank">
+              <i class="ri-facebook-fill"></i>
+            </a>
+            <a href="https://x.com/Aimdeed_?t=GC1bh1oyPU4tp-n3l9kvbg&s=08" class="social-btn" target="_blank">
+              <i class="ri-twitter-x-fill"></i>
+            </a>
+            <a href="https://www.linkedin.com/company/aimdeed/" class="social-btn" target="_blank">
+              <i class="ri-linkedin-fill"></i>
+            </a>
+            <a href="https://www.instagram.com/aimdeed?igsh=MWdpZnoyemFiMTlibQ%3D%3D&utm_source=qr" class="social-btn" target="_blank">
+              <i class="ri-instagram-line"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK LINKS -->
+      <div class="col-lg-2 col-md-6">
+        <h4 class="footer-heading">Explore</h4>
+        <ul class="footer-links-list">
+          <li><a href="/#home" class="footer-link-item">Home</a></li>
+          <li><a href="/listings/index2" class="footer-link-item">Studies</a></li>
+          <li><a href="/chatbot" class="footer-link-item">AI Chatbot</a></li>
+          <li><a href="/predictor" class="footer-link-item">Rank Predictor</a></li>
+          <li><a href="/mentor" class="footer-link-item">Mentorship</a></li>
+        </ul>
+      </div>
+
+      <!-- SUPPORT -->
+      <div class="col-lg-2 col-md-6">
+        <h4 class="footer-heading">Support</h4>
+        <ul class="footer-links-list">
+          <li><a href="/#contact" class="footer-link-item">Help Center</a></li>
+          <li><a href="/#contact" class="footer-link-item">Contact Us</a></li>
+          <li><a href="#" class="footer-link-item">Privacy Policy</a></li>
+          <li><a href="#" class="footer-link-item">Terms of Service</a></li>
+        </ul>
+      </div>
+
+      <!-- CONTACT INFO -->
+      <div class="col-lg-4 col-md-6">
+        <h4 class="footer-heading">Get in Touch</h4>
+        <ul class="contact-info-list">
+          <li class="contact-info-item">
+            <div class="contact-icon-wrap">
+              <i class="ri-map-pin-2-fill"></i>
+            </div>
+            <span>Indian Institute of Technology Kharagpur, West Bengal, India - 721302</span>
+          </li>
+          <li class="contact-info-item">
+            <div class="contact-icon-wrap">
+              <i class="ri-phone-fill"></i>
+            </div>
+            <span>+91 6239547309</span>
+          </li>
+          <li class="contact-info-item">
+            <div class="contact-icon-wrap">
+              <i class="ri-mail-open-fill"></i>
+            </div>
+            <span>support@aimdeed.in</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BOTTOM BAR -->
+    <div class="footer-bottom">
+      <p class="copyright-text">
+        &copy; 2025 Aimdeed. Crafted with <i class="ri-heart-fill" style="color: #38bdf8;"></i> for future leaders.
+      </p>
+      <div class="footer-legal-links">
+        <a href="#" class="legal-link">Privacy</a>
+        <a href="#" class="legal-link">Terms</a>
+        <a href="#" class="legal-link">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>

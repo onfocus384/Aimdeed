@@ -1,1084 +1,636 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-
-   
-    <title>Aimdeed - Your NEET & JEE Preparation Guider</title>
-    <meta name="description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and tips for IIT and medical entrance exams.">
-    <meta name="keywords" content="NEET preparation, JEE preparation, IIT, medical entrance exams, Aimdeed, online coaching, study materials, NEET coaching, JEE coaching">
-    <meta name="author" content="Aimdeed">
-    <meta name="robots" content="index, follow">
-
-    
-    <meta property="og:title" content="Aimdeed - Your NEET & JEE Preparation Guider">
-    <meta property="og:description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and tips for IIT and medical entrance exams.">
-    <meta property="og:image" content="https://www.aimdeed.in/logo_circular.png">
-    <meta property="og:url" content="https://www.aimdeed.in">
-    <meta property="og:type" content="website">
-
-   
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Aimdeed - Your NEET & JEE Preparation Hub">
-    <meta name="twitter:description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and coaching tips tailored for IIT and medical entrance exams.">
-    <meta name="twitter:image" content="https://www.aimdeed.in/logo_circular.png">
-
-   
-    <link rel="canonical" href="https://www.aimdeed.in">
-
-   
- <!-- Primary favicon (MOST IMPORTANT) -->
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-
-<!-- PNG favicons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
-
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
-
-
-
-   
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
-   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Victor+Mono:ital,wght@0,100..700;1,100..700&display=swap");
-
-@import url("https://fonts.googleapis.com/css2?family=Miniver&display=swap");
+<% layout('layouts/boilerplate') %>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap');
 
 :root {
-  --mobile-breakpoint: 768px;
-  --small-mobile-breakpoint: 480px;
-}
-* {
-  margin: 0%;
-  padding: 0%;
-  box-sizing: border-box;
-  font-family: "Poppins";
-  -webkit-tap-highlight-color: transparent;
+  --primary: #4F46E5;
+  --primary-dark: #3730A3;
+  --secondary: #0ea5e9;
+  --bg-gradient: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-light: #F8FAFC;
+  --text-muted: #94A3B8;
 }
 
-html,
 body {
-  height: 100%;
+  font-family: 'Outfit', sans-serif;
+  background-color: #0f172a; /* Slate 900 */
+  color: var(--text-light);
   overflow-x: hidden;
-  width: 100%;
-  background:   rgba(223, 222, 232, 1) 0%,
-    rgba(194, 211, 214, 1) 100%;
-  scroll-behavior: smooth;
-}
-h5 {
-  display: inline-block; /* Ensures only necessary space is taken */
-  font-size: 3.5vw;
-  color: black;
-  border-right: 3px solid rgb(119, 240, 253);
-  overflow: hidden;
-  white-space: nowrap; /* Keeps text on one line */
-  animation: typing 6s steps(60) forwards alternate, cursor 2s step-end forwards;
-  margin-left: 4%;
-  margin-top: 1%;
 }
 
-@keyframes cursor {
-  50% {
-    border-color: transparent;
-  }
-}
+/* Navbar overrides if any needed (navbar already exists, hopefully it handles transparent bg well) */
 
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-nav {
-  display: flex;
-  background: linear-gradient(
-    301deg,
-      rgba(223, 222, 232, 1) 0%,
-    rgba(194, 211, 214, 1) 100%
-  );
-  position: fixed;
-  top: 0%;
-  width: 100%;
-  height: 14%;
-  margin-top: 0px;
-  align-items: center;
-  justify-content: flex-end;
-  z-index: 100;
-}
-nav ul {
-  margin-top: 1%;
-  list-style: none;
-  display: flex;
-}
-nav a {
-  text-decoration: none;
-  padding: 1em 2em;
-  color: #ffffff;
-}
-.menu {
-  display: flex;
-  border-radius: 0.5rem;
-  margin-top: 6vh;
-  margin-bottom: 1%;
-  margin-right: 2%;
-  padding: 0.5%;
-  height: 6vh;
-  width: auto;
-  white-space: nowrap;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
-  justify-items: center;
-  overflow: hidden;
-  background-color: #14b8a6;
-}
-
-.menu:active {
-  background-color: #847ef5;
-}
-#logo {
+/* Hero Section */
+.hero-section {
   position: relative;
-  height: 4rem;
-  width: 4rem;
-  margin-right: 65vw;
-  left: 0;
-  margin-top: 1dvh;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+  overflow: hidden;
+  padding-top: 80px;
+}
+
+.hero-blob {
+  position: absolute;
+  filter: blur(80px);
+  z-index: 0;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  background-color: rgb(233, 242, 242);
+  animation: float 10s ease-in-out infinite alternate;
 }
 
-#logo img {
-  height: 100%;
-  width: 100%;
-  border-radius: 50%;
-  object-fit: cover;
+.blob-1 { top: -10%; left: -10%; width: 400px; height: 400px; background: rgba(79, 70, 229, 0.3); }
+.blob-2 { bottom: -10%; right: -10%; width: 500px; height: 500px; background: rgba(14, 165, 233, 0.2); animation-delay: -5s; }
+
+@keyframes float {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-30px) scale(1.1); }
 }
 
-.icon {
-  overflow: hidden;
-  object-fit: cover;
-  align-items: center;
-  justify-content: center;
-  display: grid;
-  height: 5cap;
-  width: 5cap;
-  margin-bottom: 1.5%;
-}
-#logo:hover {
-  cursor: pointer;
-}
-#Students:hover {
-  background: #0f766e;
-  transform: translateY(-1px);
-  cursor: pointer;
-  font-weight: bold;
-}
-#mentor:hover {
-  background: #0f766e;
-  transform: translateY(-1px);
-  cursor: pointer;
-  font-weight: bold;
-}
-#About:hover {
-  background: #0f766e;
-  transform: translateY(-1px);
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.fake {
-  width: 100%;
-  height: 12vh;
-}
-
-.banner {
-  width: 100%;
-  height: 75vh;
-  overflow: hidden;
+.hero-content {
   position: relative;
-}
-
-.slides {
-  display: flex;
-  width: 100%; /* Adjust based on number of images */
-  height: 100%;
-  transition: transform 3s ease-in-out;
-  animation: slide 30s infinite ease-in-out;
-}
-
-.slide {
-  width: 100%;
-  height: 80%;
-  flex: 0 0 100%;
-  position: relative;
-}
-
-.slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Text Box */
-.textbox {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-align: center;
-  width: 80%;
-  font-size: 1.2rem;
-}
-
-/* Animation */
-@keyframes slide {
-  0% {
-    transform: translateX(0%);
-  }
-  16.66% {
-    transform: translateX(-100%);
-  }
-  33.33% {
-    transform: translateX(-200%);
-  }
-  50% {
-    transform: translateX(-300%);
-  }
-  66.66% {
-    transform: translateX(-400%);
-  }
-  83.33% {
-    transform: translateX(-500%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
-}
-
-.motion {
-
-  display: flex;
-  background: linear-gradient(
-    174deg,
-      rgba(223, 222, 232, 1) 0%,
-    rgba(194, 211, 214, 1) 100%
-  );
-  justify-content: center;
-  justify-items: center;
-  align-items: center;
-  overflow: hidden;
-}
-.motion #video {
-  width: 90%;
-  max-width: 800px;
-  height: auto;
-  aspect-ratio: 16/9;
-  border: 3px solid rgb(138, 176, 222);
-  border-radius: 8px;
-  margin: 2rem auto;
-  overflow: hidden;
-  position: relative;
-}
-
-.motion #video video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-#quotes {
-  height: 30dvh;
-  width: 70%;
-  margin-bottom: 15dvh;
-  padding: 2rem;
-  align-items: center;
-  justify-content: center;
-  justify-items: center;
-}
-#quotes h4 {
-  font-family: "Miniver";
-  font-size: 2.5rem;
-  color: #6d1ece;
-}
-#quotes i {
-  font-family: "cascadia";
-  color: rgb(13, 12, 13);
-}
-#quotes .menu {
-  list-style: none;
-  width: auto;
-  height: auto;
-  margin-top: 50%;
-  background-color: #14b8a6;
-  color: #f8f9fa;
-}
-#quotes .menu:hover {
-  background-color: #0f766e;
-  font-weight: bold;
-}
-#quotes a {
-  text-decoration: none;
-  color: black;
-  font-size: 2rem;
-  padding: 1%;
-}
-.about {
-  width: 100%;
-  height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f8f9fa;
-  overflow: hidden;
-  position: relative;
-}
-.image {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-}
-
-.about .image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
   z-index: 1;
-}
-.about .content {
-  position: absolute;
-  margin: 1% 2% 3% 2%;
-  bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: #f8f9fa;
-  border-radius: 1cap;
   text-align: center;
-  width: 80%;
-  font-size: 1.2rem;
+}
+
+.hero-title {
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(to right, #a5b4fc, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.6;
+}
+
+.btn-primary-glow {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px -10px var(--secondary);
+  text-decoration: none;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  justify-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary-glow:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 25px -10px var(--secondary);
+  color: white;
+}
+
+.btn-outline-glow {
+  background: transparent;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-outline-glow:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+}
+
+/* Resources Grid */
+.resources-section {
+  padding: 6rem 0;
+  position: relative;
   z-index: 2;
 }
-.about .content #h {
-  display: flex;
-  color: aqua;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 30px;
-}
-.about .content h4 {
-  font-family: "Gill Sans";
-  font-weight: 100;
-}
-.self {
-  width: 100%;
-  height: 100vh;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  position: relative;
-  background: linear-gradient(
-    90deg,
-    rgba(223, 222, 232, 1) 100%,
-    rgba(194, 211, 214, 1) 100%
-  );
-}
 
-.card1,
-.card2,
-.card3 {
-  margin-top: 4%;
-  position: absolute;
-  width: 30vw;
-  height: 70vh;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(23, 22, 22, 0.2);
-  display: flex;
-  overflow: hidden;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
-  font-size: 16px;
-  background-image: linear-gradient(
-    to bottom,
-    #051937,
-    #002763,
-    #003391,
-    #263cbf,
-    #583fea
-  );
-}
-
-.card1 {
-  top: 10%;
-  left: 2%;
-}
-.card2 {
-  top: 10%;
-  left: 35%;
-}
-
-.card3 {
-  top: 10%;
-  right: 2%;
-}
-.card1 img,
-.card2 img,
-.card3 img {
-  height: 100%;
-  width: 60%;
-  object-fit: cover;
-  margin-top: 0;
-  margin-bottom: 0;
-  position: absolute;
-  margin: 0% 0% 0% 10%;
-  bottom: 0px;
-  left: 50%;
-  border-radius: 10px;
-}
-.self .card-content {
-  position: absolute;
-  margin-left: 0;
-  margin-top: 50%;
-  margin-right: 50%;
-  transform: translateY(-50%);
-  font-size: 2rem;
-  font-weight: bold;
-  color: #f8f9fa;
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-}
-
-.card1:hover {
-  box-shadow: 10px 10px 15px rgba(50, 50, 50, 0.7);
-  transform: scale(1.05);
-  transition: transform 0.3s ease-in-out;
-}
-.card2:hover {
-  box-shadow: 10px 10px 15px rgba(50, 50, 50, 0.7);
-  transform: scale(1.05);
-  transition: transform 0.3s ease-in-out;
-}
-.card3:hover {
-  box-shadow: 10px 10px 15px rgba(50, 50, 50, 0.7);
-  transform: scale(1.05);
-  transition: transform 0.3s ease-in-out;
-}
-.Contact {
-  background: linear-gradient(
-   176deg,rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 47%, rgba(0, 212, 255, 1) 100%
-  );
-  height: 40%;
-  width: 100%;
-  display: flex;
-  color: #ffffff;
-}
-.Contact .company {
-  margin-top: 2%;
-  margin-right: 10%;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; /* centers icons and text */
-  border-radius: 12px;
-}
-.Contact .company h3 {
-  font-size: 4rem;
-  margin-top: 2%;
-  margin-left: -12%;
-  position: relative;
-  color: #ffffff;
-}
-.colored-letter {
-  color: red;
-}
-.social-icons {
-  display: flex;
-  gap: 0.6rem; /* space between icons */
-  margin-top: 1%;
-  margin-right: 30%;
-  flex-wrap: nowrap; /* keeps them in a row but wraps on small screens */
-  justify-content: center;
-}
-
-.social-icons a {
-  font-size: 2rem;
-  color: #fff;
-  text-decoration: none;
-  transition: transform 0.3s;
-}
-
-.social-icons a:hover {
-  transform: scale(1.2);
-}
-
-.social-icons i {
-  font-size: 2rem;
-  color: #fff;
-  text-decoration: none;
-  transition: transform 0.3s;
-}
-.details {
-  width: 70vw;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  margin-left: 35dvw;
-  margin-top: 1dvh;
-  align-items: center;
-  justify-content: center;
-}
-.details h4 {
-  font-size: 3cap;
-}
-.contact-item {
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-    flex-wrap:nowrap; /* allows wrapping if needed on very small screens */
-  }
-.details i,
-.details p {
-  display: inline-flex;
-  align-items: center;
-  vertical-align: middle;
-}
-
-.details i {
-  font-size: 1.2em;
-  min-width: 1.5em;
-  padding: 0.2rem;
-}
-
-.details p {
-  white-space: nowrap;
-  overflow: visible;
-}
-
-.details {
-  overflow: visible;
-  padding: 0 1rem;
-}
-.copy {
-  height: auto;
-  width: 100%;
-  font-weight: bold;
-  color: black;
-  font-size: 1rem;
-  margin-top: 1%;
-  margin-bottom: 2%;
-  align-items: center;
+.section-title {
   text-align: center;
-}
-@media screen and (max-width: 768px) {
-  h5 {
-    font-size: 3.5vw;
-  }
-
-  nav {
-    height: auto;
-    padding: 5px;
-  }
-  #logo {
-    width: 4cap;
-    height: 4cap;
-    margin-right: auto;
-    position: absolute;
-    left: 0;
-    margin-top: 5vh;
-    transform: translateY(-50%);
-    padding: 0.25rem;
-  }
-  #logo img {
-    height: 4cap;
-    width: 4cap;
-    border-radius: 50%;
-  }
-
-  .fake {
-    height: 15%;
-  }
-  .menu {
-    width: 20vh;
-    font-size: medium;
-    height: 4vh;
-    padding: 1rem;
-    margin-top: 5vh;
-  }
-  .motion {
-    flex-direction: column;
-  }
-  .motion #video {
-    width: 100%;
-    height: 40dvh;
-  }
-  .motion #quotes {
-    width: 100%;
-    height: 40dvh;
-  }
-  .about {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .image img {
-    height: auto;
-    width: 100%;
-  }
-  .self {
-    height: 70vh; /* Taller on mobile */
-    padding: 1rem 0;
-  }
-
-  .image {
-    width: 100%;
-    aspect-ratio: 9/16;
-    border-radius: 10px;
-  }
-
-  .Contact {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-    height: 50vh;
-    justify-content: center;
-    align-items: center;
-  }
-  .Contact .company a {
-    font-size: 1rem;
-  }
-
-  .copy {
-    margin-left: 0;
-    text-align: center;
-  }
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: white;
 }
 
-@media screen and (max-width: 480px) {
-  h5 {
-    font-size: 3.5vw;
-  }
-
-  nav {
-    padding: 3px;
-    height: 12%;
-  }
-  #logo {
-    width: 4cap;
-    height: 4cap;
-    margin-right: auto;
-    margin-left: 1%;
-    position: absolute;
-    left: 0;
-    margin-top: 5vh;
-    transform: translateY(-50%);
-  }
-  #logo img {
-    width: 4cap;
-    height: 4cap;
-    border-radius: 50%;
-  }
-
-  .fake {
-    height: 15%;
-  }
-  h5 {
-    font-size: 0.75rem;
-  }
-  .menu {
-    margin-top: 5vh;
-    margin-bottom: 2vh;
-    width: 12vh;
-    height: 4vh;
-    font-size: small;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 1cap;
-  }
-
-  .motion #video {
-    height: 30dvh;
-  }
-
-  .motion #quotes {
-    height: 80vh;
-  }
-  .about {
-    flex-direction: column;
-    height: 130vh;
-    width: 100%;
-  }
-  .image {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-  }
-  .content {
-    max-width: 95%;
-    padding: 10px;
-  }
-
-  .content h1 {
-    font-size: 1.8rem;
-  }
-
-  .content h2 {
-    font-size: 1.3rem;
-  }
-
-  .content h4 {
-    font-size: 0.9rem;
-  }
-  .image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .self {
-    height: 180vh;
-    justify-content: center;
-    justify-items: center;
-    align-items: center;
-    gap: 30px;
-  }
-  .self .image {
-    display: flex;
-    flex-direction: column; /* Arrange cards vertically */
-    align-items: center;
-    gap: 25px; /* Add spacing between cards */
-    height: auto; /* Adjust height for proper fit */
-  }
-
-  .card1,
-  .card2,
-  .card3 {
-    width: 80%; /* Set width to 80% */
-    height: 50vh; /* Increase height for better fit */
-    margin: 15px; /* Add margin for spacing */
-    position: relative; /* Remove absolute positioning for vertical stacking */
-    margin-left: 4%;
-  }
-  .self .card-content {
-    margin-top: 65%;
-  }
-  .card1 img,
-  .card2 img,
-  .card3 img {
-    height: 100%; /* Increase image height */
-    width: 40%; /* Maintain aspect ratio */
-    object-fit: cover; /* Ensure proper image fit */
-  }
+.section-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 4rem;
+  font-size: 1.1rem;
 }
 
-.Contact {
-  flex-direction: column;
-  padding: 20px;
-  height: 50vh;
-  justify-content: center;
+.r-card-modern {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  padding: 2rem;
+  text-align: left;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: block;
+  text-decoration: none;
+  color: white;
+  backdrop-filter: blur(10px);
+}
+
+.r-card-modern::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.r-card-modern:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5);
+  border-color: rgba(255,255,255,0.3);
+  color: white;
+}
+
+.r-card-modern:hover::before {
+  opacity: 1;
+}
+
+.r-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  display: flex;
   align-items: center;
-}
-.Contact .company {
-  margin-left: 20%;
-}
-.Contact .company h3 {
-  margin-right: 0.8dvw;
-  font-size: 3rem;
-}
-.Contact .company a {
+  justify-content: center;
   font-size: 2rem;
-  margin-left: 8vw;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
 }
-.details {
+
+.r-icon.blue { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+.r-icon.purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+.r-icon.teal { background: rgba(20, 184, 166, 0.2); color: #2dd4bf; }
+.r-icon.green { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+.r-icon.orange { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+.r-icon.indigo { background: rgba(79, 70, 229, 0.2); color: #818cf8; }
+
+.r-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.r-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.r-img-bg {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.1;
+  transition: opacity 0.4s ease;
+  z-index: 0;
+}
+.r-card-modern:hover .r-img-bg {
+  opacity: 0.2;
+}
+
+/* Infinity Slider */
+.slider-container {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  padding: 2rem 0;
+  background: rgba(0,0,0,0.2);
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.slider-track {
+  display: inline-block;
+  animation: scroll 30s linear infinite;
+}
+
+.slider-container:hover .slider-track {
+  animation-play-state: paused;
+}
+
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.slider-item {
+  display: inline-block;
+  width: 300px;
+  height: 200px;
+  margin: 0 1rem;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.slider-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.slider-item:hover img {
+  transform: scale(1.1);
+}
+
+.slider-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+}
+
+.slider-text {
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+/* Video Section */
+.video-section {
+  padding: 6rem 0;
+  position: relative;
+}
+
+.video-wrapper {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.video-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2);
+  pointer-events: none;
+}
+
+.video-wrapper video {
+  width: 100%;
+  display: block;
+}
+
+.quote-glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3rem;
+  border-radius: 24px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  margin-right: 35dvw;
-  height: auto;
+  justify-content: center;
+}
+
+.quote-glass h4 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #fff, #94A3B8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* About Us */
+.about-section {
+  padding: 6rem 0;
+  position: relative;
+}
+
+.about-img-container {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.about-img-container img {
   width: 100%;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 24px;
 }
 
-.details i,
-.details p {
-  display: inline-flex;
-  align-items: center;
+.about-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(79, 70, 229, 0.2);
+  color: #818cf8;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(79, 70, 229, 0.3);
+}
+
+.about-content h3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.about-content p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+/* Typwriter cursor animation */
+.typewriter-cursor {
+  display: inline-block;
+  width: 4px;
+  height: 1em;
+  background-color: #38bdf8;
+  margin-left: 5px;
   vertical-align: middle;
-  margin-right: 0.8rem;
+  animation: blink 1s step-end infinite;
 }
 
-.details i {
-  font-size: 1.2em;
-  min-width: 1.5em;
-  padding: 0.2rem;
+@keyframes blink {
+  50% { opacity: 0; }
 }
+</style>
 
-.details p {
-  white-space: nowrap;
-  overflow: visible;
-}
+<div class="hero-blob blob-1"></div>
+<div class="hero-blob blob-2"></div>
 
-.details {
-  overflow: visible;
-  padding: 0 1rem;
-}
-
-.copy {
-  font-size: 0.7rem;
-  margin-top: 5%;
-}
-
-@keyframes appear {
-  from {
-    opacity: 0;
-    transform: translateX(-100px);
-  }
-  to {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-  }
-}
-.about {
-  animation: appear linear;
-  animation-timeline: view();
-  animation-range: entry 0% cover 30%;
-}
-.motion {
-  animation: appear linear;
-  animation-timeline: view();
-  animation-range: entry 0% cover 30%;
-}
-.self {
-  animation: appear linear;
-  animation-timeline: view();
-  animation-range: entry 0% cover 30%;
-}
-.Contact {
-  animation: appear linear;
-  animation-timeline: view();
-  animation-range: entry 0% cover 20%;
-}
-
-   </style>
-
-   
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "Aimdeed",
-        "url": "https://www.aimdeed.in",
-        "logo": "https://www.aimdeed.in/logo_circular.png",
-        "sameAs": [
-          "https://www.facebook.com/profile.php?id=61573887340168",
-          "https://x.com/aimdeed",
-          "https://www.linkedin.com/company/aimdeed/"
-        ],
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+91 9463215750",
-          "contactType": "customer service",
-          "areaServed": "IN",
-          "availableLanguage": ["en", "Bengali", "Hindi"]
-        }
-      }
-    </script>
-</head>
-
-  <body>
-    <nav>
-      <ul>
-   
-        <a href="#"><li class="menu" id="logo"> <img
-          src="/images/logo_circular.png"
-          alt="Aimdeed logo"
-          width="50"
-          height="50"
-        /></li></a>
-      <!-- <span class="menu" id="Home">Home</span> -->
-      <li class="menu" id="Students"><a href="/predictor">Predictor</a></li>
-      <!-- <span class="menu" id="Jobs">Jobs</span> -->
-      <!-- <span class="menu" id="Blog">Blog</span> -->
-     <li class="menu" id="About"><a href="/chatbot">Ask Me</a></li>
-     <li class="menu" id="mentor"><a href="/mentor">Mentor</a></li>
-
-     <!-- <li class="icon" id="user"><i class="ri-user-fill"></i></li> -->
-      
-      <!-- <span class="menu" id="user"><img src="user.png" alt=""></span> -->
-    </ul>
-    </nav>
-    <div class="fake"></div>
-     <div class="heading"><h5>Your Ultimate Guide to NEET & JEE Success! ....</h5></div>
-
-     <div class="banner">
-      <div class="slides">
-        <div class="slide">
-          <img src="https://plus.unsplash.com/premium_photo-1683749808421-bf411cb88f20?q=80&w=2013&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image 1">
-          <div class="textbox">
-            <h2>Your future is created by what you do today, not tomorrow.</h2>
-          </div>
-        </div>
-    
-        <div class="slide">
-          <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image 2">
-          <div class="textbox">
-            <h2>Success is not final, failure is not fatal.</h2>
-          </div>
-        </div>
-    
-        <div class="slide">
-          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image 3">
-          <div class="textbox">
-            <h2>Dream big, work hard, and stay consistent.</h2>
-          </div>
-        </div>
-    
-        <div class="slide">
-          <img src="https://images.unsplash.com/photo-1547637589-f54c34f5d7a4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-          <div class="textbox">
-            <h2>Believe in yourself and your abilities.</h2>
-          </div>
-        </div>
-        <div class="slide">
-          <img src="https://cdn.pixabay.com/photo/2019/04/30/11/46/success-4168389_1280.jpg" alt="Image 5">
-          <div class="textbox">
-            <h2> Every step you take brings you closer to your goals</h2>
-          </div>
-        </div>
-        <div class="slide">
-          <img src="https://plus.unsplash.com/premium_photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Image 6">
-          <div class="textbox">
-            <h2>Opportunities don't happen, you create them</h2>
-          </div>
+<!-- HERO SECTION -->
+<section class="hero-section">
+  <div class="container hero-content">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="about-badge mb-4">🚀 Elevate Your Preparation</div>
+        <h1 class="hero-title">
+          <span id="typewriter-text"></span><span class="typewriter-cursor"></span>
+        </h1>
+        <p class="hero-subtitle">
+          Master your exams with our premium study materials, expertly crafted mock tests, and comprehensive past year questions designed for top achievers.
+        </p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+          <a href="#resources" class="btn-primary-glow">
+            Explore Materials <i class="ri-arrow-right-line"></i>
+          </a>
+          <a href="/login" class="btn-outline-glow">
+            Start Free Trial <i class="ri-play-fill"></i>
+          </a>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- RESOURCES SECTION -->
+<section class="resources-section" id="resources">
+  <div class="container">
+    <h2 class="section-title">Everything You Need</h2>
+    <p class="section-subtitle">A complete ecosystem for your competitive exam journey.</p>
     
-    <div class="motion">
-      <div id="video">
-        <video autoplay loop muted playsinline webkit-playsinline>
+    <div class="row g-4">
+      <!-- Notes -->
+      <div class="col-md-6 col-lg-3">
+        <a href="/student" class="r-card-modern">
+          <img src="/images/2840443.jpg" alt="Notes Background" class="r-img-bg">
+          <div class="r-icon blue">
+            <i class="ri-book-open-line"></i>
+          </div>
+          <h3 class="r-title">Premium Notes</h3>
+          <p class="r-desc">Structured, easy-to-understand notes curated by top faculty.</p>
+        </a>
+      </div>
+
+      <!-- Tests -->
+      <div class="col-md-6 col-lg-3">
+        <a href="#" class="r-card-modern">
+          <img src="/images/2011.i518.015.realistic test paper pencil.jpg" alt="Tests Background" class="r-img-bg">
+          <div class="r-icon teal">
+            <i class="ri-edit-box-line"></i>
+          </div>
+          <h3 class="r-title">Mock Tests</h3>
+          <p class="r-desc">Simulated exam environment with detailed performance analytics.</p>
+        </a>
+      </div>
+
+      <!-- PYQS -->
+      <div class="col-md-6 col-lg-3">
+        <a href="#" class="r-card-modern">
+          <img src="/images/8282.jpg" alt="PYQs Background" class="r-img-bg">
+          <div class="r-icon purple">
+            <i class="ri-history-line"></i>
+          </div>
+          <h3 class="r-title">PYQ Archive</h3>
+          <p class="r-desc">Years of past questions with step-by-step video solutions.</p>
+        </a>
+      </div>
+
+      <!-- Mentorship -->
+      <div class="col-md-6 col-lg-3">
+        <a href="/mentor" class="r-card-modern">
+          <div class="r-icon green">
+            <i class="ri-user-star-line"></i>
+          </div>
+          <h3 class="r-title">Mentorship</h3>
+          <p class="r-desc">1-on-1 guidance from students who recently cracked the exams.</p>
+        </a>
+      </div>
+
+      <!-- Rank Predictor -->
+      <div class="col-md-6 col-lg-3">
+        <a href="/predictor" class="r-card-modern">
+          <div class="r-icon orange">
+            <i class="ri-ruler-2-line"></i>
+          </div>
+          <h3 class="r-title">Rank Predictor</h3>
+          <p class="r-desc">Estimate your JEE rank precisely based on your session scores.</p>
+        </a>
+      </div>
+
+      <!-- AI Chatbot -->
+      <div class="col-md-6 col-lg-3">
+        <a href="/chatbot" class="r-card-modern">
+          <div class="r-icon indigo">
+            <i class="ri-robot-2-line"></i>
+          </div>
+          <h3 class="r-title">AI Assistant</h3>
+          <p class="r-desc">24/7 support for your instant academic and technical doubts.</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INFINITE SLIDER SECTION -->
+<section class="slider-container my-5">
+  <div class="slider-track">
+    <!-- Duplicate elements to create seamless infinity scroll -->
+    <% const slides = [
+      { img: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=2070&auto=format&fit=crop', text: 'Your future is created by what you do today.' },
+      { img: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=1173&auto=format&fit=crop', text: 'Success is not final, failure is not fatal.' },
+      { img: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=2070&auto=format&fit=crop', text: 'Dream big, work hard, stay consistent.' },
+      { img: 'https://images.unsplash.com/photo-1547637589-f54c34f5d7a4?q=80&w=2070&auto=format&fit=crop', text: 'Believe in yourself and your abilities.' },
+      { img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=2070&auto=format&fit=crop', text: 'Every step brings you closer to your goals.' },
+      { img: 'https://images.unsplash.com/photo-1677567996070-68fa4181775a?q=80&w=1172&auto=format&fit=crop', text: "Opportunities don't happen, you create them." }
+    ] %>
+    
+    <% for(let i=0; i<2; i++) { %>
+      <% slides.forEach(slide => { %>
+        <div class="slider-item">
+          <img src="<%= slide.img %>" alt="Motivation">
+          <div class="slider-overlay">
+            <div class="slider-text"><%= slide.text %></div>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</section>
+
+<!-- VIDEO & MOTIVATION SECTION -->
+<section class="video-section">
+  <div class="container">
+    <div class="row g-5 align-items-stretch">
+      <div class="col-lg-7">
+        <div class="video-wrapper">
+          <video autoplay loop muted playsinline>
             <source src="/images/coverVideo.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-    </div>
-      <div id="quotes">
-        <h4>
-          "If you think yourselves strong, strong you will be !" <i>  - Swami Vivekananda</i>
-        
-        </h4>
-        <a href="/mentor"> <li class="menu" id="mentor">Get Mentor</li></a>
-      </div>
-    </div>
-
-    <div class="about">
-      <div class="image">
-        <img
-          src="https://images.unsplash.com/photo-1611743503489-09f50e0be8e4?q=80&w=2159&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt=""
-        />
-        <div class="content">
-          <div id="h"><h1>About Us</h1></div>
-          <h2>Who We Are :</h2>
-          <h4>
-            Aimdeed is a student-centric platform dedicated to empowering the next generation of engineers and medical professionals. Founded by educators , we provide free, high-quality practice resources (PDFs, guides, and mock tests) and personalized mentorship to help students excel in their academic and professional journeys. Our community-driven approach ensures every learner has access to the tools and guidance they need to thrive, regardless of financial barriers.
-          </h4>
-          <h2>Our Mission :</h2>
-          <h4>
-            As we embark on this exciting journey of helping students navigate their career paths, we invite you to join us! Whether you’re a student seeking guidance or an educator looking for resources for your students,we are here to support you every step of the way.
-          </h4>
-          <h2>Our Vision :</h2>
-          <h4>
-            A world where every student has the guidance they need to succeed.We envision a future where every student, no matter their background, can achieve their full potential in engineering or medical.
-          </h4>
+            <!-- Fallback image if video fails -->
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop" alt="Study Video" style="width:100%; height:100%; object-fit:cover;">
+          </video>
         </div>
       </div>
-    </div>
-    <div class="self">
-      <!-- <div class="image">
-        <img src="https://images.unsplash.com/photo-1633451238042-85d93d267866?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Background Image"> -->
-        
-       
-          <a href="/student">
-            <div class="card1">
-              <img src="/images/2840443.jpg" alt="Notes">
-              <div class="card-content">NOTES</div>
-            </div>
+
+      <div class="col-lg-5">
+        <div class="quote-glass">
+          <div class="about-badge mb-4" style="align-self: flex-start; background: rgba(14, 165, 233, 0.2); color: #38bdf8; border-color: rgba(14, 165, 233, 0.3);">Daily Motivation</div>
+          <h4>"If you think yourselves strong, strong you will be!"</h4>
+          <p class="quote-author mb-5 text-muted fst-italic fs-5">— Swami Vivekananda</p>
+          <a href="/mentor" class="btn-primary-glow" style="align-self: flex-start;">
+            <i class="ri-user-star-line fs-5"></i> Connect with a Mentor
           </a>
-    
-          <a href="#">
-            <div class="card2">
-              <img src="/images/2011.i518.015.realistic test paper pencil.jpg" alt="Tests">
-              <div class="card-content">TESTS</div>
-            </div>
-          </a>
-    
-          <a href="#">
-            <div class="card3">
-              <img src="/images/8282.jpg" alt="PYQS">
-              <div class="card-content">PYQS</div>
-            </div>
-          </a>
-        
-      <!-- </div> -->
-    </div>
-    
-
-    <div class="Contact">
-      <div class="company">
-        <h3><span class="colored-letter">A</span>imdeed</h3>
-        
-        <!-- Icon Row -->
-        <div class="social-icons">
-          <a href="https://www.facebook.com/people/Aim-Deed/pfbid027eQwMFMRqbEDE8ptHYTcEKRJdNAZ1aXywE2dZrncJgXam36mmLXoXvDG39yfwQ6xl/?rdid=jTY2q1fs1oqYSXYu&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F16uunc7X9x%2F"><i class="ri-facebook-circle-fill"></i></a>
-          <a href="https://x.com/Aimdeed_?t=GC1bh1oyPU4tp-n3l9kvbg&s=08"><i class="ri-twitter-x-fill"></i></a>
-          <a href="https://www.instagram.com/aimdeed?igsh=MWdpZnoyemFiMTlibQ%3D%3D&utm_source=qr"><i class="ri-instagram-fill"></i></a>
-          <a href="https://www.linkedin.com/company/aimdeed/"><i class="ri-linkedin-box-fill"></i></a>
-          <a href="https://t.me/aimdeed"><i class="ri-telegram-fill"></i></a>
-        </div>
-      </div>
-
-      <div class="details">
-        <h4>Contact Us :</h4>
-        <div class="contact-item">
-            <i class="ri-mail-fill"></i>
-            <p>support@aimdeed.in</p>
-        </div>
-        <div class="contact-item">
-            <i class="ri-phone-fill"></i>
-            <p>+91 6239547309</p>
         </div>
       </div>
     </div>
+  </div>
+</section>
 
+<!-- ABOUT US MODERNIZED -->
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6 order-lg-2">
+        <div class="about-img-container shadow-lg">
+          <img src="https://images.unsplash.com/photo-1611743503489-09f50e0be8e4?q=80&w=2159&auto=format&fit=crop" alt="Students studying">
+          <!-- Glass overlay element for aesthetic -->
+          <div style="position:absolute; bottom:20px; right:20px; background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); padding:1rem 2rem; border-radius:16px; border:1px solid rgba(255,255,255,0.2);">
+            <div class="fs-4 fw-bold text-white mb-0">10k+</div>
+            <div class="text-white-50 small">Active Students</div>
+          </div>
+        </div>
+      </div>
 
-    <div class="copy">
-      <p2>© 2025 Aimdeed. All rights reserved.</p2>
+      <div class="col-lg-6 order-lg-1">
+        <div class="about-content">
+          <div class="about-badge">Our Story</div>
+          
+          <h3>Who We Are</h3>
+          <p>
+            Aimdeed is a student-centric platform dedicated to empowering the next generation of engineers and medical professionals. Founded by top educators and former rankers, we provide high-quality practice resources and personalized mentorship to help you excel.
+          </p>
+
+          <h3>Our Mission</h3>
+          <p>
+            We believe that financial barriers shouldn't hinder brilliant minds. Our mission is to democratize education by offering premium resources accessible to everyone. We invite you to join our growing community of achievers.
+          </p>
+
+          <h3>Our Vision</h3>
+          <p class="mb-0">
+            A world where every student has the guidance they need to succeed. We envision a future where your potential dictates your trajectory, not your circumstances. Let's aim high, together.
+          </p>
+        </div>
+      </div>
     </div>
+  </div>
+</section>
+
+<script>
+  // Simple Typewriter Effect
+  document.addEventListener("DOMContentLoaded", function() {
+    const text = "Your Ultimate Guide to NEET & JEE Success!";
+    const speed = 100;
+    let i = 0;
+    const target = document.getElementById("typewriter-text");
     
-    <script src="script.js"></script>
-  </body>
-</html>
+    function typeWriter() {
+      if (i < text.length) {
+        target.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, speed);
+      }
+    }
+    
+    setTimeout(typeWriter, 500); // initial delay
+  });
+  
+  // Apply a scroll effect to navbar if we have one (usually controlled globally, but can help)
+  window.addEventListener('scroll', function() {
+    const nav = document.querySelector('.navbar');
+    if (nav) {
+      if (window.scrollY > 50) {
+        nav.style.backgroundColor = 'rgba(15, 23, 42, 0.9)';
+        nav.style.backdropFilter = 'blur(10px)';
+        nav.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+      } else {
+        nav.style.backgroundColor = 'transparent';
+        nav.style.backdropFilter = 'none';
+        nav.style.boxShadow = 'none';
+      }
+    }
+  });
+</script>

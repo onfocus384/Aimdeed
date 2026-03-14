@@ -1,0 +1,60 @@
+name: Aimdeed CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Clean Install dependencies
+      run: npm ci
+
+    # In a full production app, you would run tests and linting here.
+    # - name: Run Linter
+    #   run: npm run lint
+    
+    # - name: Run Tests
+    #   run: npm test
+
+  docker-build-test:
+    needs: build-and-lint
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Test Docker Image Build
+      run: docker build -t aimdeed-app:test .
+
+  deployment-note:
+    needs: docker-build-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+
+    steps:
+      - name: 🚀 Deployment via Render
+        run: |
+          echo "===========================================" 
+          echo "✅ CI passed! Render is deploying automatically."
+          echo "Code Change → GitHub Push → Render detects"
+          echo "→ Docker builds → Container runs → AIMDEED updated"
+          echo "==========================================="

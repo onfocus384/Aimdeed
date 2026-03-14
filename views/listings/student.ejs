@@ -1,70 +1,105 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Student Page</title>
+<% layout("layouts/boilerplate") %>
 
- <!-- Primary favicon (MOST IMPORTANT) -->
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-
-<!-- PNG favicons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
-
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
-
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="/css/student.css">
-</head>
-
-<body>
-  <div class="card1">
-    <a href="/Books/class9.html">
-      <div id="one">
-        <img src="/images/Pictures/x.svg" alt="">
-        Class IX
-      </div>
-    </a>
-
-    <a href="/Books/class10.html">
-      <div id="two">
-        <img src="/images/Pictures/xi.svg" alt="">
-        Class X
-      </div>
-    </a>
-
-    <a href="/Books/class11.html">
-      <div id="three">
-        <img src="/images/Pictures/xii.svg" alt="">
-        Class XI
-      </div>
-    </a>
+<div class="page-hero">
+  <div class="container">
+    <div class="badge-premium mb-3">Resource Center</div>
+    <h1 class="page-title">Study Materials</h1>
+    <p class="page-subtitle">Select your class or target exam to access premium notes, practice papers, and video solutions.</p>
   </div>
+</div>
 
-  <div class="card2">
-    <a href="/Books/class12.html">
-      <div id="four">
-        <img src="/images/Pictures/arts.jpg" alt="">
-        Class XII
-      </div>
-    </a>
+<div class="container mb-5 pb-5">
+  <div class="row g-4">
+    <!-- Class 9 -->
+    <div class="col-md-6 col-lg-4">
+      <a href="/Books/class9.html" class="glass-card text-decoration-none d-block h-100 p-0 overflow-hidden position-relative group">
+        <div style="height: 200px; overflow: hidden; position: relative;">
+          <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=1173&auto=format&fit=crop" class="w-100 h-100" style="object-fit: cover; transition: transform 0.5s ease;" alt="Class 9">
+          <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.8));"></div>
+        </div>
+        <div class="p-4">
+          <h3 class="text-white fw-bold mb-2">Class IX</h3>
+          <p class="text-muted small mb-0">Foundation building for competitive exams with core concept clarity.</p>
+        </div>
+      </a>
+    </div>
 
-    <a href="/Books/iit.html">
-      <div id="five">
-        <img src="/images/Pictures/commerce.jpg" alt="">
-        IIT-JEE
-      </div>
-    </a>
+    <!-- Class 10 -->
+    <div class="col-md-6 col-lg-4">
+      <a href="/Books/class10.html" class="glass-card text-decoration-none d-block h-100 p-0 overflow-hidden position-relative">
+        <div style="height: 200px; overflow: hidden; position: relative;">
+          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=1173&auto=format&fit=crop" class="w-100 h-100" style="object-fit: cover;" alt="Class 10">
+          <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.8));"></div>
+        </div>
+        <div class="p-4">
+          <h3 class="text-white fw-bold mb-2">Class X</h3>
+          <p class="text-muted small mb-0">Board exam excellence and critical concept deep-dives.</p>
+        </div>
+      </a>
+    </div>
 
-    <a href="/Books/neet.html">
-      <div id="six">
-        <img src="/images/Pictures/science.jpg" alt="">
-        NEET
-      </div>
-    </a>
+    <!-- Class 11 -->
+    <div class="col-md-6 col-lg-4">
+      <a href="/Books/class11.html" class="glass-card text-decoration-none d-block h-100 p-0 overflow-hidden position-relative">
+        <div style="height: 200px; overflow: hidden; position: relative;">
+          <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1173&auto=format&fit=crop" class="w-100 h-100" style="object-fit: cover;" alt="Class 11">
+          <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.8));"></div>
+        </div>
+        <div class="p-4">
+          <h3 class="text-white fw-bold mb-2">Class XI</h3>
+          <p class="text-muted small mb-0">Advanced preparation for NEET & JEE foundation years.</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- Class 12 -->
+    <div class="col-md-6 col-lg-4">
+      <a href="/Books/class12.html" class="glass-card text-decoration-none d-block h-100 p-0 overflow-hidden position-relative">
+        <div style="height: 200px; overflow: hidden; position: relative;">
+          <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1173&auto=format&fit=crop" class="w-100 h-100" style="object-fit: cover;" alt="Class 12">
+          <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.8));"></div>
+        </div>
+        <div class="p-4">
+          <h3 class="text-white fw-bold mb-2">Class XII</h3>
+          <p class="text-muted small mb-0">Comprehensive board and competitive exam integration.</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- IIT-JEE -->
+    <div class="col-md-6 col-lg-4">
+      <a href="/Books/iit.html" class="glass-card text-decoration-none d-block h-100 p-0 overflow-hidden position-relative border-primary" style="border-width: 2px;">
+        <div style="height: 200px; overflow: hidden; position: relative;">
+          <img src="https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1173&auto=format&fit=crop" class="w-100 h-100" style="object-fit: cover;" alt="IIT JEE">
+          <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(79, 70, 229, 0.6));"></div>
+          <div class="badge-premium position-absolute top-0 end-0 m-3">Pro</div>
+        </div>
+        <div class="p-4">
+          <h3 class="text-white fw-bold mb-2">IIT-JEE</h3>
+          <p class="text-muted small mb-0">Targeted preparation for JEE Main & Advanced aspirants.</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- NEET -->
+    <div class="col-md-6 col-lg-4">
+      <a href="/Books/neet.html" class="glass-card text-decoration-none d-block h-100 p-0 overflow-hidden position-relative border-secondary" style="border-width: 2px;">
+        <div style="height: 200px; overflow: hidden; position: relative;">
+          <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=1173&auto=format&fit=crop" class="w-100 h-100" style="object-fit: cover;" alt="NEET">
+          <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(14, 165, 233, 0.6));"></div>
+          <div class="badge-premium position-absolute top-0 end-0 m-3" style="background: rgba(14, 165, 233, 0.2); color: #38bdf8; border-color: rgba(14, 165, 233, 0.3);">Pro</div>
+        </div>
+        <div class="p-4">
+          <h3 class="text-white fw-bold mb-2">NEET</h3>
+          <p class="text-muted small mb-0">Specialized resources for medical entrance exam preparation.</p>
+        </div>
+      </a>
+    </div>
   </div>
-</body>
-</html>
+</div>
+
+<style>
+  .glass-card:hover img {
+    transform: scale(1.1);
+  }
+</style>

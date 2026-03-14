@@ -1,264 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JEE College Predictor</title>
- <!-- Primary favicon (MOST IMPORTANT) -->
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<% layout("layouts/boilerplate") %>
 
-<!-- PNG favicons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
+<div class="page-hero">
+  <div class="container">
+    <div class="badge-premium mb-3">Admission Intelligence</div>
+    <h1 class="page-title">JEE College Predictor</h1>
+    <p class="page-subtitle">Input your All India Rank to see your potential college matches based on historical admission data.</p>
+  </div>
+</div>
 
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
-
-
-
-    <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --light: #ecf0f1;
-            --danger: #e74c3c;
-        }
-
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            margin: 0;
-            padding: 20px;
-            background-color: var(--light);
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            color: var(--primary);
-            margin-bottom: 30px;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--secondary);
-            outline: none;
-        }
-
-        button {
-            background-color: var(--secondary);
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: transform 0.2s ease, background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-        }
-
-        .result-section {
-            margin-top: 30px;
-            text-align: left;
-        }
-
-        .college-category {
-            margin: 25px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .college-item {
-            padding: 15px;
-            margin: 10px 0;
-            background: white;
-            border-left: 4px solid var(--secondary);
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .loading {
-            display: none;
-            margin: 20px 0;
-            text-align: center;
-            color: var(--secondary);
-        }
-
-        .error {
-            color: var(--danger);
-            margin: 15px 0;
-            padding: 10px;
-            background: #f8d7da;
-            border-radius: 5px;
-        }
-
-        .disclaimer {
-            margin-top: 30px;
-            padding: 15px;
-            background: #fff3cd;
-            border-radius: 8px;
-            color: #856404;
-            font-size: 0.9em;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h2>🎓 JEE College Predictor</h2>
-        
-        <div class="input-group">
-            <label for="rank">Enter Your JEE Rank:</label>
-            <input type="number" id="rank" placeholder="Enter your All India Rank" min="1">
+<div class="container mb-5 pb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="glass-card mb-4">
+        <div class="row g-4 align-items-end">
+          <div class="col-md-8">
+            <label class="form-label-premium">Enter Your JEE Rank (AIR)</label>
+            <div class="input-group">
+              <span class="input-group-text bg-transparent border-end-0" style="border-color: var(--glass-border); color: var(--text-muted);">
+                <i class="ri-medal-line"></i>
+              </span>
+              <input type="number" id="rank" class="form-control form-control-glass border-start-0" placeholder="e.g. 15000" min="1">
+            </div>
+          </div>
+          <div class="col-md-4">
+            <button onclick="predictCollege()" class="btn-premium w-100 justify-content-center py-2" style="height: 50px;">
+              Predict <i class="ri-search-eye-line ms-2"></i>
+            </button>
+          </div>
         </div>
 
-        <button onclick="predictCollege()">Predict My Colleges</button>
-        <div class="loading" id="loading">⏳ Analyzing rank data...</div>
-
-        <div class="result-section" id="result"></div>
-        <div class="disclaimer">
-            Note: Predictions are based on previous year's cutoff data. Actual results may vary. 
-            Always consult official sources for admission decisions.
+        <div id="loading" class="text-center mt-4" style="display: none;">
+          <div class="spinner-border text-primary mb-2" role="status"></div>
+          <p class="small text-muted mb-0">Analyzing historical cut-off data...</p>
         </div>
+      </div>
+
+      <div id="result" class="result-section"></div>
+
+      <div class="badge-premium w-100 bg-opacity-10 mt-4 text-center py-3" style="font-weight: 400; font-size: 0.85rem; border-style: dashed;">
+        <i class="ri-information-line me-1"></i> Predictions are based on previous year's JoSAA cut-off data. Actual results may vary. Always consult official sources for final admission decisions.
+      </div>
     </div>
+  </div>
+</div>
 
-    <script>
-        async function predictCollege() {
-            const rank = parseInt(document.getElementById("rank").value);
-            const resultDiv = document.getElementById("result");
-            const loading = document.getElementById("loading");
-            
-            resultDiv.innerHTML = '';
-            loading.style.display = 'block';
+<script>
+  async function predictCollege() {
+      const rankInput = document.getElementById("rank");
+      const rank = parseInt(rankInput.value);
+      const resultDiv = document.getElementById("result");
+      const loading = document.getElementById("loading");
+      
+      resultDiv.innerHTML = '';
+      loading.style.display = 'block';
 
-            if (!rank || rank <= 0) {
-                showError("Please enter a valid positive rank");
-                loading.style.display = 'none';
-                return;
-            }
+      if (!rank || rank <= 0) {
+          showError("Please enter a valid positive rank to continue.");
+          loading.style.display = 'none';
+          return;
+      }
 
-            try {
-               const response = await fetch("/api/josaa", {
-  credentials: "same-origin"
-});
+      try {
+          const response = await fetch("/api/josaa", {
+              credentials: "same-origin"
+          });
 
-if (!response.ok) {
-  throw new Error("Failed to fetch JOSAA data");
-}
+          if (!response.ok) {
+              throw new Error("Failed to fetch JOSAA data");
+          }
 
-const colleges = await response.json();
+          const colleges = await response.json();
 
+          let eligibleColleges = colleges.filter(college => {
+              return rank >= college["Opening Rank"] && 
+                     rank <= college["Closing Rank"];
+          });
+          
+          eligibleColleges = eligibleColleges.sort((a, b) => {
+              const typeOrder = { "IIT": 1, "NIT": 2, "IIIT": 3, "IIEST": 4, "GFTI": 5, "Other": 6 };
+              const aType = getInstituteType(a);
+              const bType = getInstituteType(b);
+              return typeOrder[aType] - typeOrder[bType] || a["Closing Rank"] - b["Closing Rank"];
+          });
 
-                let eligibleColleges = colleges.filter(college => {
-                    return rank >= college["Opening Rank"] && 
-                           rank <= college["Closing Rank"];
-                });
-                
-                eligibleColleges = eligibleColleges.sort((a, b) => {
-                    const typeOrder = { "IIT": 1, "NIT": 2, "IIIT": 3, "IIEST": 4, "GFTI": 5, "Other": 6 };
-                    const aType = getInstituteType(a);
-                    const bType = getInstituteType(b);
-                    return typeOrder[aType] - typeOrder[bType] || a["Closing Rank"] - b["Closing Rank"];
-                });
+          displayResults(eligibleColleges, rank);
+      } catch (error) {
+          showError("Failed to load college data. Please try again later.");
+      } finally {
+          loading.style.display = 'none';
+      }
+  }
 
-                displayResults(eligibleColleges, rank);
-            } catch (error) {
-                showError("Failed to load college data. Please try again later.");
-            } finally {
-                loading.style.display = 'none';
-            }
-        }
+  function getInstituteType(college) {
+      if (college["Institute"].includes("IIT")) return "IIT";
+      if (college["Institute"].includes("NIT")) return "NIT";
+      if (college["Institute"].includes("IIIT")) return "IIIT";
+      if (college["Institute"].includes("IIEST")) return "IIEST";
+      if (college["Institute"].includes("GFTI")) return "GFTI";
+      return "Other";
+  }
 
-        function getInstituteType(college) {
-            if (college["Institute"].includes("IIT")) return "IIT";
-            if (college["Institute"].includes("NIT")) return "NIT";
-            if (college["Institute"].includes("IIIT")) return "IIIT";
-            if (college["Institute"].includes("IIEST")) return "IIEST";
-            if (college["Institute"].includes("GFTI")) return "GFTI";
-            return "Other";
-        }
+  function displayResults(colleges, userRank) {
+      const resultDiv = document.getElementById("result");
+      
+      if (colleges.length === 0) {
+          resultDiv.innerHTML = `
+              <div class="glass-card text-center py-5 border-danger">
+                  <i class="ri-error-warning-line fs-1 text-danger mb-3 d-block"></i>
+                  <h4 class="text-white">No Direct Matches Found</h4>
+                  <p class="text-muted small">Based on your rank, there are no exact matches in this database. Consider exploring state-level counseling or spot rounds.</p>
+              </div>`;
+          return;
+      }
 
-        function displayResults(colleges, userRank) {
-            const resultDiv = document.getElementById("result");
-            
-            if (colleges.length === 0) {
-                resultDiv.innerHTML = `
-                    <div class="error">
-                        No colleges found for your rank. Consider these options:
-                        <ul>
-                            <li>Check lower-tier colleges</li>
-                            <li>Explore state-level counseling</li>
-                            <li>Consider spot admission rounds</li>
-                        </ul>
-                    </div>`;
-                return;
-            }
+      let html = `<div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fs-4 fw-bold text-white mb-0">Matched Colleges (${colleges.length})</h3>
+                    <span class="badge-premium">Scroll to view</span>
+                  </div>`;
+      
+      colleges.forEach(college => {
+          const type = getInstituteType(college);
+          const typeClass = type === 'IIT' ? 'bg-primary' : (type === 'NIT' ? 'bg-success' : 'bg-info');
+          
+          html += `
+              <div class="glass-card mb-3 p-4">
+                  <div class="d-flex justify-content-between gap-3 flex-wrap">
+                    <div>
+                      <span class="badge ${typeClass} mb-2">${type}</span>
+                      <h5 class="text-white fw-bold mb-1">${college["Institute"]}</h5>
+                      <p class="text-muted small mb-3">${college["Academic Program Name"]}</p>
+                    </div>
+                    <div class="text-end">
+                      <div class="small text-muted">Category</div>
+                      <div class="text-white">${college["Seat Type"]} (${college["Quota"]})</div>
+                    </div>
+                  </div>
+                  <div class="row align-items-center mt-3 g-2">
+                    <div class="col-sm-6">
+                      <div class="p-2 rounded bg-opacity-10 bg-white border border-white border-opacity-10">
+                        <span class="small text-muted ms-1">Rank Range:</span>
+                        <span class="text-white fw-bold ms-2">${college["Opening Rank"]} - ${college["Closing Rank"]}</span>
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      ${getAdmissionChance(userRank, college["Opening Rank"], college["Closing Rank"])}
+                    </div>
+                  </div>
+              </div>`;
+      });
 
-            let html = '<h3>📚 Predicted College List</h3>';
-            colleges.forEach(college => {
-                html += `
-                    <div class="college-item">
-                        <strong>${college["Institute"]}</strong><br>
-                        <span>Program: ${college["Academic Program Name"]}</span><br>
-                        <span>Category: ${college["Seat Type"]} (${college["Quota"]})</span><br>
-                        <em>Rank Range: ${college["Opening Rank"]} - ${college["Closing Rank"]}</em>
-                        ${getAdmissionChance(userRank, college["Opening Rank"], college["Closing Rank"])}
-                    </div>`;
-            });
+      resultDiv.innerHTML = html;
+  }
 
-            resultDiv.innerHTML = html;
-        }
+  function getAdmissionChance(userRank, open, close) {
+      const range = close - open;
+      const position = userRank - open;
+      const percentage = ((position / range) * 100);
 
-        function getAdmissionChance(userRank, open, close) {
-            const range = close - open;
-            const position = userRank - open;
-            const percentage = ((position / range) * 100).toFixed(1);
+      if (position < range * 0.25) return '<div class="p-2 rounded bg-success bg-opacity-10 text-success small border border-success border-opacity-20 text-center"><i class="ri-checkbox-circle-fill me-1"></i> High Admission Chance</div>';
+      if (position < range * 0.75) return '<div class="p-2 rounded bg-warning bg-opacity-10 text-warning small border border-warning border-opacity-20 text-center"><i class="ri-time-fill me-1"></i> Moderate Chance</div>';
+      return '<div class="p-2 rounded bg-danger bg-opacity-10 text-danger small border border-danger border-opacity-20 text-center"><i class="ri-error-warning-fill me-1"></i> Possible in Waitlist</div>';
+  }
 
-            if (position < range * 0.25) return '<div style="color: #27ae60;">High Admission Chance (Top 25%)</div>';
-            if (position < range * 0.75) return '<div style="color: #f1c40f;">Moderate Chance</div>';
-            return '<div style="color: #e74c3c;">Possible in Later Rounds</div>';
-        }
+  function showError(message) {
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = `
+          <div class="glass-card text-center border-danger">
+            <p class="text-danger mb-0">${message}</p>
+          </div>`;
+  }
 
-        function showError(message) {
-            const resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = `<div class="error">${message}</div>`;
-        }
-
-        document.getElementById('rank').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') predictCollege();
-        });
-    </script>
-</body>
-
-</html>
+  document.getElementById('rank').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') predictCollege();
+  });
+</script>

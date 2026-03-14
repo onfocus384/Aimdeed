@@ -310,6 +310,13 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     const status = document.getElementById("contactStatus");
+    const submitBtn = this.querySelector("button[type='submit']");
+
+    // Show loading state
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+    }
 
     const formData = {
       name: this.name.value,
@@ -328,27 +335,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const data = await res.json();
 
-      // Show message below form
-      status.textContent = data.message;
-      status.classList.remove("hidden");
-      status.style.background = "rgba(0,128,0,0.12)";
-      status.style.color = "#e9f2eeff";
-      status.style.padding = "12px";
-      status.style.borderRadius = "8px";
-      status.style.marginTop = "12px";
+      // Show success message
+      if (status) {
+        status.textContent = data.message || "Message sent successfully!";
+        status.style.display = "block";
+        status.style.background = "rgba(16, 185, 129, 0.15)";
+        status.style.color = "#6ee7b7";
+        status.style.border = "1px solid rgba(16, 185, 129, 0.3)";
+      }
 
       this.reset();
 
-      // Redirect after 1 seconds
+      // Restore button
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send Message <i class="ri-send-plane-fill ms-2"></i>';
+      }
+
+      // Hide message after 5 seconds
       setTimeout(() => {
-        window.location.href = "/";
-      }, 1000);
+        if (status) status.style.display = "none";
+      }, 5000);
 
     } catch (err) {
-      status.textContent = "Something went wrong. Please try again.";
-      status.classList.remove("hidden");
-      status.style.background = "rgba(255,0,0,0.12)";
-      status.style.color = "#cc1c2bff";
+      if (status) {
+        status.textContent = "Something went wrong. Please try again.";
+        status.style.display = "block";
+        status.style.background = "rgba(239, 68, 68, 0.12)";
+        status.style.color = "#fca5a5";
+        status.style.border = "1px solid rgba(239, 68, 68, 0.3)";
+      }
+
+      // Restore button
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send Message <i class="ri-send-plane-fill ms-2"></i>';
+      }
     }
   });
 

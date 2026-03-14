@@ -1,125 +1,140 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= pageTitle %></title>
- <meta name="description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and tips for IIT and medical entrance exams.">
-    <meta name="keywords" content="NEET preparation, JEE preparation, IIT, medical entrance exams, Aimdeed, online coaching, study materials, NEET coaching, JEE coaching">
-    <meta name="author" content="Aimdeed">
-    <meta name="robots" content="index, follow">
+<% layout("layouts/boilerplate") %>
 
-    
-    <meta property="og:title" content="Aimdeed - Your NEET & JEE Preparation Guider">
-    <meta property="og:description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and tips for IIT and medical entrance exams.">
-    <meta property="og:image" content="https://www.aimdeed.in/logo_circular.png">
-    <meta property="og:url" content="https://www.aimdeed.in">
-    <meta property="og:type" content="website">
-
-   
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Aimdeed - Your NEET & JEE Preparation Hub">
-    <meta name="twitter:description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and coaching tips tailored for IIT and medical entrance exams.">
-    <meta name="twitter:image" content="https://www.aimdeed.in/logo_circular.png">
-
-   
-    <link rel="canonical" href="https://www.aimdeed.in">
-
-   
-    <!-- Primary favicon (MOST IMPORTANT) -->
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-
-<!-- PNG favicons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
-
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
-
-
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-
-  <!-- Marked.js for Markdown → HTML -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:"Segoe UI", sans-serif; }
-    body { background:#16213e; display:flex; justify-content:center; align-items:center; min-height:100vh; padding:10px; }
-    .chat-container { width:100%; max-width:800px; height:100vh; background:white; border-radius:20px; display:flex; flex-direction:column; overflow:hidden; }
-    .chat-header { padding:1rem; background:#007fff; color:white; display:flex; align-items:center; gap:12px; }
-    .chat-header i { font-size:1.5rem; animation: float 3s ease-in-out infinite; }
-    .chat-header h2 { font-size:1.2rem; }
-    .chat-body { flex:1; padding:1rem; overflow-y:auto; display:flex; flex-direction:column; gap:1rem; }
-    .message { max-width:85%; padding:0.8rem 1rem; border-radius:15px; font-size:0.9rem; }
-    .user-message { background: rgba(34, 38, 233, 0.1); border:1px solid rgba(47,23,231,0.15); align-self:flex-end; }
-    .bot-message { background: rgba(75, 73, 238, 0.15); border:1px solid rgba(22,25,227,0.2); align-self:flex-start; }
-    .input-container { padding:1rem; display:flex; gap:0.5rem; border-top:1px solid #eee; }
-    input { flex:1; padding:0.8rem; border:1px solid rgb(62,155,237); border-radius:12px; font-size:0.9rem; }
-    button { padding:0.8rem 1rem; border:none; border-radius:12px; background:#3457d5; color:white; cursor:pointer; }
-    @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
-  </style>
-</head>
-<body>
-  <div class="chat-container">
-    <div class="chat-header"><i class="fas fa-robot"></i><h2>Ask me your Questions</h2></div>
-
-    <div class="chat-body" id="chat-body">
-      <div class="message bot-message"><b>Aimdeed:</b> How can I help you today?</div>
+<div class="page-hero" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem;">
+  <div class="glass-card p-0 overflow-hidden" style="width: 100%; max-width: 900px; height: 80vh; display: flex; flex-direction: column;">
+    <!-- Chat Header -->
+    <div class="p-4 d-flex align-items-center justify-content-between" style="background: rgba(255,255,255,0.03); border-bottom: 1px solid var(--glass-border);">
+      <div class="d-flex align-items-center gap-3">
+        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; background: var(--gradient-primary); font-size: 1.5rem; color: white;">
+          <i class="ri-robot-2-line"></i>
+        </div>
+        <div>
+          <h4 class="mb-0 fs-5 fw-bold text-white">Aimdeed AI Assistant</h4>
+          <div class="d-flex align-items-center gap-1">
+            <span class="d-inline-block rounded-circle bg-success" style="width: 8px; height: 8px;"></span>
+            <span class="text-muted small">Online & Ready to Help</span>
+          </div>
+        </div>
+      </div>
+      <div class="d-none d-sm-block">
+        <span class="badge-premium">v2.0 Beta</span>
+      </div>
     </div>
 
-    <div class="input-container">
-      <input type="text" id="user-input" placeholder="Type your doubts..." />
-      <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+    <!-- Chat Body -->
+    <div class="p-4 flex-grow-1 overflow-auto d-flex flex-column gap-3" id="chat-body" style="background: rgba(15, 23, 42, 0.2);">
+      <div class="message-wrapper bot">
+        <div class="bot-bubble p-3 rounded-4" style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); max-width: 80%; align-self: flex-start;">
+          <p class="mb-0 text-white-50">Hello! I'm your Aimdeed AI assistant. I can help you with NEET/JEE preparation strategies, syllabus doubts, or technical support. How can I assist you today?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Input -->
+    <div class="p-3 p-md-4" style="background: rgba(255,255,255,0.03); border-top: 1px solid var(--glass-border);">
+      <div class="d-flex gap-2">
+        <input type="text" id="user-input" class="form-control form-control-glass py-2 py-md-3" placeholder="Type your doubt..." autocomplete="off">
+        <button id="send-button" class="btn-premium px-3 px-md-4" style="border-radius: 12px; white-space: nowrap;">
+          <i class="ri-send-plane-2-line"></i>
+        </button>
+      </div>
+      <p class="text-center text-muted smaller mt-3 mb-0" style="font-size: 0.75rem; color: #CBD5E1 !important;">AI may produce inaccurate information about people, places, or facts.</p>
     </div>
   </div>
+</div>
 
-  <script>
-    const chatBody = document.getElementById("chat-body");
-    const backendUrl = "/chat"; // same origin
+<style>
+  .message-wrapper {
+    display: flex;
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .message-wrapper.user {
+    justify-content: flex-end;
+  }
+  .user-bubble {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
+    border: none !important;
+  }
+  .bot-bubble pre {
+    background: rgba(0,0,0,0.3);
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    color: #e2e8f0;
+  }
+  .bot-bubble code {
+    color: #38bdf8;
+  }
+  #chat-body::-webkit-scrollbar {
+    width: 6px;
+  }
+  #chat-body::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+  }
+</style>
 
-    document.getElementById("send-button").addEventListener("click", sendMessage);
-    document.getElementById("user-input").addEventListener("keypress", e => {
-      if(e.key==="Enter"){ e.preventDefault(); sendMessage(); }
-    });
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  const chatBody = document.getElementById("chat-body");
+  const input = document.getElementById("user-input");
+  const sendBtn = document.getElementById("send-button");
+  const backendUrl = "/chat";
 
-    async function sendMessage() {
-      const input = document.getElementById("user-input");
-      const message = input.value.trim();
-      if(!message) return;
+  sendBtn.addEventListener("click", sendMessage);
+  input.addEventListener("keypress", e => {
+    if(e.key === "Enter") { e.preventDefault(); sendMessage(); }
+  });
 
-      addMessage("You", message, true);
-      input.value = "";
+  async function sendMessage() {
+    const message = input.value.trim();
+    if(!message) return;
 
-      const thinking = addMessage("Aimdeed", "Thinking...", false);
+    addMessage("You", message, true);
+    input.value = "";
 
-      try {
-        const res = await fetch(backendUrl, {
-          method:"POST",
-          headers:{"Content-Type":"application/json"},
-          body: JSON.stringify({ message })
-        });
-        const data = await res.json();
-        thinking.remove();
+    const thinkingBubble = addMessage("Aimdeed", "Thinking...", false);
 
-        const formattedReply = marked.parse(data.reply || "");
-        addMessage("Aimdeed", formattedReply, false, true);
-      } catch(err){
-        thinking.remove();
-        addMessage("Aimdeed", "Something went wrong. Try again.", false);
-        console.error(err);
-      }
+    try {
+      const res = await fetch(backendUrl, {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ message })
+      });
+      const data = await res.json();
+      thinkingBubble.remove();
+
+      const formattedReply = marked.parse(data.reply || "");
+      addMessage("Aimdeed", formattedReply, false, true);
+    } catch(err){
+      thinkingBubble.remove();
+      addMessage("Aimdeed", "I apologize, but I encountered an error. Please try again.", false);
+      console.error(err);
+    }
+  }
+
+  function addMessage(sender, text, isUser, isHTML=false){
+    const wrapper = document.createElement("div");
+    wrapper.className = `message-wrapper ${isUser ? 'user' : 'bot'}`;
+    
+    const bubble = document.createElement("div");
+    bubble.className = `${isUser ? 'user-bubble' : 'bot-bubble'} p-3 rounded-4`;
+    bubble.style.cssText = isUser 
+      ? "max-width: 80%; align-self: flex-end;" 
+      : "background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); max-width: 85%; align-self: flex-start;";
+    
+    if(isHTML) {
+      bubble.innerHTML = `<div class="chatbot-response text-white-50">${text}</div>`;
+    } else {
+      bubble.innerHTML = `<p class="mb-0 ${isUser ? 'text-white' : 'text-white-50'}">${text.replace(/\n/g,"<br>")}</p>`;
     }
 
-    function addMessage(sender, text, isUser, isHTML=false){
-      const div = document.createElement("div");
-      div.className = `message ${isUser?"user-message":"bot-message"}`;
-      div.innerHTML = isHTML ? `<b>${sender}:</b><div class="chatbot-response">${text}</div>` : `<b>${sender}:</b> ${text.replace(/\n/g,"<br>")}`;
-      chatBody.appendChild(div);
-      div.scrollIntoView({ behavior: "smooth" });
-      return div;
-    }
-  </script>
-</body>
-</html>
+    wrapper.appendChild(bubble);
+    chatBody.appendChild(wrapper);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return wrapper;
+  }
+</script>

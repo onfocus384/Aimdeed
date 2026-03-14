@@ -1,433 +1,255 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Aimdeed® | NEET & JEE Preparation Platform</title>
+<% layout('layouts/boilerplate') %>
 
-    <meta name="description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and tips for IIT and medical entrance exams.">
-    <meta name="keywords" content="NEET preparation, JEE preparation, IIT, medical entrance exams, Aimdeed, online coaching, study materials, NEET coaching, JEE coaching">
-    <meta name="author" content="Aimdeed">
-    <meta name="robots" content="index, follow">
-
-    
-    <meta property="og:title" content="Aimdeed - Your NEET & JEE Preparation Guider">
-    <meta property="og:description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and tips for IIT and medical entrance exams.">
-    <meta property="og:image" content="https://www.aimdeed.in/logo_circular.png">
-    <meta property="og:url" content="https://www.aimdeed.in">
-    <meta property="og:type" content="website">
-
-   
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Aimdeed - Your NEET & JEE Preparation Hub">
-    <meta name="twitter:description" content="Boost your NEET & JEE exam success with Aimdeed. Explore expert strategies, high-quality study materials, and coaching tips tailored for IIT and medical entrance exams.">
-    <meta name="twitter:image" content="https://www.aimdeed.in/logo_circular.png">
-
-   
-    <link rel="canonical" href="https://www.aimdeed.in">
-
-   
-   <!-- Primary favicon (MOST IMPORTANT) -->
-<link rel="icon" href="/favicon.ico" type="image/x-icon">
-
-<!-- PNG favicons -->
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon_io/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon_io/favicon-16x16.png">
-
-<!-- Apple Touch Icon -->
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon_io/apple-touch-icon.png">
-
-
-
-
-
-     <!-- Bootstrap -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  >
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-   
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
-
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="/css/style.css" />
-
-
-    <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "Aimdeed",
-  "url": "https://www.aimdeed.in",
-  "logo": "https://www.aimdeed.in/logo_circular.png",
-  "sameAs": [
-    "https://www.instagram.com/aimdeed?igsh=MWdpZnoyemFiMTlibQ%3D%3D&utm_source=qr",
-    "https://www.linkedin.com/company/aimdeed/"
-  ]
-}
-</script>
-
-
-  </head>
-  <body>
-
-    
-    <!-- NAVBAR -->
-  <header class="site-header">
-  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
-    <div class="container">
-
-      <!-- BRAND -->
-      <a href="/" class="navbar-brand d-flex align-items-center gap-2">
-        <img
-          src="/images/logo_circular.png"
-          alt="Aimdeed logo"
-          width="50"
-          height="50"
-        />
-        <span class="fw-bold fs-5">
-          <span style="color:#030303;font-size:xx-large;">A</span>imdeed
-        </span>
-      </a>
-
-      <!-- TOGGLER -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#mainNavbar"
-        aria-controls="mainNavbar"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- NAV LINKS -->
-      <div class="collapse navbar-collapse" id="mainNavbar">
-       <ul class="navbar-nav ms-auto align-items-lg-center gap-2 gap-lg-3">
-
-          <li class="nav-item">
-            <a class="nav-link active" href="#home">Home</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="#about">About</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/studies">AimDeed Studies</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/mentor">AimDeed mentor</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="/payment">Subscription</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="#contact">Contact</a>
-          </li>
-
-          <!-- ACCOUNT DROPDOWN -->
-          <li class="nav-item dropdown">
-
-            <a
-              class="nav-link dropdown-toggle d-flex align-items-center gap-1"
-              href="#"
-              id="accountDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i class="ri-user-3-line"></i>
-              Account
-            </a>
-
-            <ul class="dropdown-menu dropdown-menu-end">
-
-              <% if (currentUser) { %>
-                <li class="dropdown-header d-flex align-items-center gap-2">
-                  <i class="ri-account-circle-2-fill fs-4"></i>
-                  <strong><%= currentUser.username %></strong>
-                </li>
-
-                <li><hr class="dropdown-divider"></li>
-
-                <li>
-                  <a class="dropdown-item text-danger" href="/logout">
-                    <i class="ri-logout-box-r-line me-2"></i>
-                    Logout
-                  </a>
-                </li>
-
-              <% } else { %>
-
-                <li>
-                  <a class="dropdown-item" href="/login">
-                    <i class="ri-login-box-line me-2"></i>
-                    Login
-                  </a>
-                </li>
-
-                <li>
-                  <a class="dropdown-item" href="/signup">
-                    <i class="ri-user-add-line me-2"></i>
-                    Signup
-                  </a>
-                </li>
-
-              <% } %>
-
-            </ul>
-          </li>
-
-        </ul>
+<!-- HERO SLIDER SECTION -->
+<section class="hero-section" style="padding: 0; min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden;">
+  <div id="heroCarousel" class="carousel slide carousel-fade w-100 h-100" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner h-100">
+      <div class="carousel-item active" style="height: 100vh;">
+        <div class="hero-overlay" style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4)); z-index: 1;"></div>
+        <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=2070&auto=format&fit=crop" class="d-block w-100 h-100" style="object-fit: cover;" fetchpriority="high" alt="Inspire">
+        <div class="carousel-caption d-flex flex-column justify-content-center text-start h-100" style="z-index: 2; left: 10%; right: 10%; bottom: 0;">
+          <div class="hero-content">
+            <div class="badge-premium mb-2" style="width: fit-content;"> Level up your game</div>
+            <h1 class="page-title text-start mb-0" style="font-size: clamp(2.2rem, 6vw, 5rem); line-height: 1.1;">Aimdeed:<br>Inspire. Learn. Achieve.</h1>
+            <p class="hero-subtitle text-start ms-0 mb-3 text-muted" style="max-width: 550px; font-size: clamp(0.9rem, 1.5vw, 1.1rem);">Modern courses, proven results — join thousands who transformed their future with our expert guidance.</p>
+            <div class="d-flex flex-wrap gap-3">
+              <a href="/listings/index2" class="btn-premium">Explore Courses <i class="ri-arrow-right-line"></i></a>
+              <a href="#contact" class="btn-outline-premium">Contact Us</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item" style="height: 100vh;">
+        <div class="hero-overlay" style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4)); z-index: 1;"></div>
+        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1950&q=80" class="d-block w-100 h-100" style="object-fit: cover;" loading="lazy" alt="Mentorship">
+        <div class="carousel-caption d-flex flex-column justify-content-center text-start h-100" style="z-index: 2; left: 10%; right: 10%; bottom: 0;">
+          <div class="hero-content">
+            <div class="badge-premium mb-2" style="width: fit-content;"> Expert 1-on-1 Help</div>
+            <h1 class="page-title text-start mb-0" style="font-size: clamp(2.2rem, 6vw, 5rem); line-height: 1.1;">Aimdeed NEET & JEE<br>Mentorship</h1>
+            <p class="hero-subtitle text-start ms-0 mb-3 text-muted" style="max-width: 550px; font-size: clamp(0.9rem, 1.5vw, 1.1rem);">Dedicated mentors, small batches, and measurable progress tailored to your unique learning style.</p>
+            <div class="d-flex flex-wrap gap-3">
+              <a href="/mentor" class="btn-premium">Find a Mentor <i class="ri-user-heart-line"></i></a>
+              <a href="/listings/index2" class="btn-outline-premium">Meet Toppers</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item" style="height: 100vh;">
+        <div class="hero-overlay" style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4)); z-index: 1;"></div>
+        <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1950&q=80" class="d-block w-100 h-100" style="object-fit: cover;" loading="lazy" alt="Outcomes">
+        <div class="carousel-caption d-flex flex-column justify-content-center text-start h-100" style="z-index: 2; left: 10%; right: 10%; bottom: 0;">
+          <div class="hero-content">
+            <div class="badge-premium mb-2" style="width: fit-content;"> Real Success Stories</div>
+            <h1 class="page-title text-start mb-0" style="font-size: clamp(2.2rem, 6vw, 5rem); line-height: 1.1;">Excellence in<br>Real Outcomes</h1>
+            <p class="hero-subtitle text-start ms-0 mb-3 text-muted" style="max-width: 550px; font-size: clamp(0.9rem, 1.5vw, 1.1rem);">Top placements and record-breaking exam scores — see our success stories and build your own.</p>
+            <div class="d-flex flex-wrap gap-3">
+              <a href="/listings/index2" class="btn-premium">View Results <i class="ri-medal-line"></i></a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </nav>
-</header>
+  </div>
+</section>
 
-    <!-- HERO -->
-    <main>
-      <section id="home" class="hero">
-        <div class="hero-slider-container" aria-live="polite">
-          <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?q=80&w=1073&auto=format&fit=crop');">
-            <div class="slide-content">
-              <h1>Inspire. Learn. Achieve.</h1>
-              <p>Modern courses, proven results — join thousands who transformed their future.</p>
-              <div class="hero-actions">
-                <a href="#studies" class="btn-primary">Explore Courses</a>
-                <a href="#contact" class="btn-secondary">Contact Us</a>
-              </div>
-            </div>
-          </div>
+<!-- TOPPERS / STUDIES SECTION -->
+<section id="studies" class="section" style="background: rgba(255,255,255,0.02);">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="badge-premium mb-2">Hall of Fame</div>
+      <h2 class="section-title mb-3">Meet Our <span style="background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Toppers</span></h2>
+      <p class="section-subtitle mx-auto">Our exceptional students who are leading the way in NEET & JEE preparation.</p>
+    </div>
 
-          <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1950&q=80');">
-            <div class="slide-content">
-              <h1>Personalised Mentorship</h1>
-              <p>Dedicated mentors, small batches, measurable progress.</p>
-              <div class="hero-actions">
-                <a href="#career" class="btn-primary">See Placements</a>
-                <a href="#studies" class="btn-secondary">Meet Toppers</a>
-              </div>
-            </div>
-          </div>
+    <!-- Reusing existing scroll container logic but styled -->
+    <div class="position-relative">
+      <div id="studiesScroll" class="d-flex gap-4 overflow-auto pb-4" style="scrollbar-width: none; -ms-overflow-style: none;">
+        <!-- JS will populate this -->
+      </div>
+    </div>
 
-          <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1950&q=80');">
-            <div class="slide-content">
-              <h1>Real Outcomes</h1>
-              <p>Top placements and exam scores — see our success stories.</p>
-              <div class="hero-actions">
-                <a href="student.html" class="btn-primary">View Success</a>
-                <a href="career.html" class="btn-secondary">Hire Graduates</a>
-              </div>
-            </div>
-          </div>
+    <div class="text-center mt-5">
+      <a href="/listings/index2" class="btn-premium">
+        Explore AimDeed Studies <i class="ri-trophy-line ms-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDERS SECTION -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <div class="glass-card p-2" style="border-radius: 30px; overflow: hidden;">
+          <img src="/images/founders.jpg" alt="Founders" class="w-100 shadow-lg" style="border-radius: 22px; max-height: 500px; object-fit: cover;" loading="lazy" />
         </div>
-
-        <button class="slider-arrow slider-prev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
-        <button class="slider-arrow slider-next" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
-
-        <div class="slider-indicators" aria-hidden="false">
-          <button class="slider-indicator active" aria-label="Slide 1"></button>
-          <button class="slider-indicator" aria-label="Slide 2"></button>
-          <button class="slider-indicator" aria-label="Slide 3"></button>
+      </div>
+      <div class="col-lg-6">
+        <div class="about-content">
+          <div class="badge-premium mb-3">Letter from Founders</div>
+          <h2 class="section-title text-start mb-4">Bridging the Gap Between <br><span style="color: #818cf8;">Aimdeed & Your Success</span></h2>
+          <p class="text-white fs-5 lh-lg mb-4" style="color: #ffffff !important; opacity: 1 !important;">
+            At AimDeed, we began with a simple observation: the gap between academic potential and professional opportunity is far too wide. Currently, we are dedicated to helping students navigate the rigors of JEE and NEET, empowering the next generation of doctors and engineers with the grit and knowledge they need to succeed.
+          </p>
+          <p class="text-white fs-5 lh-lg mb-0" style="color: #ffffff !important; opacity: 1 !important;">
+            Our vision is to fundamentally bridge the gap between education and employment. We aren't just teaching students to pass tests; we are building an ecosystem that redefines the job market through innovative placement models and a "campus-to-career" philosophy.
+          </p>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="decor-circle"></div>
-      </section>
-
-
-<!-- STUDIES -->
-      <section id="studies" class="section section-alt">
-        <div class="container">
-          <div class="section-head">
-            <h2>MEET — <span class="accent">OUR TOPPERS </span></h2>
-            <p class="muted narrow">Meet our exceptional students who are preparing for competitive exams through our programs.</p>
+<!-- CONTACT SECTION -->
+<section id="contact" class="section" style="background: radial-gradient(circle at center, rgba(79, 70, 229, 0.05), transparent);">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="glass-card p-5">
+          <div class="text-center mb-5">
+            <h2 class="section-title">Get In <span style="color: #38bdf8;">Touch</span></h2>
+            <p class="text-muted">Have specific questions? Our team is always here to help you.</p>
           </div>
 
-
-          <div class="carousel-wrap">
-            <button id="studiesLeft" class="scroll-arrow left hidden"><i class="fa fa-chevron-left"></i></button>
-            <div id="studiesScroll" class="horizontal-scroll" aria-label="Students carousel"></div>
-            <button id="studiesRight" class="scroll-arrow right hidden"><i class="fa fa-chevron-right"></i></button>
-          </div>
-
-          
-          <div class="center-row" style="margin-top:18px">
-            <a href="/studies" class="btn-primary">AimDeed Studies <i class="fa fa-trophy" style="margin-left:8px"></i></a>
-          </div>
-        </div>
-      </section>
-
-      
-
-
-
-
-
-
-      <!-- ABOUT -->
-      <section id="about" class="section">
-        <div class="container">
-          <h2>FROM THE <span class="accent">FOUNDERS</span></h2>
-          <div class="two-col"> 
-
-               <div class="about-media">
-              <div class="glass-panel">
-                 <img src="/images/founders.jpg" alt="Founders" class="responsive-img" />
-                
+          <form id="contact-form" method="POST" action="/contact" class="row g-4">
+            <div class="col-md-6">
+              <label class="form-label-premium">Full Name</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0" style="border-color: var(--glass-border); color: var(--text-muted);">
+                  <i class="ri-user-line"></i>
+                </span>
+                <input type="text" class="form-control form-control-glass border-start-0" placeholder="John Doe" name="name" required />
               </div>
             </div>
-            <div class="about-text">
-              
-              <p class="">At AimDeed, we began with a simple observation: the gap between academic potential and professional opportunity is far too wide. Currently, we are dedicated to helping students navigate the rigors of JEE and NEET, empowering the next generation of doctors and engineers with the grit and knowledge they need to succeed. But for us, the entrance exam is just the starting line.Our vision for the near future is to fundamentally bridge the gap between education and employment. We aren't just teaching students to pass tests; we are building an ecosystem that redefines the job market. Through innovative placement models and a "campus-to-career" philosophy, we aim to ensure that every student's hard work translates directly into a high-impact career. We are here to change how India learns, works, and grows.</p>
-
-            </div>
-
-         
-          </div>
-        </div>
-      </section>
-
-
-      
-
-
-     
-
-
-
-      <!-- CONTACT -->
-      <section id="contact" class="section contact-section">
-        <div class="container narrow-container">
-          <div class="section-head center">
-          
-            <h2>GET IN TOUCH </h2>
-            <p class="muted">Have questions? We'd love to hear from you.</p>
-          </div>
-
-         <form
-  id="contact-form"
-  class="contact-form"
-  method="POST"
-  action="/contact"
-  autocomplete="off"
->
-
-            <div class="two-cols">
-              <div class="input-wrap">
-                <i class="fa fa-user icon-left"></i>
-                <input class="input" placeholder="Your Name" name="name" />
-              </div>
-              <div class="input-wrap">
-                <i class="fa fa-envelope icon-left"></i>
-                <input class="input" type="email" placeholder="Your Email" name="email" />
+            <div class="col-md-6">
+              <label class="form-label-premium">Email Address</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0" style="border-color: var(--glass-border); color: var(--text-muted);">
+                  <i class="ri-mail-line"></i>
+                </span>
+                <input type="email" class="form-control form-control-glass border-start-0" placeholder="john@example.com" name="email" required />
               </div>
             </div>
-
-            <div class="input-wrap">
-              <i class="fa fa-edit icon-left top"></i>
-              <textarea class="input" rows="5" placeholder="Your Message" name="message"></textarea>
+            <div class="col-12">
+              <label class="form-label-premium">Your Message</label>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent border-end-0 align-items-start pt-2" style="border-color: var(--glass-border); color: var(--text-muted);">
+                  <i class="ri-message-2-line"></i>
+                </span>
+                <textarea class="form-control form-control-glass border-start-0" rows="5" placeholder="Tell us how we can help..." name="message" required></textarea>
+              </div>
             </div>
-
-            <div class="center-row">
-              <button class="btn-primary btn-action" type="submit">Send Message <i class="fa fa-paper-plane" style="margin-left:8px"></i></button>
+            <div class="col-12 text-center mt-5">
+              <button class="btn-premium px-5 py-3" type="submit">
+                Send Message <i class="ri-send-plane-fill ms-2"></i>
+              </button>
             </div>
-            <div id="contactStatus" class="status hidden"></div>
+            <div class="col-12">
+              <div id="contactStatus" class="hidden text-center mt-3" style="display:none; border-radius: 10px; padding: 12px;"></div>
+            </div>
           </form>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
 
-
-      <!--  about us -->
-
-<div class="text">
-              <h2>ABOUT <span class="accent">US</span></h2>
-              <p class="">At AimDeed, we believe that education is not a destination, but a journey that requires constant, unwavering support. While we are currently recognized for our excellence in training students for JEE and NEET, our purpose runs deeper. We are architects of careers. By combining rigorous academic prep with a revolutionary vision for the job market—including upcoming "direct-to-industry" placement models—we are closing the gap between a student's potential and their professional reality. We don't just help you clear an exam; we help you claim your future.
-
-                <br>
-                 The AimDeed Advantage: Constant Support
-24/7 Personal Mentorship: We don't believe in "office hours." Our mentors are available around the clock because doubts don't wait for the sun to come up.
-<br>
-The 7-Second Rule: We strive for instantaneous support. Our systems are designed to ensure students get the guidance they need in seconds, keeping their momentum alive.
-<br>
-  Daily, Weekly & Monthly Reviews: Growth is measured in layers. We provide daily tracking, weekly assessments, and monthly deep-dives to ensure no student falls behind.
-<br>
- Future College Counseling: Clearing the exam is only half the battle. We guide students through the complex maze of college selection, ensuring they land in the right environment for their goals.
- <br>
- End-to-End Career Guidance: From the first day of coaching to the first day of your career, we provide the roadmap, the skills, and the industry connections to ensure you don't just graduate—you get hired.
-
-              </p>
-              
-            </div>
-
-
-
-
-
-
-
-
-
-
-      
-      <footer class="site-footer">
-        <div class="container">
-          <div class="footer-grid">
-            <div class="brand-block">
-              <img src="/images/logo_circular.png" class="footer-logo" alt="Aimdeed" />
-              <div class="brand-compact">
-                <span class="brand-a">A</span><span 
-                class="brand-name">imdeed</span>
-              </div>
-              <p class="muted">Empowering students for a brighter future through mentorship, education, and career opportunities.</p>
-              <div class="socials">
-                <a href="https://www.facebook.com/people/Aim-Deed/pfbid027eQwMFMRqbEDE8ptHYTcEKRJdNAZ1aXywE2dZrncJgXam36mmLXoXvDG39yfwQ6xl/?rdid=jTY2q1fs1oqYSXYu&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F16uunc7X9x%2F" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="https://x.com/Aimdeed_?t=GC1bh1oyPU4tp-n3l9kvbg&s=08" class="social"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.linkedin.com/company/aimdeed/" class="social"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://www.instagram.com/aimdeed?igsh=MWdpZnoyemFiMTlibQ%3D%3D&utm_source=qr" class="social"><i class="fab fa-instagram"></i></a>
-              </div>
-            </div>
-
-
-            <div class="links-block">
-              <h4>Quick Links</h4>
-              <a href="#home" class="footer-link">Home</a>
-              <a href="#about" class="footer-link">About</a>
-              <a href="#studies" class="footer-link">Studies</a>
-              <a href="#career" class="footer-link">Career</a>
-            </div>
-
-
-            <div class="contact-block">
-              <h4>Contact Info</h4>
-              <div class="contact-line"><i class="fa fa-map-marker-alt accent-icon"></i>
-                <span>Indian Institute of Technology Kharagpur, Kharagpur, West Bengal, India - 721302</span>
-              </div>
-              <div class="contact-line"><i class="fa fa-phone accent-icon"></i><span>+91 6239547309</span></div>
-              <div class="contact-line"><i class="fa fa-envelope accent-icon"></i><span>support@aimdeed.in</span></div>
-            </div>
+<!-- SMART TOOLS SECTION -->
+<section class="section">
+  <div class="container text-center">
+    <div class="badge-premium mb-3">Interactive Learning</div>
+    <h2 class="section-title">Smart Preparation <span style="color: #818cf8;">Tools</span></h2>
+    <p class="section-subtitle mx-auto mb-5">Harness the power of AI and data to streamline your exam journey.</p>
+    
+    <div class="row g-4 justify-content-center">
+      <div class="col-lg-5 col-md-6">
+        <a href="/chatbot" class="glass-card text-decoration-none h-100 d-block p-5 border-hover">
+          <div class="btn-premium mb-4" style="width: 70px; height: 70px; padding: 0; justify-content: center; border-radius: 20px; background: linear-gradient(135deg, #4f46e5, #818cf8);">
+            <i class="ri-robot-2-line fs-1"></i>
           </div>
-
-          <div class="footer-bottom">
-            <p>&copy; 2025 Aimdeed — All Rights Reserved</p>
+          <h3 class="text-white mb-3">AI Academic Assistant</h3>
+          <p class="text-white fs-6" style="opacity: 0.8;">Resolve your NEET & JEE doubts instantly with our advanced AI tutor, trained specifically for board and entrance exams.</p>
+          <span class="btn-outline-premium mt-3">Try Chatbot <i class="ri-arrow-right-up-line"></i></span>
+        </a>
+      </div>
+      <div class="col-lg-5 col-md-6">
+        <a href="/predictor" class="glass-card text-decoration-none h-100 d-block p-5 border-hover">
+          <div class="btn-premium mb-4" style="width: 70px; height: 70px; padding: 0; justify-content: center; border-radius: 20px; background: linear-gradient(135deg, #0ea5e9, #38bdf8);">
+            <i class="ri-ruler-2-line fs-1"></i>
           </div>
+          <h3 class="text-white mb-3">JEE Rank Predictor</h3>
+          <p class="text-white fs-6" style="opacity: 0.8;">Get an accurate estimation of your JEE Mains & Advanced rank based on current session trends and historical data.</p>
+          <span class="btn-outline-premium mt-3">Predict Now <i class="ri-medal-line"></i></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADVANTAGES / DETAILED ABOUT -->
+<section class="section">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="glass-card h-100">
+          <div class="btn-premium mb-3" style="width: 50px; height: 50px; padding: 0; justify-content: center; border-radius: 15px;">
+            <i class="ri-customer-service-2-line fs-4"></i>
+          </div>
+          <h4 class="mb-3">24/7 Support</h4>
+          <p class="text-white small mb-0" style="opacity: 0.8;">Our mentors are available around the clock because doubts don't wait for office hours.</p>
         </div>
-      </footer>
-    </main>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script src="/js/script.js"></script>
-  </body>
-</html>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="glass-card h-100">
+          <div class="btn-premium mb-3" style="width: 50px; height: 50px; padding: 0; justify-content: center; border-radius: 15px; background: linear-gradient(135deg, #14b8a6, #0f766e);">
+            <i class="ri-timer-flash-line fs-4"></i>
+          </div>
+          <h4 class="mb-3">7-Second Rule</h4>
+          <p class="text-white small mb-0" style="opacity: 0.8;">We strive for instantaneous support systems to ensure your study momentum never breaks.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="glass-card h-100">
+          <div class="btn-premium mb-3" style="width: 50px; height: 50px; padding: 0; justify-content: center; border-radius: 15px; background: linear-gradient(135deg, #6366f1, #4338ca);">
+            <i class="ri-bar-chart-box-line fs-4"></i>
+          </div>
+          <h4 class="mb-3">Periodic Reviews</h4>
+          <p class="text-white small mb-0" style="opacity: 0.8;">Daily tracking, weekly assessments, and monthly deep-dives into your performance layers.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <div class="glass-card h-100">
+          <div class="btn-premium mb-3" style="width: 50px; height: 50px; padding: 0; justify-content: center; border-radius: 15px; background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+            <i class="ri-road-map-line fs-4"></i>
+          </div>
+          <h4 class="mb-3">Career Roadmap</h4>
+          <p class="text-white small mb-0" style="opacity: 0.8;">From the first day of coaching to your first high-impact career placement, we guide the way.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Simple animation for the topper carousel if needed, though script.js likely handles it.
+  // We can add a simple entry animation here
+  document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.glass-card');
+    cards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = 'all 0.6s ease ' + (index * 0.1) + 's';
+      
+      setTimeout(() => {
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, 100);
+    });
+  });
+</script>
