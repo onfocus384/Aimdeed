@@ -23,70 +23,79 @@ form.addEventListener("submit", (e) => {
     const careerGoal = document.getElementById("career-goal").value.trim();
     const studyTime = document.getElementById("study-time").value;
 
+    const statusEl = document.getElementById("res");
+
+    // Helper to show modern non-blocking status messages
+    function showStatus(message, isError = true) {
+        statusEl.innerHTML = `<div class="alert mt-3 animate__animated animate__fadeIn" style="
+            background: ${isError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)'}; 
+            border: 1px solid ${isError ? 'rgba(239, 68, 68, 0.3)' : 'rgba(16, 185, 129, 0.3)'}; 
+            color: ${isError ? '#fca5a5' : '#4ade80'};
+            border-radius: 12px;
+            padding: 1rem;
+        ">
+            ${isError ? '⚠️ ' : '✅ '} ${message}
+        </div>`;
+        
+        // Auto-clear error messages after 5 seconds, success stays longer
+        setTimeout(() => {
+            statusEl.innerHTML = "";
+        }, isError ? 5000 : 8000);
+    }
+
     // Validation rules
     if (!name || name.length < 2) {
-        alert("Please enter a valid name (at least 2 characters).");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please enter a valid name (at least 2 characters).");
         return;
     }
 
     if (!gender) {
-        alert("Please select a gender.");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please select a gender.");
         return;
     }
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        alert("Please enter a valid email address.");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please enter a valid email address.");
         return;
     }
 
     if (!phone || !/^\d{10}$/.test(phone)) {
-        alert("Please enter a valid 10-digit phone number.");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please enter a valid 10-digit phone number.");
         return;
     }
 
     if (!school || school.length < 2) {
-        alert("Please enter a valid school name.");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please enter a valid school name.");
         return;
     }
 
     if (!classLevel || classLevel < 1 || classLevel > 12) {
-        alert("Please enter a valid class (between 1 and 12).");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please enter a valid class (between 1 and 12).");
         return;
     }
 
     if (!city || city.length < 2) {
-        alert("Please enter a valid city name.");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please enter a valid city name.");
         return;
     }
 
     if (!district || district.length < 2) {
-        alert("Please enter a valid district name.");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please enter a valid district name.");
         return;
     }
 
     if (!state || state.length < 2) {
-        alert("Please enter a valid state name.");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please enter a valid state name.");
         return;
     }
 
     if (!careerGoal || careerGoal.length < 5) {
-        alert("Please enter a valid career goal (at least 5 characters).");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please enter a valid career goal (at least 5 characters).");
         return;
     }
 
     if (!studyTime) {
-        alert("Please select a valid study time.");
-        submitButton.innerHTML = "Submit";
+        showStatus("Please select a valid study time.");
         return;
     }
 
@@ -122,20 +131,13 @@ form.addEventListener("submit", (e) => {
         submitButton.disabled = false;
 
         // Show prominent success message
-        const responseEl = document.getElementById("res");
-        responseEl.innerHTML = '<div class="alert alert-success mt-3" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #4ade80;">✅ Your mentor application was submitted successfully! We will contact you soon.</div>';
-        
+        showStatus("Your mentor application was submitted successfully! We will contact you soon.", false);
         form.reset();
-        
-        // Clear message after 6 seconds
-        setTimeout(() => {
-            responseEl.innerHTML = "";
-        }, 6000);
     })
     .catch((error) => {
         console.error("Submission Error:", error);
         submitButton.innerHTML = 'Submit My Application <i class="ri-send-plane-fill ms-2"></i>';
         submitButton.disabled = false;
-        alert("An error occurred. Please check your internet connection and try again.");
+        showStatus("An error occurred. Please check your internet connection and try again.");
     });
 });
