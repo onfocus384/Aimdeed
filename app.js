@@ -46,11 +46,10 @@ app.use((req, res, next) => {
   const host = req.headers.host;
   
   if (host === "www.aimdeed.in" || host === "aimdeed.com" || host === "www.aimdeed.com") {
-    console.log(` Redirecting from ${host} to aimdeed.in`);
-    return res.redirect(301, "https://aimdeed.in" + req.url);
+    return res.redirect(301, `https://aimdeed.in${req.url}`);
   }
   
-  next();
+  return next();
 });
 
 // Compress all HTTP responses for faster page load
@@ -979,7 +978,7 @@ EMAIL_PASSWORD=your-app-password
       `);
     }
     
-    const transporter = nodemailer.createTransport({
+    const testTransporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: process.env.EMAIL_USERNAME,
@@ -987,10 +986,9 @@ EMAIL_PASSWORD=your-app-password
       },
     });
     
-    await transporter.verify();
-    console.log("Email server connected!");
+    await testTransporter.verify();
     
-    const info = await transporter.sendMail({
+    await testTransporter.sendMail({
       from: `"Aimdeed Test" <${process.env.EMAIL_USERNAME}>`,
       to: process.env.EMAIL_USERNAME,
       subject: "Test Email from Aimdeed",
