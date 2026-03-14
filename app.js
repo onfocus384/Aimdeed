@@ -25,10 +25,19 @@ const compression = require("compression");
 
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+// Default to 10000 to match Dockerfile EXPOSE and Render's typical Docker default
+const PORT = process.env.PORT || 10000;
 const User = require("./models/user.js");
 const dbUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/aimdeed";
-const SESSION_SECRET = process.env.SESSION_SECRET;
+const SESSION_SECRET = process.env.SESSION_SECRET || "default_session_secret_change_me";
+
+// ======================
+// HEALTH CHECK (TOP PRIORITY)
+// Place this before expensive middleware/DB connections
+// ======================
+app.get("/healthz", (req, res) => {
+  return res.status(200).send("OK");
+});
 
 // ======================
 // VIEW ENGINE
@@ -62,7 +71,8 @@ app.use(methodOverride("_method")); // Add method override
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   collectionName: "sessions",
-  ttl: 7 * 24 * 60 * 60 // 7 days (seconds)
+  ttl: 7 * 24 * 60 * 60, // 7 days (seconds)
+  touchAfter: 24 * 3600 // Only update session every 24 hours unless data changes
 });
 
 store.on("error", (err) => {
@@ -77,17 +87,13 @@ app.set("trust proxy", 1); // REQUIRED for Render
 app.use(
   session({
     name: "aimdeed.sid",
-    store: MongoStore.create({
-      mongoUrl: dbUrl,
-      collectionName: "sessions",
-      ttl: 7 * 24 * 60 * 60,
-    }),
-    secret: SESSION_SECRET || "change-this-in-production",
+    store: store, // Use the pre-created store
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // IMPORTANT
+      secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
@@ -249,10 +255,8 @@ app.get("/mentor", (req, res) => {
   return res.redirect("/listings/mentor");
 });
 
-// Health Check
-app.get("/healthz", (req, res) => {
-  return res.status(200).send("OK");
-});
+// Health Check moved to top
+
 
 // Privacy Policy
 app.get("/privacy", (req, res) => {
@@ -783,9 +787,7 @@ app.get("/listings/index2", isLoggedIn, (req, res) => {
 
 
 
-// for rank predictor 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// predictor routes (middleware already handled at top)
 
 
 // Redirect predictor route
@@ -878,18 +880,9 @@ app.get("/listings/mentor", (req, res) => {
 
 
 
-// chatbot 
-app.use(
-  cors({
-    origin: [
-      "https://www.aimdeed.in",
-      "http://localhost:3000",
-      "http://localhost:5000",
-    ],
-    methods: ["GET", "POST"],
-    credentials: true,
-  })
-);
+// chatbot CORS
+app.use(cors()); // Simplified or use existing global CORS if defined
+
 
 // ================= AUTH ROUTES =================
 app.get("/chatbot", isLoggedIn, (req, res) => {
@@ -1240,7 +1233,7 @@ app.use((err, req, res, next) => {
 // ======================
 // SERVER START
 // ======================
-app.listen(PORT, () => {
-  console.log(` Server is running on port ${PORT}`);
-  console.log(` Environment: ${process.env.NODE_ENV || 'development'}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Aimdeed Server started on port ${PORT}`);
+  console.log(`📡 Binding to 0.0.0.0`);
 });
