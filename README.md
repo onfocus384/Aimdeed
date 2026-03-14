@@ -101,14 +101,14 @@ This automatically sets up the Node.js application and a MongoDB database, linki
 
 ## 🔄 Enterprise CI/CD Pipeline
 
-This project follows a professional, multi-stage CI/CD pipeline that enforces code quality, security, and automated deployment on every Pull Request.
+This project follows a professional, multi-stage CI/CD pipeline that enforces code quality, dependency security, and automated deployment on every Pull Request.
 
 ```mermaid
 graph TD;
   A["🧑‍💻 Developer pushes code"] --> B["📤 Pull Request created"];
   B --> C["🔍 DeepSource → Code quality check"];
-  C --> D["🔒 Snyk → Security scan"];
-  D --> E["🧪 GitHub Actions → Run tests"];
+  C --> D["🤖 Dependabot → Dependency security"];
+  D --> E["🧪 GitHub Actions → CI tests"];
   E --> F["👥 Code review by team"];
   F --> G["✅ Merge PR to main"];
   G --> H["🚀 Render → Automatic deployment"];
@@ -120,27 +120,27 @@ graph TD;
 | Tool | Purpose | Trigger |
 |------|---------|---------|
 | **DeepSource** | Static code analysis, code quality | Every PR (via GitHub App) |
-| **Snyk** | Dependency & security vulnerability scan | Every PR & push |
+| **Dependabot** | Automated dependency updates & security scans | Weekly & on vulnerability detection |
 | **GitHub Actions** | Automated build + test (Node 18 & 20) | Every PR & push |
 | **Code Review** | Human review before merge | Pull Request |
 | **Render** | Automatic deployment via Docker | On merge to `main` |
 
 ### Setup Instructions
 
-**Snyk (Security Scanning):**
-1. Sign up at [snyk.io](https://snyk.io) with your GitHub account
-2. Go to your GitHub repo → **Settings** → **Secrets and variables** → **Actions**
-3. Add a secret named `SNYK_TOKEN` with your Snyk API token
-
 **DeepSource (Code Quality):**
-1. Sign up at [deepsource.com](https://deepsource.com) with GitHub
-2. Add the Aimdeed repository — DeepSource will detect `.deepsource.toml` automatically
-3. It will post quality reports directly on every Pull Request
+1. Sign up at [deepsource.com](https://deepsource.com) with GitHub.
+2. Add the Aimdeed repository — DeepSource will detect `.deepsource.toml` automatically.
+3. It will post quality reports directly on every Pull Request.
+
+**Dependabot (Security Updates):**
+1. Ensure `.github/dependabot.yml` exists in the repository (already added).
+2. GitHub will automatically scan your dependencies and open PRs for security updates.
+3. You can monitor these in the **Security** tab of your GitHub repository.
 
 **Render (Deployment):**
-1. Connect your GitHub repo at [render.com](https://render.com)
-2. Set environment to **Docker** — it will use the `Dockerfile` automatically
-3. Every merge to `main` triggers an automatic redeploy
+1. Connect your GitHub repo at [render.com](https://render.com).
+2. Set environment to **Docker** — it will use the `Dockerfile` automatically.
+3. Every merge to `main` triggers an automatic redeploy.
 
 ## 📝 License
 Distributed under the ISC License.
