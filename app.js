@@ -5,7 +5,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require("express");
 const mongoose = require("mongoose");
-const fs =require("fs")
+const fs = require("fs");
 const ejsMate = require("ejs-mate");
 const nodemailer = require("nodemailer");
 const session = require("express-session");
@@ -13,23 +13,23 @@ const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const crypto = require('crypto');
+const crypto = require("crypto");
 const methodOverride = require("method-override");
 const flash = require("connect-flash");
-const cors=require("cors")
-const path=require("path")
-const OpenAI=require("openai")
-const QRCode=require("qrcode")
+const cors = require("cors");
+const path = require("path");
+const OpenAI = require("openai");
+const QRCode = require("qrcode");
 const Payment = require("./models/Payment.js");
 const compression = require("compression");
-
 
 const app = express();
 // Reverting to 3000 as it appears to be the expected port in your Render environment
 const PORT = process.env.PORT || 3000;
 const User = require("./models/user.js");
 const dbUrl = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/aimdeed";
-const SESSION_SECRET = process.env.SESSION_SECRET || "default_session_secret_change_me";
+const SESSION_SECRET =
+  process.env.SESSION_SECRET || "default_session_secret_change_me";
 
 // ======================
 // HEALTH CHECK (TOP PRIORITY)
@@ -50,7 +50,9 @@ app.set("views", path.join(__dirname, "views"));
 // DIAGNOSTIC LOGGER (Temporary)
 // ======================
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - Host: ${req.headers.host}`);
+  console.log(
+    `[${new Date().toISOString()}] ${req.method} ${req.url} - Host: ${req.headers.host}`,
+  );
   return next();
 });
 
@@ -59,15 +61,12 @@ app.use(compression());
 
 // Cache static files (CSS, JS, images) aggressively for 1 year in production
 const staticOptions = {
-  maxAge: process.env.NODE_ENV === "production" ? "1y" : "0"
+  maxAge: process.env.NODE_ENV === "production" ? "1y" : "0",
 };
 app.use(express.static(path.join(__dirname, "public"), staticOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method")); // Add method override
-
-
-
 
 // ======================
 // SESSION STORE
@@ -76,7 +75,7 @@ const store = MongoStore.create({
   mongoUrl: dbUrl,
   collectionName: "sessions",
   ttl: 7 * 24 * 60 * 60, // 7 days (seconds)
-  touchAfter: 24 * 3600 // Only update session every 24 hours unless data changes
+  touchAfter: 24 * 3600, // Only update session every 24 hours unless data changes
 });
 
 store.on("error", (err) => {
@@ -101,9 +100,8 @@ app.use(
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
-  })
+  }),
 );
-
 
 app.use(flash());
 
@@ -127,20 +125,21 @@ if (googleClientID && googleClientSecret) {
       {
         clientID: googleClientID,
         clientSecret: googleClientSecret,
-        callbackURL: process.env.NODE_ENV === "production" 
-          ? "https://www.aimdeed.in/auth/google/callback" 
-          : "http://localhost:3000/auth/google/callback",
-        proxy: true
+        callbackURL:
+          process.env.NODE_ENV === "production"
+            ? "https://www.aimdeed.in/auth/google/callback"
+            : "http://localhost:3000/auth/google/callback",
+        proxy: true,
       },
       async (accessToken, refreshToken, profile, done) => {
         try {
           // Find user by googleId
           let user = await User.findOne({ googleId: profile.id });
-          
+
           if (!user) {
             // Check if user already exists with this email
             user = await User.findOne({ email: profile.emails[0].value });
-            
+
             if (user) {
               // Update existing user with googleId
               user.googleId = profile.id;
@@ -150,9 +149,12 @@ if (googleClientID && googleClientSecret) {
               // Create a new user
               user = new User({
                 googleId: profile.id,
-                username: profile.emails[0].value.split("@")[0] + "_" + Math.floor(Math.random() * 1000),
+                username:
+                  profile.emails[0].value.split("@")[0] +
+                  "_" +
+                  Math.floor(Math.random() * 1000),
                 email: profile.emails[0].value,
-                displayName: profile.displayName
+                displayName: profile.displayName,
               });
               await user.save();
             }
@@ -162,11 +164,13 @@ if (googleClientID && googleClientSecret) {
           console.error("❌ Google Strategy Callback Error:", err);
           return done(err, null);
         }
-      }
-    )
+      },
+    ),
   );
 } else {
-  console.warn("⚠️ Google OAuth credentials missing. Google Login is disabled.");
+  console.warn(
+    "⚠️ Google OAuth credentials missing. Google Login is disabled.",
+  );
 }
 
 // Switch to ID-based serialization to support both social and local users
@@ -183,7 +187,6 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-
 // ======================
 // GLOBAL VARIABLES
 // ======================
@@ -191,10 +194,9 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.currentUser = req.user || null;
-  res.locals.currentHost = req.get('host') || 'www.aimdeed.in';
+  res.locals.currentHost = req.get("host") || "www.aimdeed.in";
   return next();
 });
-
 
 // ======================
 // MONGODB CONNECTION
@@ -210,7 +212,9 @@ mongoose
   })
   .catch((err) => {
     console.error("❌ MongoDB Connection Error:", err.message);
-    console.error("Tip: Check if your Render IP addresses are whitelisted in MongoDB Atlas.");
+    console.error(
+      "Tip: Check if your Render IP addresses are whitelisted in MongoDB Atlas.",
+    );
   });
 
 // ======================
@@ -255,7 +259,8 @@ const fromAddress = process.env.EMAIL_FROM
 app.get("/", (req, res) => {
   return res.render("index", {
     title: "Aimdeed | Best NEET & JEE Preparation Platform",
-    description: "Aimdeed provides premium NEET & JEE preparation with expert mentorship, comprehensive study materials, and a proven success roadmap.",
+    description:
+      "Aimdeed provides premium NEET & JEE preparation with expert mentorship, comprehensive study materials, and a proven success roadmap.",
   });
 });
 
@@ -265,7 +270,6 @@ app.get("/mentor", (req, res) => {
 });
 
 // Health Check moved to top
-
 
 // Privacy Policy
 app.get("/privacy", (req, res) => {
@@ -282,7 +286,6 @@ app.get("/cookies", (req, res) => {
   return res.render("cookies", { title: "Cookies Policy | Aimdeed" });
 });
 
-
 // payments page
 // Payment page – show plans
 app.get("/payment", isLoggedIn, (req, res) => {
@@ -290,14 +293,13 @@ app.get("/payment", isLoggedIn, (req, res) => {
     const allowedAmounts = [499, 799, 999];
 
     return res.render("users/payment", {
-      allowedAmounts
+      allowedAmounts,
     });
   } catch (error) {
     console.error("Payment page error:", error);
     return res.status(500).send("Server error");
   }
 });
-
 
 // Generate QR for selected amount
 app.post("/payment/generate-qr", isLoggedIn, async (req, res) => {
@@ -309,20 +311,19 @@ app.post("/payment/generate-qr", isLoggedIn, async (req, res) => {
       return res.status(400).json({ error: "Invalid amount" });
     }
 
-    const upiId = process.env.UPI_ID ;
+    const upiId = process.env.UPI_ID;
     const merchantName = "Samprit Saha";
 
     const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(
-      merchantName
+      merchantName,
     )}&am=${amount}&cu=INR`;
 
     const qrImage = await QRCode.toDataURL(upiLink);
 
     return res.json({
       success: true,
-      qrImage
+      qrImage,
     });
-
   } catch (error) {
     console.error("QR generation error:", error);
     return res.status(500).json({ error: "Server error" });
@@ -340,7 +341,7 @@ app.post("/payment/confirm", isLoggedIn, async (req, res) => {
       amount,
       utrId: utr,
       transactionId: "AD" + Date.now(),
-      status: "PENDING"
+      status: "PENDING",
     });
 
     await payment.save();
@@ -348,14 +349,13 @@ app.post("/payment/confirm", isLoggedIn, async (req, res) => {
     return res.render("users/payment-success", {
       title: "Payment Submitted",
       amount,
-      transactionId: utr
+      transactionId: utr,
     });
-
   } catch (error) {
     // 🔴 Duplicate UTR
     if (error.code === 11000) {
       return res.status(400).render("users/payment-error", {
-        message: "This Transaction ID has already been used."
+        message: "This Transaction ID has already been used.",
       });
     }
 
@@ -363,10 +363,6 @@ app.post("/payment/confirm", isLoggedIn, async (req, res) => {
     return res.status(500).send("Payment failed");
   }
 });
-
-
-
-
 
 // ======================
 // AUTH ROUTES
@@ -382,42 +378,43 @@ app.get("/signup", isLoggedOut, (req, res) => {
 app.post("/signup", isLoggedOut, async (req, res) => {
   console.log("=== SIGNUP PROCESS STARTED ===");
   console.log("Request body:", req.body);
-  
+
   try {
     const { username, email, password } = req.body;
-    
+
     // Validate input
     if (!username || !email || !password) {
       console.log("Validation failed: Missing fields");
       req.flash("error", "All fields are required!");
       return res.redirect("/signup");
     }
-    
+
     console.log("Checking for existing user...");
     // Check if user already exists
-    const existingUser = await User.findOne({ 
+    const existingUser = await User.findOne({
       $or: [
-        { username: username.trim() }, 
-        { email: email.toLowerCase().trim() }
-      ] 
+        { username: username.trim() },
+        { email: email.toLowerCase().trim() },
+      ],
     });
-    
+
     if (existingUser) {
       console.log("User already exists:", existingUser.username);
-      const errorMsg = existingUser.username === username.trim() 
-        ? "Username already taken!" 
-        : "Email already registered!";
+      const errorMsg =
+        existingUser.username === username.trim()
+          ? "Username already taken!"
+          : "Email already registered!";
       req.flash("error", errorMsg);
       return res.redirect("/signup");
     }
-    
+
     console.log("Creating new user object...");
     // Create new user object
     const newUser = new User({
       username: username.trim(),
-      email: email.toLowerCase().trim()
+      email: email.toLowerCase().trim(),
     });
-    
+
     console.log("Attempting User.register...");
     // Register user using callback
     User.register(newUser, password, (err, registeredUser) => {
@@ -426,30 +423,29 @@ app.post("/signup", isLoggedOut, async (req, res) => {
         console.error("Error name:", err.name);
         console.error("Error message:", err.message);
         console.error("Error stack:", err.stack);
-        
+
         let errorMessage = "Signup failed! ";
-        if (err.name === 'UserExistsError') {
+        if (err.name === "UserExistsError") {
           errorMessage = "Username already exists!";
-        } else if (err.message && err.message.includes('duplicate')) {
+        } else if (err.message && err.message.includes("duplicate")) {
           errorMessage = "Username or email already registered!";
         } else {
           errorMessage += err.message;
         }
-        
+
         req.flash("error", errorMessage);
         return res.redirect("/signup");
       }
-      
+
       console.log(" User registered successfully:", registeredUser._id);
       console.log("Username:", registeredUser.username);
       console.log("Email:", registeredUser.email);
-      
+
       // SUCCESS: Redirect to login page with success message
       req.flash("success", "Account created successfully! Please login.");
       console.log("Redirecting to /login...");
       return res.redirect("/login");
     });
-    
   } catch (err) {
     console.error(" Unexpected signup error:", err);
     console.error("Error stack:", err.stack);
@@ -457,10 +453,6 @@ app.post("/signup", isLoggedOut, async (req, res) => {
     return res.redirect("/signup");
   }
 });
-
-
-
-
 
 // Login - GET
 app.get("/login", isLoggedOut, (req, res) => {
@@ -478,47 +470,47 @@ app.post(
   },
   passport.authenticate("local", {
     failureRedirect: "/login",
-    failureFlash: true // This will pass the error message from passport
+    failureFlash: true, // This will pass the error message from passport
   }),
   (req, res) => {
     console.log("✅ Login successful!");
     console.log("User:", req.user.username);
     console.log("User ID:", req.user._id);
-    
+
     // Set success message
     req.flash("success", `Welcome back, ${req.user.username}!`);
-    
+
     // Redirect to homepage or returnTo URL
     const redirectUrl = req.session.returnTo || "/";
     delete req.session.returnTo;
     return res.redirect(redirectUrl);
-  }
+  },
 );
-
-
-
-
-
 
 // ======================
 // GOOGLE AUTH ROUTES
 // ======================
 app.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
+  passport.authenticate("google", { scope: ["profile", "email"] }),
 );
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login", failureFlash: true }),
+  passport.authenticate("google", {
+    failureRedirect: "/login",
+    failureFlash: true,
+  }),
   (req, res) => {
-    req.flash("success", `Welcome, ${req.user.displayName || req.user.username}!`);
+    req.flash(
+      "success",
+      `Welcome, ${req.user.displayName || req.user.username}!`,
+    );
     const redirectUrl = req.session.returnTo || "/";
     delete req.session.returnTo;
     return res.redirect(redirectUrl);
-  }
+  },
 );
-
 
 // Forgot Password - GET
 app.get("/forgot-password", isLoggedOut, (req, res) => {
@@ -529,35 +521,38 @@ app.get("/forgot-password", isLoggedOut, (req, res) => {
 app.post("/forgot-password", isLoggedOut, async (req, res) => {
   console.log("🔐 Forgot password form submitted");
   console.log("Email:", req.body.email);
-  
+
   try {
     const { email } = req.body;
-    
+
     if (!email) {
       req.flash("error", "Please enter your email address.");
       return res.redirect("/forgot-password");
     }
-    
+
     // Find user by email
     const user = await User.findOne({ email: email.toLowerCase().trim() });
-    
+
     // Show same message whether user exists or not (for security)
     if (!user) {
       console.log("No user found with email:", email);
-      req.flash("success", "If an account exists with this email, a reset link will be sent.");
+      req.flash(
+        "success",
+        "If an account exists with this email, a reset link will be sent.",
+      );
       return res.redirect("/login");
     }
-    
+
     console.log("User found:", user.username);
-    
+
     // Generate reset token
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
-    
+
     // Create reset URL
-    const resetURL = `${req.protocol}://${req.get('host')}/reset-password/${resetToken}`;
+    const resetURL = `${req.protocol}://${req.get("host")}/reset-password/${resetToken}`;
     console.log("Reset URL:", resetURL);
-    
+
     const mailOptions = {
       from: fromAddress,
       to: user.email,
@@ -603,15 +598,14 @@ app.post("/forgot-password", isLoggedOut, async (req, res) => {
           </table>
         </body>
         </html>
-      `
+      `,
     };
-    
+
     await transporter.sendMail(mailOptions);
     console.log("✅ Reset email sent to:", user.email);
-    
+
     req.flash("success", "Password reset link sent to your email!");
     return res.redirect("/login");
-    
   } catch (error) {
     console.error("❌ Error sending reset email:", error);
     req.flash("error", "Could not send reset email. Please try again.");
@@ -619,27 +613,24 @@ app.post("/forgot-password", isLoggedOut, async (req, res) => {
   }
 });
 
-
-
 // Reset Password - GET (show reset form)
 app.get("/reset-password/:token", isLoggedOut, async (req, res) => {
   console.log("Reset password token received:", req.params.token);
-  
+
   try {
     const { token } = req.params;
-    
+
     if (!token) {
       req.flash("error", "Invalid reset link.");
       return res.redirect("/forgot-password");
     }
-    
+
     // For now, just show the form with the token
     // We'll validate the token when the form is submitted
-    res.render("users/reset-password", { 
+    res.render("users/reset-password", {
       title: "Reset Password",
-      token: token 
+      token: token,
     });
-    
   } catch (error) {
     console.error("Reset password error:", error);
     req.flash("error", "Invalid or expired reset link.");
@@ -652,44 +643,41 @@ app.get("/reset-password/:token", isLoggedOut, async (req, res) => {
 app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
   console.log(" RESET PASSWORD PROCESS STARTED");
   console.log("Token from URL:", req.params.token);
-  
+
   try {
     const { token } = req.params;
     const { password, confirmPassword } = req.body;
-    
+
     // 1. Validate passwords
     if (!password || !confirmPassword) {
       req.flash("error", "Please fill in all fields.");
       return res.redirect(`/reset-password/${token}`);
     }
-    
+
     if (password !== confirmPassword) {
       req.flash("error", "Passwords do not match.");
       return res.redirect(`/reset-password/${token}`);
     }
-    
+
     if (password.length < 6) {
       req.flash("error", "Password must be at least 6 characters.");
       return res.redirect(`/reset-password/${token}`);
     }
-    
+
     console.log(" Password validation passed");
-    
+
     // 2. Hash the token to compare with database
-    const hashedToken = crypto
-      .createHash('sha256')
-      .update(token)
-      .digest('hex');
-    
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
     console.log("Hashed token:", hashedToken);
     console.log("Looking for user with this token...");
-    
+
     // 3. Find user with valid, non-expired token
     const user = await User.findOne({
       resetPasswordToken: hashedToken,
-      resetPasswordExpires: { $gt: Date.now() } // Check if not expired
+      resetPasswordExpires: { $gt: Date.now() }, // Check if not expired
     });
-    
+
     if (!user) {
       console.log(" No user found with valid token");
       console.log("Current time:", new Date());
@@ -697,14 +685,14 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
       req.flash("error", "Password reset link is invalid or has expired.");
       return res.redirect("/forgot-password");
     }
-    
+
     console.log(" User found:", user.username);
     console.log("User email:", user.email);
     console.log("Token expires:", new Date(user.resetPasswordExpires));
-    
+
     // 4. UPDATE THE PASSWORD - CORRECT WAY
     console.log("Updating password for user:", user.username);
-    
+
     // Method 1: Using setPassword (passport-local-mongoose method)
     return new Promise((resolve, reject) => {
       user.setPassword(password, async (err) => {
@@ -713,25 +701,27 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
           req.flash("error", "Error updating password.");
           return res.redirect(`/reset-password/${token}`);
         }
-        
+
         console.log("✅ Password set successfully");
-        
+
         // 5. CLEAR THE RESET TOKEN (IMPORTANT!)
         user.resetPasswordToken = undefined;
         user.resetPasswordExpires = undefined;
-        
+
         console.log("Reset token cleared");
-        
+
         // 6. Save the user
         try {
           await user.save();
           console.log("✅ User saved successfully with new password");
           console.log("User ID:", user._id);
-          
+
           // 7. Success - redirect to login
-          req.flash("success", "Password updated successfully! You can now login with your new password.");
+          req.flash(
+            "success",
+            "Password updated successfully! You can now login with your new password.",
+          );
           return res.redirect("/login");
-          
         } catch (saveError) {
           console.error("❌ Error saving user:", saveError);
           req.flash("error", "Error saving new password.");
@@ -739,7 +729,6 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
         }
       });
     });
-    
   } catch (error) {
     console.error("❌ RESET PASSWORD ERROR:", error);
     console.error("Error stack:", error.stack);
@@ -748,17 +737,15 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
   }
 });
 
-
-
 // Debug route to check user state
 app.get("/debug-user/:email", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.params.email });
-    
+
     if (!user) {
       return res.json({ error: "User not found" });
     }
-    
+
     res.json({
       username: user.username,
       email: user.email,
@@ -769,9 +756,8 @@ app.get("/debug-user/:email", async (req, res) => {
       resetExpires: user.resetPasswordExpires,
       isTokenExpired: user.resetPasswordExpires < Date.now(),
       currentTime: new Date(),
-      tokenExpiryTime: new Date(user.resetPasswordExpires)
+      tokenExpiryTime: new Date(user.resetPasswordExpires),
     });
-    
   } catch (error) {
     res.json({ error: error.message });
   }
@@ -779,25 +765,20 @@ app.get("/debug-user/:email", async (req, res) => {
 
 // In your app.js or routes file
 app.get("/studies", isLoggedIn, (req, res) => {
-    // This redirects to /listings/index2
-    return res.redirect("/listings/index2");
+  // This redirects to /listings/index2
+  return res.redirect("/listings/index2");
 });
 
 // Make sure you have this route too
 app.get("/listings/index2", isLoggedIn, (req, res) => {
-    // Render the actual EJS file
-    res.render("listings/index2", { 
-        currentUser: req.user,
-        pageTitle: "AimDeed Studies"
-    });
+  // Render the actual EJS file
+  res.render("listings/index2", {
+    currentUser: req.user,
+    pageTitle: "AimDeed Studies",
+  });
 });
 
-
-
-
-
 // predictor routes (middleware already handled at top)
-
 
 // Redirect predictor route
 app.get("/predictor", isLoggedIn, (req, res) => {
@@ -864,11 +845,7 @@ app.put("/api/josaa", async (req, res) => {
   }
 });
 
-
-
-
-
-// for mentor form 
+// for mentor form
 // Redirect /mentor → mentor form page
 // (Simplified duplicate)
 // app.get("/mentor", isLoggedIn, (req, res) => {
@@ -883,15 +860,8 @@ app.get("/listings/mentor", (req, res) => {
   });
 });
 
-
-
-
-
-
-
 // chatbot CORS
 app.use(cors()); // Simplified or use existing global CORS if defined
-
 
 // ================= AUTH ROUTES =================
 app.get("/chatbot", isLoggedIn, (req, res) => {
@@ -905,15 +875,14 @@ app.get("/listings/chatbot", isLoggedIn, (req, res) => {
   });
 });
 
-
 // ================== CHAT API ==================
- // Using OpenAI v4+
-   const openai = new OpenAI({
+// Using OpenAI v4+
+const openai = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
   baseURL: "https://openrouter.ai/api/v1",
   defaultHeaders: {
     "HTTP-Referer": "https://www.aimdeed.in", // required by OpenRouter
-    "X-Title": "Aimdeed Chatbot",             // any name
+    "X-Title": "Aimdeed Chatbot", // any name
   },
 });
 app.post("/chat", isLoggedIn, async (req, res) => {
@@ -922,7 +891,9 @@ app.post("/chat", isLoggedIn, async (req, res) => {
 
     if (!process.env.OPENROUTER_API_KEY) {
       console.error("❌ Chat Error: OPENROUTER_API_KEY is missing");
-      return res.status(500).json({ reply: "Chatbot configuration error. API key missing." });
+      return res
+        .status(500)
+        .json({ reply: "Chatbot configuration error. API key missing." });
     }
 
     const completion = await openai.chat.completions.create({
@@ -941,13 +912,16 @@ app.post("/chat", isLoggedIn, async (req, res) => {
     if (err.response?.data) {
       console.error("API Details:", JSON.stringify(err.response.data));
     }
-    return res.status(500).json({ reply: "I'm having trouble connecting to my brain. Please try again in a moment." });
+    return res
+      .status(500)
+      .json({
+        reply:
+          "I'm having trouble connecting to my brain. Please try again in a moment.",
+      });
   }
 });
 
-
-
-// class notes 
+// class notes
 app.get("/student", isLoggedIn, (req, res) => {
   res.redirect("/listings/student");
 });
@@ -959,13 +933,10 @@ app.get("/listings/student", isLoggedIn, (req, res) => {
   });
 });
 
-
-
-
 // Test email configuration
 app.get("/test-email", async (req, res) => {
   console.log("Testing email configuration...");
-  
+
   try {
     if (!process.env.EMAIL_USERNAME || !process.env.EMAIL_PASSWORD) {
       return res.send(`
@@ -977,7 +948,7 @@ EMAIL_PASSWORD=your-app-password
         </pre>
       `);
     }
-    
+
     const testTransporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -985,25 +956,24 @@ EMAIL_PASSWORD=your-app-password
         pass: process.env.EMAIL_PASSWORD,
       },
     });
-    
+
     await testTransporter.verify();
-    
+
     await testTransporter.sendMail({
       from: `"Aimdeed Test" <${process.env.EMAIL_USERNAME}>`,
       to: process.env.EMAIL_USERNAME,
       subject: "Test Email from Aimdeed",
       text: "This is a test email. If you receive this, email is working!",
     });
-    
+
     return res.send(`
       <h2> Email Test Successful!</h2>
       <p>A test email has been sent to <strong>${process.env.EMAIL_USERNAME}</strong>.</p>
       <a href="/">Back to Home</a>
     `);
-    
   } catch (error) {
     console.error(" Email test failed:", error.message);
-    
+
     return res.send(`
       <h2> Email Test Failed</h2>
       <p>Error: ${error.message}</p>
@@ -1018,52 +988,38 @@ EMAIL_PASSWORD=your-app-password
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Logout
 // Logout - Corrected version to satisfy DeepSource return value rules
 app.get("/logout", (req, res, next) => {
   const flashMessage = "Logged out successfully!";
-  
+
   req.logout((err) => {
     if (err) {
       return next(err);
     }
-    
+
     // Set the flash message in session before destroying it
     req.session.flash = {
-      success: [flashMessage]
+      success: [flashMessage],
     };
-    
+
     // Save the session with flash message
     return req.session.save((saveErr) => {
       if (saveErr) {
         return next(saveErr);
       }
-      
+
       // Now destroy the session
       return req.session.destroy(() => {
         // Clear the cookie
-        res.clearCookie("aimdeed.sid", { path: '/' });
-        
+        res.clearCookie("aimdeed.sid", { path: "/" });
+
         // Redirect to home
         return res.redirect("/");
       });
     });
   });
 });
-
 
 // ======================
 // CONTACT FORM
@@ -1075,7 +1031,7 @@ app.post("/contact", async (req, res) => {
   if (!name || !email || !message) {
     return res.status(400).json({
       success: false,
-      message: "All fields are required."
+      message: "All fields are required.",
     });
   }
 
@@ -1163,9 +1119,9 @@ app.post("/contact", async (req, res) => {
 
     return res.json({
       success: true,
-      message: "Thank you! We have received your message. A confirmation email has been sent to you.",
+      message:
+        "Thank you! We have received your message. A confirmation email has been sent to you.",
     });
-
   } catch (error) {
     console.error("Email Error:", error);
     return res.status(500).json({
@@ -1189,12 +1145,12 @@ app.use((err, req, res, next) => {
     return next(err);
   }
   const { statusCode = 500, message = "Something went wrong!" } = err;
-  
+
   // If error view doesn't exist, use simple HTML
   try {
-    return res.status(statusCode).render("error", { 
+    return res.status(statusCode).render("error", {
       title: `${statusCode} - Error`,
-      message 
+      message,
     });
   } catch (_renderErr) {
     // Fallback to simple HTML response
@@ -1227,21 +1183,10 @@ app.use((err, req, res, next) => {
   }
 });
 
-
-
-
-
-
-
-
-
-
-
-
 // SERVER START
 // ======================
 app.listen(PORT, "0.0.0.0", () => {
   console.log("🚀 Aimdeed Server started");
   console.log(`📡 Port: ${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
 });
