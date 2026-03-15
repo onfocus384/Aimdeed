@@ -882,8 +882,15 @@ app.post("/chat", isLoggedIn, async (req, res) => {
         .json({ reply: "Chatbot configuration error. API key missing." });
     }
 
+    if (!userMessage || !userMessage.trim()) {
+      return res.status(400).json({ reply: "Please enter a message." });
+    }
+
+    const model = process.env.MODEL || "meta-llama/llama-3.3-70b-instruct:free";
+    console.info(`🤖 Chat request — model: ${model}, message: "${userMessage.slice(0, 60)}"`);
+
     const completion = await openai.chat.completions.create({
-      model: process.env.MODEL || "meta-llama/llama-3.3-70b-instruct:free",
+      model,
       messages: [{ role: "user", content: userMessage }],
     });
 
@@ -894,9 +901,41 @@ app.post("/chat", isLoggedIn, async (req, res) => {
 
     return res.json({ reply });
   } catch (err) {
-    console.error("❌ Chat Error:", err.message);
+    // Log the full error for debugging in Render logs
+    console.error("❌ Chat Error message:", err.message);
+    console.error("❌ Chat Error status:", err?.status);
+    console.error("❌ Chat Error type:", err?.type);
+    console.error("❌ Chat Error body:", JSON.stringify(err?.error || err?.response?.data || {}));
     return res.status(500).json({
       reply: "I'm having trouble connecting to my brain. Please try again in a moment.",
+    });
+  }
+});
+
+// Debug route — test OpenRouter API directly (remove after confirming chatbot works)
+app.get("/chat-test", isLoggedIn, async (req, res) => {
+  try {
+    const keyPresent = Boolean(process.env.OPENROUTER_API_KEY);
+    const model = process.env.MODEL || "meta-llama/llama-3.3-70b-instruct:free";
+
+    if (!keyPresent) {
+      return res.json({ ok: false, error: "OPENROUTER_API_KEY not set in environment" });
+    }
+
+    const completion = await openai.chat.completions.create({
+      model,
+      messages: [{ role: "user", content: "Say hello in one sentence." }],
+    });
+
+    const reply = completion.choices?.[0]?.message?.content;
+    return res.json({ ok: true, model, reply });
+  } catch (err) {
+    return res.json({
+      ok: false,
+      message: err.message,
+      status: err?.status,
+      type: err?.type,
+      error: err?.error || err?.response?.data,
     });
   }
 });
