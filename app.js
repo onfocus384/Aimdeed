@@ -430,7 +430,7 @@ app.post("/signup", isLoggedOut, async (req, res) => {
         let errorMessage = "Signup failed! ";
         if (err.name === 'UserExistsError') {
           errorMessage = "Username already exists!";
-        } else if (err.message && err.message.includes('duplicate')) {
+        } else if (err.message?.includes('duplicate')) {
           errorMessage = "Username or email already registered!";
         } else {
           errorMessage += err.message;
