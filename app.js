@@ -179,10 +179,19 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
+    // Guard: if id is not a valid ObjectId (e.g. old sessions stored username),
+    // treat as logged-out instead of crashing with CastError
+    if (!id || !String(id).match(/^[a-f\d]{24}$/i)) {
+      return done(null, false);
+    }
     const user = await User.findById(id);
-    done(null, user);
+    return done(null, user || false);
   } catch (err) {
-    done(err, null);
+    // CastError = invalid ObjectId format → gracefully log out
+    if (err.name === "CastError") {
+      return done(null, false);
+    }
+    return done(err, null);
   }
 });
 
