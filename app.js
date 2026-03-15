@@ -873,7 +873,13 @@ const openai = new OpenAI({
 });
 // --- Chat helpers (keep route handler flat) ---
 
-const CHAT_MODEL = process.env.MODEL || "meta-llama/llama-3.3-70b-instruct:free";
+// Fallback chain: primary → fallbacks in order when rate-limited
+const CHAT_MODELS = [
+  process.env.MODEL || "meta-llama/llama-3.3-70b-instruct:free",
+  "meta-llama/llama-3.1-8b-instruct:free",
+  "mistralai/mistral-7b-instruct:free",
+  "google/gemma-3-4b-it:free",
+];
 
 const validateChatRequest = (apiKey, message) => {
   if (!apiKey) return "Chatbot configuration error. API key missing.";
@@ -881,9 +887,9 @@ const validateChatRequest = (apiKey, message) => {
   return null;
 };
 
-const fetchAIReply = async (message) => {
+const tryModelRequest = async (model, message) => {
   const completion = await openai.chat.completions.create({
-    model: CHAT_MODEL,
+    model,
     messages: [{ role: "user", content: message }],
   });
   const reply = completion.choices?.[0]?.message?.content;
@@ -891,11 +897,35 @@ const fetchAIReply = async (message) => {
   return reply;
 };
 
+const fetchAIReply = async (message) => {
+  let lastErr;
+  for (const model of CHAT_MODELS) {
+    try {
+      console.info(`🤖 Trying model: ${model}`);
+      return await tryModelRequest(model, message);
+    } catch (err) {
+      lastErr = err;
+      if (err?.status === 429) {
+        console.warn(`⚠️ Rate-limited on ${model}, trying next fallback...`);
+      } else {
+        throw err; // non-rate-limit error — don't retry
+      }
+    }
+  }
+  throw lastErr; // all models exhausted
+};
+
 const logChatError = (err) => {
   console.error("❌ Chat Error message:", err.message);
   console.error("❌ Chat Error status:", err?.status);
-  console.error("❌ Chat Error type:", err?.type);
   console.error("❌ Chat Error body:", JSON.stringify(err?.error || err?.response?.data || {}));
+};
+
+const getChatErrorReply = (err) => {
+  if (err?.status === 429) {
+    return "The AI is currently very busy. Please wait a moment and try again.";
+  }
+  return "I'm having trouble connecting to my brain. Please try again in a moment.";
 };
 
 // --- /chat route ---
@@ -904,16 +934,12 @@ app.post("/chat", isLoggedIn, async (req, res) => {
   const validationError = validateChatRequest(process.env.OPENROUTER_API_KEY, userMessage);
   if (validationError) return res.status(400).json({ reply: validationError });
 
-  console.info(`🤖 Chat request — model: ${CHAT_MODEL}, msg: "${String(userMessage).slice(0, 60)}"`);
-
   try {
     const reply = await fetchAIReply(userMessage);
     return res.json({ reply });
   } catch (err) {
     logChatError(err);
-    return res.status(500).json({
-      reply: "I'm having trouble connecting to my brain. Please try again in a moment.",
-    });
+    return res.status(500).json({ reply: getChatErrorReply(err) });
   }
 });
 
