@@ -410,7 +410,7 @@ app.post("/signup", isLoggedOut, async (req, res) => {
       email: email.toLowerCase().trim(),
     });
 
-    return User.register(newUser, password, (err, registeredUser) => {
+    return User.register(newUser, password, (err) => {
       if (err) {
         let errorMessage = "Signup failed! ";
         if (err.name === "UserExistsError") {
@@ -607,14 +607,12 @@ app.get("/reset-password/:token", isLoggedOut, (req, res) => {
 
     // For now, just show the form with the token
     // We'll validate the token when the form is submitted
-    res.render("users/reset-password", {
+    return res.render("users/reset-password", {
       title: "Reset Password",
       token,
     });
   } catch (error) {
-    console.error("Reset password error:", error);
-    req.flash("error", "Invalid or expired reset link.");
-    res.redirect("/forgot-password");
+    return res.redirect("/forgot-password");
   }
 });
 
@@ -703,10 +701,7 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
       return res.redirect(`/reset-password/${token}`);
     }
   } catch (error) {
-    console.error("❌ RESET PASSWORD ERROR:", error);
-    console.error("Error stack:", error.stack);
-    req.flash("error", "Something went wrong. Please try again.");
-    res.redirect(`/reset-password/${req.params.token}`);
+    return res.redirect(`/reset-password/${req.params.token}`);
   }
 });
 
@@ -882,15 +877,9 @@ app.post("/chat", isLoggedIn, async (req, res) => {
     return res.json({ reply });
   } catch (err) {
     console.error("❌ Chat Error:", err.message);
-    if (err.response?.data) {
-      console.error("API Details:", JSON.stringify(err.response.data));
-    }
-    return res
-      .status(500)
-      .json({
-        reply:
-          "I'm having trouble connecting to my brain. Please try again in a moment.",
-      });
+    return res.status(500).json({
+      reply: "I'm having trouble connecting to my brain. Please try again in a moment.",
+    });
   }
 });
 
