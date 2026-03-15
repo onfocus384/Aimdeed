@@ -706,7 +706,7 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
     console.log("Updating password for user:", user.username);
     
     // Method 1: Using setPassword (passport-local-mongoose method)
-    return new Promise((resolve, reject) => {
+    return new Promise(() => {
       user.setPassword(password, async (err) => {
         if (err) {
           console.error("❌ Error in setPassword:", err);

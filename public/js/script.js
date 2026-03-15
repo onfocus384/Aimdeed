@@ -273,7 +273,6 @@ document.addEventListener("DOMContentLoaded", () => {
       };
     }).catch(() => {
       // fallback: still try using simple half-width approach
-      let halfWidth = el.scrollWidth / 2 || 0;
       el.scrollLeft = 0;
     });
   }
