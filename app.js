@@ -904,14 +904,14 @@ if (provider === "groq") {
     "gemma2-9b-it"
   ];
   // Only use env model if it looks like a groq model
-  if (envModel && !envModel.includes("/")) CHAT_MODELS.unshift(envModel);
+  if (!envModel?.includes("/")) CHAT_MODELS.unshift(envModel);
 } else if (provider === "xai") {
   CHAT_MODELS = [
     "grok-2-latest",
     "grok-beta",
     "grok-2-1212"
   ];
-  if (envModel && envModel.includes("grok")) CHAT_MODELS.unshift(envModel);
+  if (envModel?.includes("grok")) CHAT_MODELS.unshift(envModel);
 } else {
   // OpenRouter
   CHAT_MODELS = [
