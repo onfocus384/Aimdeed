@@ -643,7 +643,7 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
     // 2. Hash the token to compare with database
     const hashedToken = nodeCrypto.createHash("sha256").update(token).digest("hex");
 
-    console.info("Hashed token:", hashedToken);
+    console.info("Validating reset token...");
     console.info("Looking for user with this token...");
 
     // 3. Find user with valid, non-expired token
@@ -653,9 +653,8 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
     });
 
     if (!user) {
-      console.info(" No user found with valid token");
+      console.info("No user found with valid token or token has expired");
       console.info("Current time:", new Date());
-      console.info("Token in DB:", hashedToken);
       req.flash("error", "Password reset link is invalid or has expired.");
       return res.redirect("/forgot-password");
     }
@@ -699,7 +698,7 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
       );
       return res.redirect("/login");
     } catch (passwordError) {
-      console.error("❌ Error updating password:", passwordError);
+      console.error("❌ Password update failed");
       req.flash("error", "Error updating password.");
       return res.redirect(`/reset-password/${token}`);
     }
