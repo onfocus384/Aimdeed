@@ -172,27 +172,28 @@ if (googleClientID && googleClientSecret) {
   );
 }
 
+// Helper: validate a 24-char hex MongoDB ObjectId (JS-D007: use RegExp#test)
+const OBJECT_ID_RE = /^[a-f\d]{24}$/i;
+const isValidObjectId = (id) => Boolean(id) && OBJECT_ID_RE.test(String(id));
+
+// Helper: look up a user by id, return null on any error
+const findUserById = async (id) => {
+  try {
+    return await User.findById(id);
+  } catch {
+    return null;
+  }
+};
+
 // Switch to ID-based serialization to support both social and local users
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
-  try {
-    // Guard: if id is not a valid ObjectId (e.g. old sessions stored username),
-    // treat as logged-out instead of crashing with CastError
-    if (!id || !String(id).match(/^[a-f\d]{24}$/i)) {
-      return done(null, false);
-    }
-    const user = await User.findById(id);
-    return done(null, user || false);
-  } catch (err) {
-    // CastError = invalid ObjectId format → gracefully log out
-    if (err.name === "CastError") {
-      return done(null, false);
-    }
-    return done(err, null);
-  }
+  if (!isValidObjectId(id)) return done(null, false);
+  const user = await findUserById(id);
+  return done(null, user || false);
 });
 
 // ======================
