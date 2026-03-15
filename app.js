@@ -883,7 +883,7 @@ app.post("/chat", isLoggedIn, async (req, res) => {
     }
 
     const completion = await openai.chat.completions.create({
-      model: process.env.MODEL || "llama-3.1-70b-versatile",
+      model: process.env.MODEL || "meta-llama/llama-3.3-70b-instruct:free",
       messages: [{ role: "user", content: userMessage }],
     });
 
