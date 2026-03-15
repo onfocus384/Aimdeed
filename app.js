@@ -611,7 +611,7 @@ app.get("/reset-password/:token", isLoggedOut, (req, res) => {
       title: "Reset Password",
       token,
     });
-  } catch (error) {
+  } catch {
     return res.redirect("/forgot-password");
   }
 });
@@ -695,12 +695,12 @@ app.post("/reset-password/:token", isLoggedOut, async (req, res) => {
         "Password updated successfully! You can now login with your new password.",
       );
       return res.redirect("/login");
-    } catch (passwordError) {
+    } catch {
       console.error("❌ Password update failed");
       req.flash("error", "Error updating password.");
       return res.redirect(`/reset-password/${token}`);
     }
-  } catch (error) {
+  } catch {
     return res.redirect(`/reset-password/${req.params.token}`);
   }
 });
