@@ -190,8 +190,16 @@ passport.deserializeUser(async (id, done) => {
 // GLOBAL VARIABLES
 // ======================
 app.use((req, res, next) => {
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
+  // Always initialise to safe defaults first (guards against flash middleware
+  // not yet being ready during cold-starts / edge cases)
+  res.locals.success = [];
+  res.locals.error = [];
+  try {
+    res.locals.success = req.flash("success") || [];
+    res.locals.error   = req.flash("error")   || [];
+  } catch {
+    // flash not available on this request — keep empty arrays
+  }
   res.locals.currentUser = req.user || null;
   res.locals.currentHost = req.get("host") || "www.aimdeed.in";
   return next();

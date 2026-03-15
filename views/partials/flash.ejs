@@ -1,13 +1,16 @@
-<% if(success && success.length) { %>
+<% const _success = (typeof success !== 'undefined') ? success : []; %>
+<% const _error   = (typeof error   !== 'undefined') ? error   : []; %>
+
+<% if(_success && _success.length) { %>
 <div class="alert alert-success alert-dismissible fade show" role="alert" style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 1050; min-width: 300px; text-align: center; background: rgba(16, 185, 129, 0.9); backdrop-filter: blur(10px); color: white; border: none; border-radius: 12px;">
-  <%= success %>
+  <%= _success %>
   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <% } %>
 
-<% if(error && error.length) { %>
+<% if(_error && _error.length) { %>
 <div class="alert alert-danger alert-dismissible fade show" role="alert" style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 1050; min-width: 300px; text-align: center; background: rgba(239, 68, 68, 0.9); backdrop-filter: blur(10px); color: white; border: none; border-radius: 12px;">
-  <%= error %>
+  <%= _error %>
   <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <% } %>
