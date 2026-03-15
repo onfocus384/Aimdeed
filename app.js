@@ -898,7 +898,7 @@ const tryModelRequest = async (model, message) => {
 };
 
 const fetchAIReply = async (message) => {
-  let lastErr;
+  let lastErr = null;
   for (const model of CHAT_MODELS) {
     try {
       console.info(`🤖 Trying model: ${model}`);
