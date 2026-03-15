@@ -862,27 +862,68 @@ app.get("/listings/chatbot", isLoggedIn, (req, res) => {
 });
 
 // ================== CHAT API ==================
+// Support for Groq, Grok (x.ai), and OpenRouter
+const rawKey = process.env.GROK_API_KEY || process.env.GROQ_API_KEY || process.env.XAI_API_KEY || process.env.OPENROUTER_API_KEY || "";
+const chatApiKey = rawKey.trim();
+
+let provider = "openrouter";
+let chatBaseURL = "https://openrouter.ai/api/v1";
+let defaultHeaders = {
+  "HTTP-Referer": "https://www.aimdeed.in",
+  "X-Title": "Aimdeed Chatbot",
+};
+
+// Intelligently detect the provider from the API key format
+if (chatApiKey.startsWith("gsk_")) {
+  provider = "groq";
+  chatBaseURL = "https://api.groq.com/openai/v1";
+  defaultHeaders = undefined;
+} else if (chatApiKey.startsWith("xai-") || process.env.XAI_API_KEY) {
+  provider = "xai";
+  chatBaseURL = "https://api.x.ai/v1";
+  defaultHeaders = undefined;
+}
+
 // Using OpenAI v4+
 const openai = new OpenAI({
-  apiKey: process.env.OPENROUTER_API_KEY,
-  baseURL: "https://openrouter.ai/api/v1",
-  defaultHeaders: {
-    "HTTP-Referer": "https://www.aimdeed.in", // required by OpenRouter
-    "X-Title": "Aimdeed Chatbot", // any name
-  },
+  apiKey: chatApiKey,
+  baseURL: chatBaseURL,
+  defaultHeaders,
 });
 // --- Chat helpers (keep route handler flat) ---
 
 // Fallback chain: primary → fallbacks in order when rate-limited
-const CHAT_MODELS = [
-  process.env.MODEL || "meta-llama/llama-3.3-70b-instruct:free",
-  "meta-llama/llama-3.1-8b-instruct:free",
-  "mistralai/mistral-7b-instruct:free",
-  "google/gemma-3-4b-it:free",
-];
+let CHAT_MODELS = [];
+const envModel = process.env.MODEL;
 
-const validateChatRequest = (apiKey, message) => {
-  if (!apiKey) return "Chatbot configuration error. API key missing.";
+if (provider === "groq") {
+  CHAT_MODELS = [
+    "llama-3.3-70b-versatile",
+    "llama3-8b-8192",
+    "mixtral-8x7b-32768",
+    "gemma2-9b-it"
+  ];
+  // Only use env model if it looks like a groq model
+  if (envModel && !envModel.includes("/")) CHAT_MODELS.unshift(envModel);
+} else if (provider === "xai") {
+  CHAT_MODELS = [
+    "grok-2-latest",
+    "grok-beta",
+    "grok-2-1212"
+  ];
+  if (envModel && envModel.includes("grok")) CHAT_MODELS.unshift(envModel);
+} else {
+  // OpenRouter
+  CHAT_MODELS = [
+    envModel || "meta-llama/llama-3.3-70b-instruct:free",
+    "meta-llama/llama-3.1-8b-instruct:free",
+    "mistralai/mistral-7b-instruct:free",
+    "google/gemma-3-4b-it:free",
+  ];
+}
+
+const validateChatRequest = (message) => {
+  if (!chatApiKey) return "Chatbot configuration error. API key missing.";
   if (!message || !message.trim()) return "Please enter a message.";
   return null;
 };
@@ -925,13 +966,16 @@ const getChatErrorReply = (err) => {
   if (err?.status === 429) {
     return "The AI is currently very busy. Please wait a moment and try again.";
   }
+  if (err?.status === 401) {
+    return "Authentication failed with the AI API. Please update the API key in the configuration.";
+  }
   return "I'm having trouble connecting to my brain. Please try again in a moment.";
 };
 
 // --- /chat route ---
 app.post("/chat", isLoggedIn, async (req, res) => {
   const { message: userMessage } = req.body;
-  const validationError = validateChatRequest(process.env.OPENROUTER_API_KEY, userMessage);
+  const validationError = validateChatRequest(userMessage);
   if (validationError) return res.status(400).json({ reply: validationError });
 
   try {
@@ -943,14 +987,14 @@ app.post("/chat", isLoggedIn, async (req, res) => {
   }
 });
 
-// Debug route — test OpenRouter API directly (remove after confirming chatbot works)
+// Debug route — test API directly (remove after confirming chatbot works)
 app.get("/chat-test", isLoggedIn, async (req, res) => {
   try {
-    const keyPresent = Boolean(process.env.OPENROUTER_API_KEY);
-    const model = process.env.MODEL || "meta-llama/llama-3.3-70b-instruct:free";
+    const keyPresent = Boolean(chatApiKey);
+    const model = CHAT_MODELS[0];
 
     if (!keyPresent) {
-      return res.json({ ok: false, error: "OPENROUTER_API_KEY not set in environment" });
+      return res.json({ ok: false, error: "API_KEY not set in environment" });
     }
 
     const completion = await openai.chat.completions.create({
@@ -959,7 +1003,7 @@ app.get("/chat-test", isLoggedIn, async (req, res) => {
     });
 
     const reply = completion.choices?.[0]?.message?.content;
-    return res.json({ ok: true, model, reply });
+    return res.json({ ok: true, model, reply, provider });
   } catch (err) {
     return res.json({
       ok: false,
