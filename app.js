@@ -125,10 +125,7 @@ if (googleClientID && googleClientSecret) {
       {
         clientID: googleClientID,
         clientSecret: googleClientSecret,
-        callbackURL:
-          process.env.NODE_ENV === "production"
-            ? "https://www.aimdeed.in/auth/google/callback"
-            : "http://localhost:3000/auth/google/callback",
+        callbackURL: `${process.env.BASE_URL || "https://www.aimdeed.in"}/auth/google/callback`,
         proxy: true,
       },
       async (accessToken, refreshToken, profile, done) => {
