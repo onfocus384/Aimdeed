@@ -853,12 +853,12 @@ app.put("/api/josaa", async (req, res) => {
     }
 
     fs.writeFileSync(dataPath, JSON.stringify(newData, null, 2));
-    res.status(200).json({
+    return res.status(200).json({
       message: "JOSAA data updated successfully",
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({
+    return res.status(500).json({
       error: "Failed to update JOSAA data",
     });
   }
@@ -918,7 +918,7 @@ app.get("/listings/chatbot", isLoggedIn, (req, res) => {
 });
 app.post("/chat", isLoggedIn, async (req, res) => {
   try {
-    const userMessage = req.body.message;
+    const { message: userMessage } = req.body;
 
     if (!process.env.OPENROUTER_API_KEY) {
       console.error("❌ Chat Error: OPENROUTER_API_KEY is missing");
@@ -930,15 +930,15 @@ app.post("/chat", isLoggedIn, async (req, res) => {
       messages: [{ role: "user", content: userMessage }],
     });
 
-    if (!completion.choices || completion.choices.length === 0) {
+    const reply = completion.choices?.[0]?.message?.content;
+    if (!reply) {
       throw new Error("No response from AI model");
     }
 
-    const reply = completion.choices[0].message.content;
     return res.json({ reply });
   } catch (err) {
     console.error("❌ Chat Error:", err.message);
-    if (err.response && err.response.data) {
+    if (err.response?.data) {
       console.error("API Details:", JSON.stringify(err.response.data));
     }
     return res.status(500).json({ reply: "I'm having trouble connecting to my brain. Please try again in a moment." });
@@ -1004,7 +1004,7 @@ EMAIL_PASSWORD=your-app-password
   } catch (error) {
     console.error(" Email test failed:", error.message);
     
-    res.send(`
+    return res.send(`
       <h2> Email Test Failed</h2>
       <p>Error: ${error.message}</p>
       <p><strong>Solution:</strong></p>
@@ -1035,7 +1035,6 @@ EMAIL_PASSWORD=your-app-password
 // Logout - Corrected version to satisfy DeepSource return value rules
 app.get("/logout", (req, res, next) => {
   const flashMessage = "Logged out successfully!";
-  const username = req.user ? req.user.username : "User";
   
   req.logout((err) => {
     if (err) {
@@ -1239,11 +1238,10 @@ app.use((err, req, res, next) => {
 
 
 
-// ======================
 // SERVER START
 // ======================
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Aimdeed Server started`);
+  console.log("🚀 Aimdeed Server started");
   console.log(`📡 Port: ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
