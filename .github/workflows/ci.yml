@@ -24,7 +24,7 @@ jobs:
   # STAGE 3: CI Tests — GitHub Actions
   # ─────────────────────────────────────────────────────────────
   build-and-test:
-    name: 🧪 CI Tests (Node 18.x / 20.x)
+    name:  CI Tests (Node 18.x / 20.x)
     runs-on: ubuntu-latest
 
     strategy:
