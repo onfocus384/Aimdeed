@@ -189,17 +189,19 @@ passport.deserializeUser(async (id, done) => {
 // ======================
 // GLOBAL VARIABLES
 // ======================
-app.use((req, res, next) => {
-  // Always initialise to safe defaults first (guards against flash middleware
-  // not yet being ready during cold-starts / edge cases)
-  res.locals.success = [];
-  res.locals.error = [];
+
+// Helper: safely read a flash key — returns [] if flash middleware is not ready
+const readFlash = (req, key) => {
   try {
-    res.locals.success = req.flash("success") || [];
-    res.locals.error   = req.flash("error")   || [];
+    return req.flash(key) || [];
   } catch {
-    // flash not available on this request — keep empty arrays
+    return [];
   }
+};
+
+app.use((req, res, next) => {
+  res.locals.success     = readFlash(req, "success");
+  res.locals.error       = readFlash(req, "error");
   res.locals.currentUser = req.user || null;
   res.locals.currentHost = req.get("host") || "www.aimdeed.in";
   return next();
