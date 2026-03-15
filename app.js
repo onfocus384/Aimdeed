@@ -871,41 +871,46 @@ const openai = new OpenAI({
     "X-Title": "Aimdeed Chatbot", // any name
   },
 });
+// --- Chat helpers (keep route handler flat) ---
+
+const CHAT_MODEL = process.env.MODEL || "meta-llama/llama-3.3-70b-instruct:free";
+
+const validateChatRequest = (apiKey, message) => {
+  if (!apiKey) return "Chatbot configuration error. API key missing.";
+  if (!message || !message.trim()) return "Please enter a message.";
+  return null;
+};
+
+const fetchAIReply = async (message) => {
+  const completion = await openai.chat.completions.create({
+    model: CHAT_MODEL,
+    messages: [{ role: "user", content: message }],
+  });
+  const reply = completion.choices?.[0]?.message?.content;
+  if (!reply) throw new Error("No response from AI model");
+  return reply;
+};
+
+const logChatError = (err) => {
+  console.error("❌ Chat Error message:", err.message);
+  console.error("❌ Chat Error status:", err?.status);
+  console.error("❌ Chat Error type:", err?.type);
+  console.error("❌ Chat Error body:", JSON.stringify(err?.error || err?.response?.data || {}));
+};
+
+// --- /chat route ---
 app.post("/chat", isLoggedIn, async (req, res) => {
+  const { message: userMessage } = req.body;
+  const validationError = validateChatRequest(process.env.OPENROUTER_API_KEY, userMessage);
+  if (validationError) return res.status(400).json({ reply: validationError });
+
+  console.info(`🤖 Chat request — model: ${CHAT_MODEL}, msg: "${String(userMessage).slice(0, 60)}"`);
+
   try {
-    const { message: userMessage } = req.body;
-
-    if (!process.env.OPENROUTER_API_KEY) {
-      console.error("❌ Chat Error: OPENROUTER_API_KEY is missing");
-      return res
-        .status(500)
-        .json({ reply: "Chatbot configuration error. API key missing." });
-    }
-
-    if (!userMessage || !userMessage.trim()) {
-      return res.status(400).json({ reply: "Please enter a message." });
-    }
-
-    const model = process.env.MODEL || "meta-llama/llama-3.3-70b-instruct:free";
-    console.info(`🤖 Chat request — model: ${model}, message: "${userMessage.slice(0, 60)}"`);
-
-    const completion = await openai.chat.completions.create({
-      model,
-      messages: [{ role: "user", content: userMessage }],
-    });
-
-    const reply = completion.choices?.[0]?.message?.content;
-    if (!reply) {
-      throw new Error("No response from AI model");
-    }
-
+    const reply = await fetchAIReply(userMessage);
     return res.json({ reply });
   } catch (err) {
-    // Log the full error for debugging in Render logs
-    console.error("❌ Chat Error message:", err.message);
-    console.error("❌ Chat Error status:", err?.status);
-    console.error("❌ Chat Error type:", err?.type);
-    console.error("❌ Chat Error body:", JSON.stringify(err?.error || err?.response?.data || {}));
+    logChatError(err);
     return res.status(500).json({
       reply: "I'm having trouble connecting to my brain. Please try again in a moment.",
     });
