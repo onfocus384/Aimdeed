@@ -190,10 +190,11 @@ passport.deserializeUser(async (id, done) => {
 // GLOBAL VARIABLES
 // ======================
 
-// Helper: safely read a flash key — returns [] if flash middleware is not ready
+// Helper: safely read a flash key — always returns a plain Array
 const readFlash = (req, key) => {
   try {
-    return req.flash(key) || [];
+    const val = req.flash(key);
+    return Array.isArray(val) ? val : [];
   } catch {
     return [];
   }
