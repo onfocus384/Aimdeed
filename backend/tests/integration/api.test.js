@@ -5,7 +5,7 @@ const assert = require("node:assert/strict");
 
 const env = require("../../config/env");
 const { app } = require("../../server");
-const { redis } = require("../../config/redis");
+const { redis, connectRedis } = require("../../config/redis");
 const { cacheService } = require("../../services/redis");
 
 let server;
@@ -15,9 +15,11 @@ test.before(async () => {
   server = app.listen(0);
   await new Promise((resolve) => server.once("listening", resolve));
   base = `http://127.0.0.1:${server.address().port}`;
-  // Start from a clean rate-limit state for the test prefix.
-  await cacheService.delByPrefix(`${env.REDIS_PREFIX}:rl:`);
-  await cacheService.delByPrefix(`${env.REDIS_PREFIX}:josaa:`);
+  // Establish the Redis connection deterministically (connectRedis is only
+  // called by start() in production) and start from a clean slate so the shared
+  // per-IP rate-limit counters are reproducible across runs.
+  await connectRedis();
+  await redis.flushall();
 });
 
 test.after(async () => {
