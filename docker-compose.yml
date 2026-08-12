@@ -1,24 +1,64 @@
-version: '3.8'
-
 services:
-  web:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - MONGO_URL=mongodb://mongo:27017/aimdeed
-    env_file:
-      - .env
-    depends_on:
-      - mongo
-
-  mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
+  redis:
+    image: redis:7-alpine
+    command: >
+      redis-server --appendonly yes
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+      --save 60 1000
     volumes:
-      - mongo_data:/data/db
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    expose:
+      - "6379"
+
+  backend:
+    build: .
+    image: aimdeed-backend:ci
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      REDIS_URL: redis://redis:6379
+      REDIS_PREFIX: aimdeed
+    env_file:
+      - backend/.env.production
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+    volumes:
+      - josaa-data:/app/backend/data
+    expose:
+      - "3000"
+    # Scale the fleet: docker compose up --scale backend=3
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    image: aimdeed-nginx:ci
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
 
 volumes:
-  mongo_data:
+  redis-data:
+  josaa-data:

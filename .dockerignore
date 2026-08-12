@@ -2,9 +2,14 @@ node_modules
 .git
 .github
 .env
+.env.production
+.env.development
+.env.test
 Dockerfile
-.dockerignore
+Dockerfile.nginx
 README.md
 docker-compose.yml
 .deepsource.toml
-# Remove josaa_data.json from here because it is needed for the Rank Predictor
+docs
+legacy
+# Keep backend/data/josaa_data.json — required for the Rank Predictor

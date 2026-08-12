@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://api.aimdeed.in/api/:path*"
+    },
+    {
+      "source": "/images/:path*",
+      "destination": "https://api.aimdeed.in/images/:path*"
+    },
+    {
+      "source": "/people/:path*",
+      "destination": "https://api.aimdeed.in/people/:path*"
+    },
+    {
+      "source": "/Books/:path*",
+      "destination": "https://api.aimdeed.in/Books/:path*"
+    },
+    {
+      "source": "/css/:path*",
+      "destination": "https://api.aimdeed.in/css/:path*"
+    },
+    {
+      "source": "/js/:path*",
+      "destination": "https://api.aimdeed.in/js/:path*"
+    },
+    {
+      "source": "/favicon.ico",
+      "destination": "https://api.aimdeed.in/favicon.ico"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "https://api.aimdeed.in/robots.txt"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://api.aimdeed.in/sitemap.xml"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
