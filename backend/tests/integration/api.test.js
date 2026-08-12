@@ -3,6 +3,7 @@ require("../helpers/env");
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
+const env = require("../../config/env");
 const { app } = require("../../server");
 const { redis } = require("../../config/redis");
 const { cacheService } = require("../../services/redis");
@@ -15,8 +16,8 @@ test.before(async () => {
   await new Promise((resolve) => server.once("listening", resolve));
   base = `http://127.0.0.1:${server.address().port}`;
   // Start from a clean rate-limit state for the test prefix.
-  await cacheService.delByPrefix("aimdeed-test:rl:");
-  await cacheService.delByPrefix("aimdeed-test:josaa:");
+  await cacheService.delByPrefix(`${env.REDIS_PREFIX}:rl:`);
+  await cacheService.delByPrefix(`${env.REDIS_PREFIX}:josaa:`);
 });
 
 test.after(async () => {
@@ -121,7 +122,7 @@ test("unknown route returns JSON 404", async () => {
 });
 
 test("rate limiter returns 429 after contact limit", async () => {
-  await cacheService.delByPrefix("aimdeed-test:rl:contact:");
+  await cacheService.delByPrefix(`${env.REDIS_PREFIX}:rl:contact:`);
   const results = [];
   for (let i = 0; i < 6; i++) {
     const res = await fetch(`${base}/api/contact`, {

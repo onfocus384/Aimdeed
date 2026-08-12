@@ -16,26 +16,28 @@ WORKDIR /app
 
 # Copy backend package files and install production dependencies
 COPY backend/package*.json ./backend/
-RUN cd backend && npm ci --omit=dev
+WORKDIR /app/backend
+RUN npm ci --omit=dev
 
 # Copy the rest of the code
+WORKDIR /app
 COPY backend/ ./backend/
 
 # JOSAA dataset must be writable by the non-root runtime user (PUT /api/josaa)
-RUN chown -R node:node /app/backend/data
+RUN chown -R 1000:1000 /app/backend/data
 
 # Copy the built SPA from the frontend build stage
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist
 
 # Security: Run as a non-root user
-USER node
+USER 1000
 
 # Expose port
 EXPOSE 3000
 
 # Healthcheck: liveness + readiness against local Express server
 HEALTHCHECK --interval=10s --timeout=3s --start-period=10s --retries=3 \
-  CMD wget -q -O /dev/null http://127.0.0.1:3000/healthz || exit 1
+  CMD ["wget", "-q", "-O", "/dev/null", "http://127.0.0.1:3000/healthz"]
 
 # Start command
 WORKDIR /app/backend
