@@ -7,6 +7,20 @@ enabled = true
   [analyzers.meta]
   plugins = ["express"]
   environment = ["nodejs"]
+  # Treat test files as non-blocking so test-only patterns (e.g. Promise
+  # executors used for server lifecycle) don't fail the analysis.
+  test_patterns = ["**/tests/**", "**/__tests__/**", "**/*.test.js", "**/*.spec.js"]
+  # Exclude the deprecated/legacy Express+EJS app and the old static frontend
+  # bundle — these are not part of the current backend API / React frontend and
+  # contain patterns (bare cors(), console.*, Promise executors) that would
+  # otherwise fail the analysis.
+  exclude_patterns = [
+    "legacy/**",
+    "backend/public/**",
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+  ]
 
 [[analyzers]]
 name = "secrets"
