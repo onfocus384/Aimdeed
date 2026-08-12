@@ -1,2 +1,9 @@
 node_modules/
+.opencode/
+.playwright-mcp/
+
+# Real secrets — never commit
 .env
+.env.development
+.env.test
+.env.production
