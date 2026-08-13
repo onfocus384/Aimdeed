@@ -32,7 +32,7 @@ const cards = [
   {
     title: "IIT-JEE",
     desc: "Premium preparation for JEE Main & Advanced.",
-    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
     to: "/Books/iit.html",
     badge: { label: "Pro", color: "#6366f1" },
   },
