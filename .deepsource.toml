@@ -5,8 +5,10 @@ name = "javascript"
 enabled = true
 
   [analyzers.meta]
-  plugins = ["express"]
-  environment = ["nodejs"]
+  plugins = ["express", "react"]
+  environment = ["nodejs", "browser"]
+  module_system = "es-modules"
+  dependency_file_paths = ["backend/", "frontend/"]
   # Treat test files as non-blocking so test-only patterns (e.g. Promise
   # executors used for server lifecycle) don't fail the analysis.
   test_patterns = ["**/tests/**", "**/__tests__/**", "**/*.test.js", "**/*.spec.js"]
