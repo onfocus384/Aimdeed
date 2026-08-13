@@ -4,39 +4,39 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://api.aimdeed.in/api/:path*"
+      "destination": "https://aimdeed-71ub.onrender.com/api/:path*"
     },
     {
       "source": "/images/:path*",
-      "destination": "https://api.aimdeed.in/images/:path*"
+      "destination": "https://aimdeed-71ub.onrender.com/images/:path*"
     },
     {
       "source": "/people/:path*",
-      "destination": "https://api.aimdeed.in/people/:path*"
+      "destination": "https://aimdeed-71ub.onrender.com/people/:path*"
     },
     {
       "source": "/Books/:path*",
-      "destination": "https://api.aimdeed.in/Books/:path*"
+      "destination": "https://aimdeed-71ub.onrender.com/Books/:path*"
     },
     {
       "source": "/css/:path*",
-      "destination": "https://api.aimdeed.in/css/:path*"
+      "destination": "https://aimdeed-71ub.onrender.com/css/:path*"
     },
     {
       "source": "/js/:path*",
-      "destination": "https://api.aimdeed.in/js/:path*"
+      "destination": "https://aimdeed-71ub.onrender.com/js/:path*"
     },
     {
       "source": "/favicon.ico",
-      "destination": "https://api.aimdeed.in/favicon.ico"
+      "destination": "https://aimdeed-71ub.onrender.com/favicon.ico"
     },
     {
       "source": "/robots.txt",
-      "destination": "https://api.aimdeed.in/robots.txt"
+      "destination": "https://aimdeed-71ub.onrender.com/robots.txt"
     },
     {
       "source": "/sitemap.xml",
-      "destination": "https://api.aimdeed.in/sitemap.xml"
+      "destination": "https://aimdeed-71ub.onrender.com/sitemap.xml"
     },
     {
       "source": "/(.*)",
