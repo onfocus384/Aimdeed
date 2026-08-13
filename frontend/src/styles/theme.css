@@ -907,7 +907,8 @@ section {
 .chat-page {
   display: flex;
   flex-direction: column;
-  min-height: calc(100dvh - var(--header-h));
+  height: calc(100dvh - var(--header-h));
+  overflow: hidden;
 }
 
 .chat-hero {
@@ -916,12 +917,14 @@ section {
 
 .chat-section {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
 
 .chat-section .container {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
@@ -1264,7 +1267,7 @@ section {
     padding: 1.5rem;
   }
   .chat-page {
-    min-height: calc(100dvh - var(--header-h));
+    height: calc(100dvh - var(--header-h));
   }
   .chat-container {
     flex: 1;
