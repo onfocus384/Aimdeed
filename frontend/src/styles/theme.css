@@ -904,9 +904,30 @@ section {
 }
 
 /* ===== Chatbot ===== */
+.chat-page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100dvh - var(--header-h));
+}
+
+.chat-hero {
+  flex-shrink: 0;
+}
+
+.chat-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-section .container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
 .chat-container {
-  height: calc(100vh - 200px);
-  height: calc(100dvh - 200px);
+  flex: 1;
   min-height: 420px;
   display: flex;
   flex-direction: column;
@@ -915,12 +936,27 @@ section {
 
 .chat-body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
   padding: 1rem 0.25rem 0.5rem;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.chat-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.chat-input-row .form-control {
+  min-width: 0;
 }
 
 .chat-bubble {
@@ -1227,9 +1263,15 @@ section {
   .glass-card {
     padding: 1.5rem;
   }
+  .chat-page {
+    min-height: calc(100dvh - var(--header-h));
+  }
   .chat-container {
-    height: calc(100dvh - 150px);
-    min-height: 380px;
+    flex: 1;
+    min-height: 340px;
+  }
+  .chat-bubble {
+    max-width: 92%;
   }
   .back-to-top {
     width: 42px;
@@ -1249,6 +1291,18 @@ section {
   .brand-logo-wrap {
     width: 40px;
     height: 40px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  /* Bootstrap g-5 gutters (48px) overflow the container on small screens —
+     reduce them so rows stay within the viewport. */
+  .row.g-5,
+  .row.gx-5 {
+    --bs-gutter-x: 1.5rem;
+  }
+  .row.g-5 {
+    --bs-gutter-y: 1.5rem;
   }
 }
 

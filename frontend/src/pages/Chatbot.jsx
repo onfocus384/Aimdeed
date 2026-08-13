@@ -53,8 +53,8 @@ export default function Chatbot() {
   };
 
   return (
-    <>
-      <section className="page-hero" style={{ paddingBottom: "2rem" }}>
+    <div className="chat-page">
+      <section className="page-hero chat-hero" style={{ paddingBottom: "2rem" }}>
         <div className="container">
           <FadeIn>
             <motion.div
@@ -90,7 +90,7 @@ export default function Chatbot() {
         </div>
       </section>
 
-      <section className="section" style={{ paddingTop: 0 }}>
+      <section className="section chat-section" style={{ paddingTop: 0 }}>
         <div className="container">
           <FadeIn className="glass-card chat-container" style={{ display: "flex", flexDirection: "column" }}>
             <div className="chat-body" ref={bodyRef}>
@@ -125,7 +125,7 @@ export default function Chatbot() {
               )}
             </div>
 
-            <div className="d-flex gap-2 mt-3" style={{ borderTop: "1px solid var(--glass-border)", paddingTop: "1rem" }}>
+            <div className="chat-input-row">
               <input
                 type="text"
                 className="form-control form-control-glass"
@@ -145,6 +145,6 @@ export default function Chatbot() {
           </FadeIn>
         </div>
       </section>
-    </>
+    </div>
   );
 }
