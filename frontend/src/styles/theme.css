@@ -913,6 +913,8 @@ section {
 
 .chat-hero {
   flex-shrink: 0;
+  padding-top: calc(var(--header-h) + 2.5rem);
+  padding-bottom: 2.5rem;
 }
 
 .chat-section {
@@ -1263,6 +1265,23 @@ section {
   .page-hero {
     padding: calc(var(--header-h) + 2.5rem) 1rem 2.5rem;
   }
+  .chat-hero {
+    padding: calc(var(--header-h) + 1.25rem) 1rem 1.75rem;
+  }
+  .chat-hero .chat-icon {
+    width: 44px !important;
+    height: 44px !important;
+    margin-bottom: 0.6rem !important;
+    font-size: 1.15rem !important;
+  }
+  .chat-hero h1 {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.35rem;
+  }
+  .chat-hero p {
+    font-size: 0.85rem !important;
+    margin-bottom: 0 !important;
+  }
   .glass-card {
     padding: 1.5rem;
   }
@@ -1317,6 +1336,12 @@ section {
   .btn-premium,
   .btn-outline-premium {
     width: 100%;
+  }
+  /* Keep the chatbot send button compact on mobile so the input keeps its width */
+  .chat-input-row .btn-premium {
+    width: auto;
+    flex-shrink: 0;
+    padding-inline: 1.25rem;
   }
   .hero-section .d-flex.flex-wrap.gap-3 {
     width: 100%;

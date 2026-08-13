@@ -58,6 +58,7 @@ export default function Chatbot() {
         <div className="container">
           <FadeIn>
             <motion.div
+              className="chat-icon"
               style={{
                 width: 64,
                 height: 64,
